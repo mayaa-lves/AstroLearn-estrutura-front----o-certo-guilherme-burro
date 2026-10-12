@@ -1,0 +1,739 @@
+/* Layout compartilhado dos cadastros */
+
+.cadastro-page {
+  margin: 0;
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: auto minmax(min-content, 1fr) auto;
+  line-height: 1.4;
+  overflow-x: hidden;
+  font-family: Astro, Arial, Helvetica, sans-serif;
+  color: #33263c;
+  background: #f9ecdd;
+}
+
+/* Cenário */
+
+.cenario {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cenario-canvas {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100vw, 177.683svh);
+  height: max(100svh, 56.28vw);
+  transform: translate(-50%, -50%);
+}
+
+.cenario-neutro,
+.cenario-timido {
+  position: absolute;
+  inset: 0;
+  background-size: 100% 100%;
+  background-image: url("../../../assets/imagens/login/poses-e-versoes/turquesa-female-neutral.png");
+}
+
+.cenario-timido {
+  background-image: url("../../../assets/imagens/login/poses-e-versoes/turquesa-female-shy.png");
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+
+.senha-ativa .cenario-timido {
+  opacity: 1;
+}
+
+/* Olhos */
+
+.olho {
+  position: absolute;
+  left: 25.4%;
+  top: 50.4%;
+  width: 1.55%;
+  height: 3.25%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+
+  background:
+    radial-gradient(circle at 35% 27%, #fff 0 9%, transparent 13%),
+    radial-gradient(ellipse at center, #20132e 45%, #604074 75%, #3e2553);
+
+  box-shadow: inset 0 0 2px #2d183f;
+  transition: opacity 0.15s;
+  animation: piscar 7s infinite;
+  transform-origin: center;
+}
+
+.olho-direito {
+  left: 30.4%;
+  top: 51.5%;
+  width: 1.35%;
+  height: 2.9%;
+}
+
+.senha-ativa .olho {
+  opacity: 0;
+}
+
+/* Mascote clicável */
+
+.mascote {
+  position: absolute;
+  left: 19%;
+  top: 37%;
+  width: 17%;
+  height: 35%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 45%;
+  z-index: 1;
+  pointer-events: auto;
+}
+
+.dica-mascote {
+  position: absolute;
+  left: 13%;
+  top: 27%;
+  width: 270px;
+  max-width: 30vw;
+  padding: 14px 18px;
+  border: 1px solid #fff9;
+  border-radius: 18px;
+  color: #352442;
+  background: #fffaf0eb;
+  box-shadow: 0 8px 30px #3d244324;
+  font-size: 0.85rem;
+  z-index: 2;
+}
+
+/* Cabeçalho */
+
+.cadastro-header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 4vw 6px;
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #443052;
+  text-decoration: none;
+}
+
+/* Conteúdo */
+
+.cadastro-page main {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+  padding: 8px 9vw 8px 4vw;
+}
+
+.cadastro-conteudo {
+  pointer-events: auto;
+  width: min(100%, 420px);
+  min-width: 0;
+  animation: chegada 0.65s ease both;
+}
+
+.auth-eyebrow {
+  color: #654778;
+  margin: 0 0 10px;
+}
+
+.cadastro-conteudo h1 {
+  font-size: clamp(32px, 3.5vw, 52px);
+  letter-spacing: -0.045em;
+  line-height: 1.06;
+  margin: 0 0 12px;
+}
+
+.introducao {
+  font-size: 0.93rem;
+  line-height: 1.5;
+  color: #615467;
+  margin: 0 0 16px;
+}
+
+/* Indicadores das etapas */
+
+.etapas {
+  display: flex;
+  gap: 22px;
+  padding: 0;
+  margin: 0 0 16px;
+  list-style: none;
+  font-size: 0.8rem;
+  color: #6c5b74;
+}
+
+.etapas li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.etapas span {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid #a592af;
+  border-radius: 50%;
+}
+
+.etapas [aria-current] {
+  color: #553286;
+  font-weight: 700;
+}
+
+.etapas [aria-current] span {
+  color: white;
+  background: #553286;
+  border-color: #553286;
+}
+
+/* Campos */
+
+.cadastro-page fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.cadastro-page label {
+  display: block;
+  margin: 10px 0 5px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.opcional {
+  font-weight: 400;
+  color: #615467;
+}
+
+.cadastro-page input {
+  width: 100%;
+  min-width: 0;
+  height: 48px;
+  padding: 0 14px;
+  border: 1px solid #baaabc;
+  border-radius: 12px;
+  background: #fffaf2dd;
+  color: #33263c;
+  font-size: 0.95rem;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.cadastro-page input::placeholder {
+  color: #776a7c;
+}
+
+.cadastro-page input:focus {
+  border-color: #654778;
+  box-shadow: 0 0 0 3px #65477815;
+}
+
+.cadastro-page input[aria-invalid="true"] {
+  border-color: #9e2536;
+}
+
+#continuar,
+.acoes {
+  margin-top: 18px;
+}
+
+.acoes {
+  display: flex;
+  gap: 10px;
+}
+
+.acoes .auth-primary {
+  flex: 1;
+}
+
+/* Mensagens e links */
+
+.cadastro-status {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  margin: 10px 0 0;
+}
+
+.cadastro-status:empty {
+  display: none;
+}
+
+.entrar {
+  font-size: 0.85rem;
+  margin: 14px 0 6px;
+  text-align: center;
+}
+
+.entrar a {
+  font-weight: 700;
+  color: #553286;
+  text-underline-offset: 3px;
+}
+
+.aviso-demo {
+  font-size: 0.7rem;
+  color: #615467;
+  margin: 0;
+  text-align: center;
+}
+
+.cadastro-footer {
+  position: relative;
+  padding: 8px 4vw 12px;
+  font-size: 0.7rem;
+  color: #51415b;
+  text-align: right;
+}
+
+/* Animações */
+
+.sem-movimento *,
+.sem-movimento *::before,
+.sem-movimento *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+@keyframes chegada {
+  from {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes piscar {
+  0%,
+  94%,
+  98%,
+  100% {
+    scale: 1 1;
+  }
+
+  96% {
+    scale: 1 0.08;
+  }
+}
+
+/* A etapa oculta não deve ocupar espaço. */
+
+.cadastro-page [hidden] {
+  display: none !important;
+}
+
+.cadastro-page .auth-password input {
+  padding-right: 88px;
+}
+
+.cadastro-page #cadastro-form {
+  margin: 0;
+}
+
+/* Compactação para telas de computador com pouca altura */
+
+@media (min-width: 801px) and (max-height: 760px) {
+  .cadastro-header {
+    padding: 6px 4vw 4px;
+  }
+
+  .marca svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .cadastro-conteudo h1 {
+    font-size: clamp(28px, 5.4svh, 40px);
+    line-height: 1.04;
+    margin-bottom: 8px;
+  }
+
+  .cadastro-page .auth-eyebrow {
+    margin-bottom: 6px;
+    font-size: 0.68rem;
+  }
+
+  .cadastro-page .introducao {
+    font-size: 0.86rem;
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+
+  .etapas {
+    margin-bottom: 8px;
+  }
+
+  .etapas span {
+    width: 24px;
+    height: 24px;
+  }
+
+  .cadastro-page label {
+    margin: 8px 0 4px;
+    font-size: 0.82rem;
+  }
+
+  .cadastro-page input {
+    height: 44px;
+  }
+
+  .cadastro-page .auth-reveal {
+    min-height: 38px;
+  }
+
+  .cadastro-page .auth-help,
+  .cadastro-page .auth-error {
+    margin-top: 4px;
+    line-height: 1.35;
+  }
+
+  #continuar,
+  .acoes {
+    margin-top: 12px;
+  }
+
+  .cadastro-page .auth-primary,
+  .cadastro-page .auth-secondary {
+    min-height: 44px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    line-height: 1.2;
+  }
+
+  .cadastro-page .entrar {
+    margin: 10px 0 4px;
+    line-height: 1.4;
+  }
+
+  .cadastro-status {
+    margin-top: 8px;
+  }
+
+  .cadastro-footer {
+    padding: 4px 4vw 6px;
+  }
+}
+
+/* Em janelas ainda mais baixas, título em uma linha */
+
+@media (min-width: 801px) and (max-height: 620px) {
+  .cadastro-conteudo h1 {
+    font-size: clamp(25px, 3vw, 30px);
+  }
+
+  .cadastro-conteudo h1 br {
+    display: none;
+  }
+
+  .cadastro-page main {
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+
+  .cadastro-page .introducao {
+    margin-bottom: 8px;
+  }
+
+  .cadastro-page .entrar {
+    margin-top: 8px;
+  }
+}
+
+/* Celular: cenário no topo e formulário abaixo */
+
+@media (max-width: 800px) {
+  .cenario {
+    position: absolute;
+    height: 270px;
+    z-index: 0;
+  }
+
+  .cenario-canvas {
+    width: 800px;
+    height: 450px;
+    top: 47%;
+    left: 66%;
+  }
+
+  .cenario::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(transparent 65%, #f9ecdd);
+  }
+
+  .cadastro-header {
+    position: relative;
+    z-index: 2;
+    padding: 10px 5vw;
+  }
+
+  .marca {
+    font-size: 1rem;
+  }
+
+  .auth-link-button {
+    font-size: 0.7rem;
+  }
+
+  .cadastro-page main {
+    position: relative;
+    padding: 210px 6vw 20px;
+    justify-content: center;
+    align-items: start;
+  }
+
+  .cadastro-conteudo h1 {
+    font-size: 36px;
+  }
+
+  .mascote,
+  .dica-mascote {
+    display: none;
+  }
+
+  .cadastro-footer {
+    text-align: center;
+  }
+}
+
+/* Preferência de movimento reduzido */
+
+@media (prefers-reduced-motion: reduce) {
+  .cadastro-page *,
+  .cadastro-page *::before,
+  .cadastro-page *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+/* Cadastro aprovado: formulário completo à direita, cenário preservado à esquerda. */
+.cadastro-conteudo {
+  width: min(100%, 390px);
+}
+.cadastro-page main {
+  padding-right: 5vw;
+}
+.cadastro-conteudo h1 {
+  font-size: clamp(34px, 3.5vw, 52px);
+  line-height: 1.07;
+  letter-spacing: -0.045em;
+  margin: 12px 0 16px;
+  color: #280c40;
+}
+.cadastro-conteudo h1 span {
+  color: #783fc3;
+}
+.cadastro-page .introducao {
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 18px;
+}
+.back-login {
+  display: inline-block;
+  color: #665074;
+  font-size: 11px;
+  text-decoration: none;
+  margin-bottom: 16px;
+}
+.profile-choice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 8px 0 12px;
+  font-size: 11px;
+}
+.profile-choice span {
+  padding: 7px 14px;
+  border-radius: 20px;
+  background: #eddef7;
+  color: #5d3685;
+}
+.profile-choice a {
+  color: #794e9d;
+  text-underline-offset: 3px;
+}
+.already-account {
+  font-size: 12px;
+  color: #665074;
+  text-underline-offset: 4px;
+}
+.cadastro-header #movimento {
+  position: fixed;
+  right: 4vw;
+  bottom: 20px;
+  z-index: 5;
+  font-size: 10px;
+  background: #fffaf3cc;
+  border: 1px solid #9375a8;
+  padding: 6px 12px;
+  min-height: 36px;
+  text-decoration: none;
+}
+.cadastro-page label {
+  font-size: 12px;
+  margin: 10px 0 5px;
+}
+.cadastro-page input {
+  height: 42px;
+  border-radius: 10px;
+  font-size: 13px;
+  background: #fffaf5dd;
+}
+.password-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.password-field {
+  min-width: 0;
+}
+.cadastro-page .auth-password input {
+  padding-right: 40px;
+}
+.cadastro-page .auth-reveal {
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 42px;
+  min-height: 42px;
+  font-size: 0;
+  padding: 10px;
+}
+.auth-reveal svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+}
+.cadastro-page .auth-primary {
+  margin-top: 22px;
+  min-height: 44px;
+  background: linear-gradient(180deg, #984be6, #6530c5);
+  border-radius: 16px;
+  font-size: 13px;
+}
+.cadastro-page .auth-help,
+.cadastro-page .auth-error {
+  font-size: 10px;
+  line-height: 1.45;
+}
+.cadastro-page .auth-error {
+  max-width: 100%;
+}
+.cadastro-page .aviso-demo {
+  margin-top: 10px;
+  text-align: left;
+  font-size: 10px;
+}
+.cadastro-footer {
+  text-align: left;
+  color: #fff;
+  text-shadow: 0 1px 5px #251330;
+}
+.authorization {
+  margin-top: 12px;
+  color: #694b7c;
+  font-size: 11px;
+}
+.authorization summary {
+  cursor: pointer;
+  padding: 6px 0;
+}
+.approval-note {
+  color: #796573;
+  font-size: 10px;
+  border-left: 2px solid #c5b099;
+  padding-left: 8px;
+  margin: 9px 0 0;
+}
+@media (min-width: 801px) and (max-height: 900px) {
+  .cadastro-conteudo {
+    width: min(100%, 380px);
+  }
+  .cadastro-conteudo h1 {
+    font-size: clamp(30px, 5.3svh, 40px);
+    margin: 7px 0 10px;
+  }
+  .back-login {
+    margin-bottom: 8px;
+  }
+  .cadastro-page .introducao {
+    margin-bottom: 12px;
+    font-size: 12px;
+  }
+  .cadastro-page input {
+    height: 38px;
+  }
+  .cadastro-page .auth-reveal {
+    height: 38px;
+    min-height: 38px;
+  }
+  .cadastro-page label {
+    margin-top: 7px;
+    font-size: 11px;
+  }
+  .cadastro-page .auth-primary {
+    margin-top: 14px;
+  }
+  .profile-choice {
+    margin: 6px 0;
+  }
+  .approval-note {
+    margin-top: 5px;
+  }
+}
+@media (max-width: 800px) {
+  .cadastro-page main {
+    padding: 210px 6vw 35px;
+  }
+  .cadastro-header #movimento {
+    position: static;
+    min-height: 36px;
+    font-size: 9px;
+  }
+  .cadastro-header {
+    flex-wrap: wrap;
+  }
+  .cadastro-conteudo h1 {
+    font-size: 36px;
+  }
+  .cadastro-footer {
+    color: #584367;
+    text-shadow: none;
+  }
+}

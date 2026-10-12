@@ -1,0 +1,230 @@
+/* Base das telas finais: pouca informação por bloco, controles claros e vidro discreto. */
+body:before {
+  background:
+    linear-gradient(130deg, #faf4ecc9, #f7f2ed8f),
+    url("../../../assets/imagens/aluno/perfil/cabine.png") center/cover
+      no-repeat;
+}
+main {
+  max-width: 1600px;
+}
+main h1 {
+  font-size: clamp(30px, 3vw, 42px);
+}
+main h2 {
+  font-size: 21px;
+  letter-spacing: -0.5px;
+}
+main p {
+  line-height: 1.6;
+}
+svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.sidebar .brand svg {
+  width: 30px;
+  height: 30px;
+}
+.page-header {
+  align-items: center;
+  margin-bottom: 26px;
+}
+.page-header p {
+  font-size: 15px;
+  color: #655274;
+}
+.page-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.soft-link,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #614083;
+  border: 1px solid #d6c3e6;
+  background: #fff9;
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: 13px;
+  font-size: 14px;
+}
+.primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 44px;
+  padding: 11px 20px;
+  text-decoration: none;
+  border-radius: 13px;
+  background: #7542af;
+  color: white;
+  font-size: 14px;
+}
+.primary:hover {
+  background: #613294;
+}
+.primary:disabled,
+.secondary:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.panel {
+  padding: 26px;
+  border: 1px solid #ffffffd9;
+  background: #fffdf5ed;
+  backdrop-filter: blur(12px);
+  border-radius: 22px;
+  box-shadow: 0 12px 32px #45285109;
+}
+.panel h2 {
+  margin-top: 0;
+}
+.muted,
+.demo-note {
+  color: #685573;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.demo-note {
+  padding: 10px 14px;
+  background: #f4ebf6;
+  border-radius: 12px;
+  margin: 18px 0;
+}
+.status {
+  min-height: 1.5em;
+  font-size: 14px;
+  color: #345e49;
+  line-height: 1.6;
+}
+.status:empty {
+  display: none;
+}
+.status-error {
+  color: #9a2346;
+}
+.error {
+  color: #a02544;
+  font-size: 13px;
+  margin: 6px 0;
+  min-height: 1em;
+}
+.chip {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 20px;
+  background: #eee3f7;
+  color: #60417b;
+  font-size: 12px;
+}
+.stack {
+  display: grid;
+  gap: 18px;
+}
+label {
+  line-height: 1.5;
+}
+input,
+textarea,
+select {
+  font: inherit;
+  max-width: 100%;
+}
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #cbb8db;
+  border-radius: 12px;
+  background: #fffefa;
+  color: #352345;
+}
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid #7648b2;
+  outline-offset: 3px;
+}
+dialog {
+  max-height: 85svh;
+  overflow: auto;
+}
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+.field {
+  display: grid;
+  gap: 7px;
+}
+.back-link {
+  font-size: 14px;
+  text-underline-offset: 4px;
+}
+.progress-bar {
+  height: 7px;
+  border-radius: 7px;
+  width: 100%;
+  accent-color: #7748b3;
+}
+.hidden,
+[hidden] {
+  display: none !important;
+}
+@media (max-width: 800px) {
+  main,
+  .collapsed main {
+    padding: 26px 18px 110px;
+    margin-left: 0;
+  }
+  .page-header {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  .panel {
+    padding: 20px;
+    border-radius: 19px;
+  }
+  .page-header h1 {
+    margin-top: 0;
+  }
+  .page-actions {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .page-actions > a {
+    flex: 1;
+  }
+  .button-row > * {
+    flex: 1;
+    white-space: normal;
+  }
+}
+.text-button {
+  background: none;
+  border: 0;
+  padding: 12px 5px;
+  font: inherit;
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  color: #644182;
+  min-height: 44px;
+}

@@ -1,0 +1,158 @@
+/* Laboratório: fundo exclusivo e artes discretas com assets já aprovados. */
+body:before {
+  background:
+    linear-gradient(150deg, #f8f6eef2, #eeedf2d9),
+    url("../../../../assets/imagens/aluno/inicial/nave-cinematic-v3.png")
+      center/cover no-repeat;
+}
+.game-hero {
+  display: grid;
+  grid-template-columns: 1fr 210px;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 24px;
+  padding: 30px;
+}
+.game-hero h2 {
+  font-size: 32px;
+  margin: 12px 0;
+}
+.game-hero p {
+  max-width: 650px;
+  margin: 8px 0;
+  font-size: 15px;
+}
+.hero-planet {
+  height: 190px;
+  background: url("../../../../assets/imagens/login/cenarios-e-personagens/planet.png")
+    center/contain no-repeat;
+  filter: drop-shadow(0 12px 18px #725a6f22);
+}
+.game-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.game-filters [aria-pressed="true"] {
+  background: #7542af;
+  color: white;
+  border-color: #7542af;
+}
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.game-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 22px;
+}
+.game-card .chip {
+  align-self: flex-start;
+}
+.game-card h2 {
+  margin: 0;
+}
+.game-card p {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: #675574;
+}
+.game-card .primary {
+  margin-top: auto;
+}
+.game-card small {
+  margin-top: 2px;
+  text-align: center;
+}
+.game-art {
+  height: 160px;
+  border-radius: 15px;
+  display: grid;
+  place-items: center;
+  background: #ebe5f0;
+}
+.art-robo {
+  background: linear-gradient(130deg, #e5efe9, #f5f1e7);
+}
+.art-robo svg {
+  width: 135px;
+  height: 120px;
+  color: #668874;
+  stroke-width: 3;
+}
+.art-quiz {
+  background:
+    linear-gradient(120deg, #eee8f6aa, #efe7ed66),
+    url("../../../../assets/imagens/aluno/inicial/horizonte-v7.png") center
+      42% / cover;
+}
+.art-crew {
+  background: linear-gradient(120deg, #e7e9f0, #f1e4ef);
+}
+.crew-icon {
+  display: block;
+  width: 130px;
+  height: 145px;
+  background: url("../../../../assets/imagens/aluno/inicial/assistente-poses-v4.png")
+    0 100%/300% 200% no-repeat;
+}
+@media (max-width: 1150px) {
+  .game-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .game-grid > article:last-child {
+    grid-column: 1/-1;
+  }
+  .game-hero {
+    grid-template-columns: 1fr 150px;
+  }
+  .hero-planet {
+    height: 145px;
+  }
+}
+@media (max-width: 650px) {
+  .game-grid {
+    grid-template-columns: 1fr;
+  }
+  .game-grid > article:last-child {
+    grid-column: auto;
+  }
+  .game-hero {
+    grid-template-columns: 1fr;
+    padding: 22px;
+  }
+  .hero-planet {
+    display: none;
+  }
+  .game-hero h2 {
+    font-size: 27px;
+  }
+  .game-art {
+    height: 140px;
+  }
+}
+
+.hero-planet {
+  animation: hovering 9s ease-in-out infinite;
+}
+.game-card {
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+.game-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px #4d335716;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-planet {
+    animation: none;
+  }
+  .game-card {
+    transition: none;
+  }
+}

@@ -1,0 +1,796 @@
+/* ========================================
+   1. CENÁRIO NA TELA INTEIRA
+======================================== */
+
+.login-page {
+  display: grid;
+  grid-template-rows: auto minmax(min-content, 1fr) auto;
+  min-height: 100svh;
+  margin: 0;
+  overflow-x: hidden;
+  background: #fff8ef;
+  color: #322046;
+
+  /* Mantém a proporção original da imagem. */
+  --canvas-w: max(100vw, 177.87234svh);
+  --canvas-h: max(100svh, 56.2201vw);
+}
+
+.login-page button {
+  border: 0;
+  font: inherit;
+}
+
+.login-page a {
+  color: #6940a5;
+}
+
+.space-background {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.scene-canvas {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--canvas-w);
+  height: var(--canvas-h);
+  transform:
+    translate(-50%, -50%)
+    translate(var(--scene-x, 0px), var(--scene-y, 0px));
+}
+
+.scene-image {
+  background:
+    url("../../../assets/imagens/login/cenarios-e-personagens/scene-cinematic-v5.png")
+    center / 100% 100% no-repeat;
+}
+
+.planet-light {
+  position: absolute;
+  left: calc(50% - var(--canvas-w) / 2 + var(--canvas-w) * .52);
+  top: calc(50% - var(--canvas-h) / 2 + var(--canvas-h) * .095);
+  width: calc(var(--canvas-w) * .385);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  opacity: .09;
+  mix-blend-mode: soft-light;
+}
+
+.planet-light img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: orbit 200s linear infinite;
+}
+
+/* ========================================
+   2. CABEÇALHO E FORMULÁRIO
+======================================== */
+
+.login-header {
+  position: relative;
+  grid-row: 1;
+  z-index: 3;
+  padding: clamp(12px, 2svh, 24px) 4.2vw 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: clamp(23px, 1.8vw, 32px);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.brand svg {
+  width: 48px;
+  height: 48px;
+}
+
+.signup-link {
+  color: white !important;
+  text-underline-offset: 5px;
+  text-shadow: 0 2px 6px #301944;
+}
+
+/* O formulário ocupa o espaço entre cabeçalho e rodapé. */
+.login-main {
+  position: relative;
+  grid-row: 2;
+  z-index: 2;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  padding: 12px 4.2vw;
+
+  /* Permite clicar no cenário fora do formulário. */
+  pointer-events: none;
+}
+
+.login-content {
+  width: clamp(340px, 33vw, 520px);
+  pointer-events: auto;
+}
+
+.login-content h1 {
+  font-size: clamp(38px, min(4.2vw, 7svh), 72px);
+  line-height: 1.02;
+  letter-spacing: -.045em;
+  margin: 0 0 16px;
+}
+
+/* Evita separar "uma aventura" em duas linhas no computador. */
+.login-content h1 span {
+  display: inline-block;
+  white-space: nowrap;
+  color: #633499;
+}
+
+.intro {
+  font-size: clamp(15px, 1.3vw, 20px);
+  line-height: 1.5;
+  color: #594566;
+  margin: 0 0 18px;
+}
+
+#login-form > label {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  margin: 12px 0 6px;
+}
+
+.input-wrap {
+  position: relative;
+}
+
+.input-wrap input {
+  width: 100%;
+  height: 50px;
+  padding: 0 52px;
+  border: 1px solid #c8b3d6;
+  border-radius: 18px;
+  background: #fffaf2c9;
+  color: #322046;
+  font-size: 16px;
+}
+
+.input-wrap input::placeholder {
+  color: #796682;
+}
+
+.input-wrap input:focus {
+  border-color: #7949b9;
+  background: #fffdf9;
+}
+
+.input-wrap input[aria-invalid="true"] {
+  border: 2px solid #a02748;
+}
+
+.input-symbol {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  font-weight: 700;
+  color: #78598c;
+  line-height: 22px;
+  pointer-events: none;
+}
+
+svg.input-symbol,
+.reveal-button svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+}
+
+.reveal-button {
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: transparent;
+  color: #78598c;
+}
+
+.reveal-button svg {
+  width: 23px;
+  height: 23px;
+  margin: auto;
+}
+
+.reveal-button:hover {
+  background: #eadff1;
+}
+
+.field-error {
+  color: #a02748;
+  font-size: 13px;
+  margin: 6px 0 0;
+}
+
+.field-error:empty,
+#login-status:empty {
+  display: none;
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  margin: 14px 0 16px;
+  color: #66516d;
+}
+
+.primary-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 50px;
+  padding: 12px 20px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, #9254df, #6534b3);
+  color: white;
+  font-weight: 700 !important;
+  box-shadow: 0 8px 22px #7343aa25;
+  transition: transform .2s, box-shadow .2s;
+}
+
+.primary-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px #7343aa38;
+}
+
+.primary-button:active {
+  transform: scale(.98);
+}
+
+.primary-button:disabled {
+  cursor: wait;
+  opacity: .75;
+}
+
+#login-status {
+  font-size: 14px;
+  color: #5b396e;
+  margin: 14px 0;
+}
+
+.register-line {
+  font-size: 13px;
+  text-align: center;
+  margin: 12px 0 8px;
+}
+
+.stage-note {
+  display: block;
+  font-size: 11px;
+  color: #6c5876;
+  line-height: 1.5;
+}
+
+/* ========================================
+   3. MASCOTE, OLHO E SOMBRA
+======================================== */
+
+.space-interactions {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.interaction-canvas > button {
+  pointer-events: auto;
+}
+
+.mascot {
+  position: absolute;
+  left: 70.8%;
+  top: 42.1%;
+  width: 14.4%;
+  aspect-ratio: 1;
+  padding: 0;
+  background: transparent;
+  clip-path: inset(0 0 8%);
+}
+
+.mascot-sprite {
+  position: absolute;
+  inset: 0;
+
+  /* Três poses dentro do mesmo arquivo. */
+  background:
+    url("../../../assets/imagens/login/cenarios-e-personagens/alien-cinematic-v5.png")
+    0 0 / 300% 100% no-repeat;
+}
+
+.mascot[data-pose="aceno"] .mascot-sprite {
+  background-position: 50% 0;
+}
+
+.mascot[data-pose="senha"] .mascot-sprite {
+  background-position: 100% 0;
+}
+
+.mascot-pupil {
+  position: absolute;
+  left: 48.6%;
+  top: 42.5%;
+  width: 14%;
+  height: 14%;
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle at 32% 25%,
+      #fff 0 10%,
+      transparent 14%
+    ),
+    radial-gradient(
+      circle,
+      #21112f 0 50%,
+      #654487 70%,
+      #a17bbb 83%,
+      #392049 100%
+    );
+
+  transform: translate(
+    calc(-50% + var(--eye-x, 0px)),
+    calc(-50% + var(--eye-y, 0px))
+  );
+
+  pointer-events: none;
+}
+
+.mascot-eyelid {
+  position: absolute;
+  left: 48.6%;
+  top: 42.5%;
+  width: 25%;
+  height: 25%;
+  transform: translate(-50%, -50%) scaleY(0);
+  animation: blink 7s infinite;
+  pointer-events: none;
+}
+
+.mascot[data-pose="senha"] .mascot-pupil,
+.mascot[data-pose="senha"] .mascot-eyelid {
+  visibility: hidden;
+}
+
+.contact-shadow {
+  position: absolute;
+  left: 74%;
+  top: 55.4%;
+  width: 8%;
+  height: 1.4%;
+  border-radius: 50%;
+  background: #3a1d5240;
+  filter: blur(7px);
+}
+
+.mascot-message {
+  position: absolute;
+  left: 70.8%;
+  top: 34%;
+  width: 240px;
+  padding: 12px 16px;
+  border-radius: 16px 16px 16px 4px;
+  background: #fffbf5f2;
+  color: #4e315e;
+  font-size: 13px;
+  opacity: 0;
+  transition: opacity .2s;
+}
+
+.mascot-message.is-visible {
+  opacity: 1;
+}
+
+/* ========================================
+   4. FOGUETE E ESTRELAS
+======================================== */
+
+.rocket {
+  position: absolute;
+  left: 45.2%;
+  top: 7%;
+  width: 8.5%;
+  height: 16%;
+  background: none;
+  padding: 0;
+  transform: rotate(26deg);
+  animation: float 6s ease-in-out infinite;
+}
+
+.rocket img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.rocket.is-flying {
+  animation: launch 2.1s ease-in forwards;
+}
+
+.rocket-flame {
+  position: absolute;
+  top: 80%;
+  left: 43%;
+  width: 14%;
+  height: 80px;
+  opacity: 0;
+  background: linear-gradient(#fff5ba, #ffab64, transparent);
+  filter: blur(4px);
+}
+
+.is-flying .rocket-flame {
+  opacity: 1;
+}
+
+.discovery-star {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: none;
+  font-size: 28px !important;
+  color: #fff3d8;
+  text-shadow: 0 0 16px #ffd08b;
+  animation: twinkle 4s ease-in-out infinite;
+}
+
+.discovery-star:hover {
+  transform: scale(1.2);
+}
+
+.star-one {
+  left: 51.8%;
+  top: 2.2%;
+}
+
+.star-two {
+  left: 77.5%;
+  top: .8%;
+  animation-delay: 1s;
+}
+
+.star-three {
+  left: 65.1%;
+  top: 90%;
+  animation-delay: 2s;
+}
+
+/* ========================================
+   5. RODAPÉ E DIÁLOGO
+======================================== */
+
+.login-footer {
+  position: relative;
+  grid-row: 3;
+  z-index: 3;
+  margin: 0;
+  padding: 8px 4.2vw 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 12px;
+  color: #61496d;
+}
+
+#pausar-movimentos {
+  min-height: 44px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  color: #553573;
+  background: #fffaf1ed;
+}
+
+dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  width: min(90vw, 430px);
+  padding: 28px;
+  border: 1px solid #d3bfdf;
+  border-radius: 22px;
+  color: #322046;
+  background: #fffcf8;
+}
+
+dialog::backdrop {
+  background: #26143699;
+  backdrop-filter: blur(5px);
+}
+
+dialog h2 {
+  margin-top: 0;
+  font-size: 23px;
+  line-height: 1.3;
+}
+
+dialog p {
+  margin-bottom: 24px;
+}
+
+/* ========================================
+   6. ANIMAÇÕES E REDUÇÃO DE MOVIMENTO
+======================================== */
+
+@keyframes orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes float {
+  50% {
+    transform: translateY(-8px) rotate(26deg);
+  }
+}
+
+@keyframes twinkle {
+  50% {
+    opacity: .5;
+  }
+}
+
+@keyframes blink {
+  0%, 43%, 47%, 100% {
+    transform: translate(-50%, -50%) scaleY(0);
+  }
+
+  45% {
+    transform: translate(-50%, -50%) scaleY(1);
+  }
+}
+
+@keyframes launch {
+  to {
+    transform: translate(45vw, -100vh) rotate(32deg);
+    opacity: 0;
+  }
+}
+
+.login-page.motion-paused *,
+.login-page.motion-paused *::before,
+.login-page.motion-paused *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+.motion-paused .mascot-eyelid {
+  display: none;
+}
+
+/* ========================================
+   7. NOTEBOOKS E TELAS MAIS BAIXAS
+   Reduz espaços sem esconder conteúdo.
+======================================== */
+
+@media (min-width: 761px) and (max-height: 760px) {
+  .login-header {
+    padding-top: 8px;
+    padding-bottom: 6px;
+  }
+
+  .brand svg {
+    width: 38px;
+    height: 38px;
+  }
+
+  .login-main {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .login-content h1 {
+    font-size: clamp(34px, min(4vw, 6.8svh), 52px);
+    margin-bottom: 12px;
+  }
+
+  .intro {
+    font-size: 15px;
+    line-height: 1.4;
+    margin-bottom: 14px;
+  }
+
+  #login-form > label {
+    font-size: 14px;
+    margin-top: 10px;
+  }
+
+  .input-wrap input {
+    height: 48px;
+  }
+
+  .reveal-button {
+    top: 2px;
+    right: 2px;
+  }
+
+  .form-options {
+    margin: 10px 0 14px;
+  }
+
+  .primary-button {
+    min-height: 46px;
+    padding: 10px 16px;
+    font-size: 15px;
+  }
+
+  .register-line {
+    font-size: 12px;
+    margin: 10px 0 6px;
+  }
+
+  .stage-note {
+    font-size: 10px;
+    line-height: 1.4;
+  }
+
+  #login-status {
+    font-size: 12px;
+    margin: 8px 0;
+  }
+
+  .login-footer {
+    padding-top: 4px;
+    padding-bottom: 6px;
+  }
+}
+
+/* ========================================
+   8. CELULAR
+======================================== */
+
+@media (max-width: 760px) {
+  .space-background::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(
+      90deg,
+      #fff8edf5,
+      #fff8eddd 68%,
+      #fff8ed85
+    );
+  }
+
+  .login-header {
+    padding: 16px 6% 8px;
+  }
+
+  .brand {
+    font-size: 23px;
+  }
+
+  .brand svg {
+    width: 37px;
+    height: 37px;
+  }
+
+  .signup-link {
+    color: #6940a5 !important;
+    text-shadow: none;
+    font-size: 13px;
+  }
+
+  .login-main {
+    align-items: flex-start;
+    padding: 44px 6% 20px;
+  }
+
+  .login-content {
+    width: 100%;
+    max-width: 430px;
+    margin: auto;
+  }
+
+  .login-content h1 {
+    font-size: clamp(32px, 8vw, 44px);
+    max-width: 72%;
+  }
+
+  .login-content h1 span {
+    white-space: normal;
+  }
+
+  .intro {
+    font-size: 15px;
+    margin-top: 16px;
+  }
+
+  .interaction-canvas {
+    width: 100%;
+    height: 100svh;
+    left: 0;
+    top: 0;
+    transform: none;
+  }
+
+  .mascot {
+    left: auto;
+    right: 0;
+    top: 118px;
+    width: 110px;
+    clip-path: none;
+  }
+
+  .mascot-message {
+    left: auto;
+    right: 12px;
+    top: 225px;
+    width: 165px;
+    font-size: 11px;
+  }
+
+  .contact-shadow,
+  .planet-light {
+    display: none;
+  }
+
+  .discovery-star {
+    top: auto;
+    bottom: 70px;
+    color: #795198;
+    text-shadow: 0 0 12px #d2b4e5;
+  }
+
+  .star-one {
+    left: auto;
+    right: 104px;
+  }
+
+  .star-two {
+    left: auto;
+    right: 60px;
+  }
+
+  .star-three {
+    left: auto;
+    right: 16px;
+  }
+
+  .rocket {
+    left: auto;
+    right: 22%;
+    top: 65px;
+    width: 42px;
+    height: 60px;
+  }
+
+  .login-footer {
+    padding: 8px 6% 16px;
+    font-size: 10px;
+  }
+
+  #pausar-movimentos {
+    font-size: 11px;
+  }
+}

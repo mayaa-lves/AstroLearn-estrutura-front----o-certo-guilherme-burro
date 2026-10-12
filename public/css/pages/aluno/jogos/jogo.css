@@ -1,0 +1,305 @@
+/* UI dos jogos: tabuleiro separado dos controles, teclado e toque equivalentes. */
+body:before {
+  background:
+    linear-gradient(140deg, #f4f1eee0, #eeeaf0ef),
+    url("../../../../assets/imagens/aluno/inicial/horizonte-v7.png")
+      center/cover no-repeat;
+}
+.game-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.8fr);
+  gap: 22px;
+  align-items: start;
+}
+.game-brief {
+  font-size: 14px;
+}
+.game-brief p {
+  color: #685373;
+}
+.game-board {
+  background: #f7f5f0;
+  border-radius: 17px;
+  border: 1px solid #dfd4e8;
+  padding: 14px;
+}
+.board {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.cell {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border: 1px solid #d7cee2;
+  border-radius: 13px;
+  background: #ede8ed;
+  font-size: 25px;
+  position: relative;
+  min-width: 0;
+}
+.cell.wall {
+  background: #c6c6c8;
+  background-image: radial-gradient(circle at 35% 35%, #e3e2df 0, #acaaad 68%);
+  border-radius: 19px 14px 17px 12px;
+  box-shadow: inset -5px -4px 5px #73727d22;
+}
+.cell.base {
+  background: #d1e7d9;
+  border-color: #abcab8;
+}
+.cell.base:before {
+  content: "BASE";
+  font-size: 11px;
+  color: #3a614c;
+  font-weight: 700;
+}
+.robot {
+  width: 75%;
+  height: 75%;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: linear-gradient(145deg, #fdfaf3, #b9ced0);
+  box-shadow: 0 4px 6px #34264622;
+  font-size: 30px;
+  color: #355866;
+}
+.robot svg {
+  width: 75%;
+  height: 75%;
+  stroke-width: 2;
+}
+.commands {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 14px 0;
+  min-height: 50px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #f1e9f5;
+}
+.command-chip {
+  min-width: 38px;
+  min-height: 38px;
+  border: 1px solid #d8c8e4;
+  background: white;
+  color: #663e8a;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+}
+.command-chip.running {
+  outline: 3px solid #7c51aa;
+}
+.direction-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 7px;
+}
+.direction-buttons button {
+  font-size: 22px;
+  min-height: 48px;
+  padding: 8px;
+}
+.level-steps {
+  display: flex;
+  gap: 7px;
+  margin-bottom: 18px;
+}
+.level-steps span {
+  background: #e9deef;
+  color: #755184;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+.level-steps .current {
+  background: #7542af;
+  color: white;
+}
+.board-legend {
+  font-size: 12px;
+  color: #655675;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 0 0;
+}
+.result-number {
+  font-size: 44px;
+  color: #7542af;
+  margin: 0;
+}
+.answer-list {
+  display: grid;
+  gap: 11px;
+  margin: 20px 0;
+}
+.answer-option {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid #d5c5e3;
+  background: #fffdfa;
+  border-radius: 13px;
+  cursor: pointer;
+  font-size: 16px;
+}
+.answer-option:has(input:checked) {
+  background: #ede1f6;
+  border-color: #8863ad;
+}
+.answer-option:focus-within {
+  outline: 3px solid #7243ab;
+  outline-offset: 3px;
+}
+.answer-option input {
+  accent-color: #7542af;
+  width: 18px;
+  height: 18px;
+}
+.question-heading {
+  font-size: 23px !important;
+  line-height: 1.4;
+}
+.explanation {
+  padding: 18px;
+  background: #eef4ec;
+  border-radius: 14px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.explanation.wrong {
+  background: #fff1e4;
+}
+.crew-map {
+  min-height: 220px;
+  background: linear-gradient(140deg, #e9edf0, #eee6f0);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  padding: 18px;
+  border-radius: 16px;
+}
+.crew-station {
+  background: #fffaf3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  border-radius: 14px;
+  border: 1px solid #d1c4dc;
+  padding: 18px;
+  font-size: 14px;
+}
+.crew-station svg {
+  width: 38px;
+  height: 38px;
+}
+.crew-station.done {
+  background: #e5f0e7;
+  border-color: #7f9e86;
+}
+.role-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+.role-list li {
+  padding: 12px;
+  background: #f0e9f3;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 14px;
+}
+.result-review {
+  display: grid;
+  gap: 14px;
+  padding: 0;
+  list-style: none;
+}
+.result-review li {
+  padding: 15px;
+  background: #f4edf7;
+  border-radius: 13px;
+  line-height: 1.6;
+  font-size: 14px;
+}
+.result-review strong {
+  display: block;
+}
+.game-controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+#resultDialog .button-row a {
+  flex: 1;
+}
+.count {
+  font-size: 13px;
+  color: #72567d;
+}
+.robo-status {
+  min-height: 3em;
+}
+.crew-question {
+  margin-top: 20px;
+}
+.quiz-board {
+  min-height: 370px;
+}
+@media (max-width: 1100px) {
+  .game-layout {
+    grid-template-columns: 1fr;
+  }
+  .game-brief > p {
+    margin-bottom: 0;
+  }
+  .board {
+    max-width: 440px;
+  }
+}
+@media (max-width: 450px) {
+  .game-board {
+    padding: 8px;
+  }
+  .board {
+    gap: 4px;
+  }
+  .cell {
+    border-radius: 9px;
+  }
+  .crew-map {
+    padding: 12px;
+    gap: 9px;
+  }
+  .crew-station {
+    padding: 12px;
+  }
+  .direction-buttons button {
+    padding: 6px;
+  }
+  .answer-option {
+    font-size: 15px;
+    padding: 13px;
+  }
+  .question-heading {
+    font-size: 20px !important;
+  }
+}
+
+.crew-station span{max-width:100%;min-width:0;overflow-wrap:anywhere;text-align:center}.role-list li{flex-wrap:wrap}.role-list li strong{min-width:0;overflow-wrap:anywhere}

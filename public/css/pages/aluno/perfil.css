@@ -1,0 +1,611 @@
+/* Tipografia acompanha a Loja: Astro regular (400) e bold (700), sem peso intermediário sintético. */
+main {
+  font-family: Astro, Arial, sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+}
+main h1,
+main h2 {
+  line-height: 1.2;
+}
+main button,
+main input,
+main output {
+  font-family: inherit;
+}
+/* Perfil: tipografia da oficina, pesos mais leves e cenário discreto. */
+body:before {
+  background:
+    linear-gradient(120deg, #fffaf585, #fffaf545),
+    url("../../../assets/imagens/aluno/perfil/cabine.png") center/cover
+      no-repeat;
+}
+.profile-header {
+  padding: 0;
+  background: none;
+  backdrop-filter: none;
+  display: block;
+}
+main {
+  max-width: 1730px;
+  padding-right: 45px;
+  padding-top: 42px;
+}
+.profile-header h1 {
+  font-size: clamp(26px, 2.8vw, 42px);
+  font-weight: 700;
+  letter-spacing: -1.2px;
+  margin: 7px 0;
+}
+.profile-header p {
+  font-size: 14px;
+  font-weight: 400;
+  color: #735b8c;
+  margin: 0;
+}
+.preview-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 12px;
+  color: #7239ad;
+  background: #eee0f8e8;
+  border-radius: 25px;
+  padding: 9px 15px;
+  margin: 17px 0 20px;
+}
+.preview-pill svg {
+  width: 19px;
+  height: 19px;
+}
+.identity-card,
+.school-card,
+.preferences-card {
+  background: #fffdfaf2;
+  border: 1px solid #ffffffdd;
+  border-radius: 21px;
+  box-shadow: 0 9px 32px #39244708;
+}
+.identity-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 21px 25px;
+  margin-bottom: 18px;
+  min-height: 124px;
+}
+.identity-symbol {
+  width: 75px;
+  height: 75px;
+  border-radius: 18px;
+  background: #f3eaf8;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.identity-symbol svg {
+  width: 50px;
+  height: 50px;
+  fill: #a18bbb;
+  stroke: #a18bbb;
+  stroke-width: 3;
+}
+.identity-symbol ellipse {
+  fill: none;
+}
+.identity-copy h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+.identity-copy p {
+  font-size: 14px;
+  color: #755e91;
+  margin: 0;
+}
+.identity-actions {
+  margin-left: auto;
+  text-align: right;
+}
+.identity-actions > div {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.identity-actions small {
+  display: block;
+  font-size: 12px;
+  color: #796584;
+  margin-top: 12px;
+}
+.outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 1px solid #a67cd1;
+  border-radius: 17px;
+  padding: 11px 15px;
+  min-height: 40px;
+  font-size: 12px;
+  font-weight: 400;
+  background: #fffefa;
+  color: #713c9f;
+  text-decoration: none;
+}
+.outline:hover {
+  background: #f1e6fa;
+}
+.outline svg {
+  width: 18px;
+  height: 18px;
+}
+.profile-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  gap: 18px;
+  align-items: start;
+}
+.school-card,
+.preferences-card {
+  padding: 23px;
+}
+.school-card h2,
+.preferences-card h2 {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 19px;
+  font-weight: 700;
+  margin: 0;
+}
+.school-card h2 svg,
+.preferences-card h2 svg {
+  width: 24px;
+  height: 24px;
+  color: #793ec0;
+  flex-shrink: 0;
+}
+.preferences-intro {
+  font-size: 12px;
+  color: #75628b;
+  margin: 7px 0 16px 35px;
+}
+.school-details {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 9px;
+  margin-top: 20px;
+}
+.school-details > div {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  background: #f5eff8;
+  border-radius: 15px;
+  padding: 17px 12px;
+}
+.school-details svg {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  color: #8950c0;
+}
+.school-details strong {
+  font-size: 14px;
+  font-weight: 700;
+  display: block;
+  line-height: 1.5;
+}
+.school-details p {
+  font-size: 12px;
+  color: #7c6590;
+  line-height: 1.5;
+  margin: 4px 0 0;
+}
+.team-link {
+  display: block;
+  text-align: center;
+  font-size: 13px;
+  text-decoration: none;
+  color: #7435b2;
+  margin: 20px 0 0;
+  padding: 8px;
+}
+.team-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.school-hint {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #83718e;
+  text-align: center;
+  margin: 12px 0 0;
+}
+.setting-row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 15px 0;
+  border-top: 1px solid #e7dfea;
+}
+.setting-icon {
+  display: grid;
+  place-items: center;
+  width: 41px;
+  height: 41px;
+  background: #f3eafa;
+  color: #743cad;
+  border-radius: 50%;
+  font-size: 25px;
+  flex-shrink: 0;
+}
+.text-icon {
+  font-size: 21px;
+}
+.setting-copy {
+  flex: 1;
+  min-width: 0;
+}
+.setting-copy label {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.6;
+  display: block;
+}
+.setting-copy p {
+  font-size: 12px;
+  color: #7b628a;
+  line-height: 1.6;
+  margin: 2px 0 0;
+}
+.switch {
+  appearance: none;
+  -webkit-appearance: none;
+  display: block;
+  position: relative;
+  width: 48px;
+  height: 27px;
+  flex-shrink: 0;
+  border: 1px solid #c2b8cf;
+  border-radius: 20px;
+  background: #c5bdcd;
+  cursor: pointer;
+  margin: 0;
+}
+.switch:before {
+  content: "";
+  position: absolute;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  left: 2px;
+  top: 2px;
+  background: #fff;
+  box-shadow: 0 1px 4px #50376b25;
+  transition: transform 0.2s;
+}
+.switch:checked {
+  background: #8950cd;
+  border-color: #8950cd;
+}
+.switch:checked:before {
+  transform: translateX(21px);
+}
+.switch:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.size-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.size-heading output {
+  font-size: 12px;
+  color: #5f3c7c;
+}
+.range-row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin: 13px 0 3px;
+}
+.small-a {
+  font-size: 15px;
+  color: #8b73a3;
+}
+.large-a {
+  font-size: 23px;
+  color: #8b73a3;
+}
+#textSize {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: 1;
+  min-width: 70px;
+  background: linear-gradient(
+    to right,
+    #8950cd 0 var(--range-fill, 0%),
+    #ded5e9 var(--range-fill, 0%) 100%
+  );
+  height: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+#textSize::-webkit-slider-thumb {
+  appearance: none;
+  width: 17px;
+  height: 25px;
+  border-radius: 5px;
+  background: #fff;
+  border: 1px solid #cbb9df;
+  box-shadow: 0 2px 5px #53396725;
+}
+#textSize::-moz-range-thumb {
+  width: 15px;
+  height: 23px;
+  border-radius: 5px;
+  background: #fff;
+  border: 1px solid #cbb9df;
+  box-shadow: 0 2px 5px #53396725;
+}
+#textSize:focus-visible {
+  outline: 3px solid #673398;
+  outline-offset: 8px;
+}
+.preferences-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding-top: 8px;
+}
+.preferences-actions .primary {
+  width: 100%;
+  background: #7a40b8;
+  border-radius: 15px;
+  padding: 13px 15px;
+  font-size: 13px;
+  font-weight: 400;
+  min-height: 43px;
+}
+.text-button {
+  background: none;
+  padding: 8px;
+  color: #7b5295;
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.preference-status {
+  font-size: 12px;
+  line-height: 1.6;
+  text-align: center;
+  margin: 7px 0;
+  color: #456954;
+}
+.preference-status:empty {
+  display: none;
+}
+.local-hint {
+  font-size: 12px;
+  text-align: center;
+  color: #85718e;
+  margin: 8px 0 0;
+}
+.page-error {
+  background: #fff0f2;
+  border: 1px solid #dfb6c2;
+  padding: 12px;
+  border-radius: 12px;
+  color: #953d55;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.page-error:empty {
+  display: none;
+}
+.helper {
+  width: 58px;
+  height: 68px;
+  right: 12px;
+  bottom: 23px;
+}
+.profile-header ~ .preview-pill + section {
+  scroll-margin: 20px;
+}
+svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+#nameForm label {
+  display: block;
+  margin: 18px 0 8px;
+  font-size: 13px;
+}
+#displayName {
+  font: inherit;
+  padding: 12px;
+  width: 100%;
+  border: 1px solid #cdbade;
+  border-radius: 12px;
+  color: #39204e;
+  background: #fff;
+}
+#nameForm .primary {
+  margin-top: 10px;
+}
+#nameError {
+  color: #9b3c54;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.outline:focus-visible,
+.switch:focus-visible {
+  outline: 3px solid #553494;
+  outline-offset: 4px;
+}
+@media (max-width: 1200px) {
+  main {
+    padding-right: 28px;
+  }
+  .profile-grid {
+    grid-template-columns: 1fr 1.1fr;
+    gap: 14px;
+  }
+  .school-card,
+  .preferences-card {
+    padding: 20px;
+  }
+  .school-details {
+    grid-template-columns: 1fr;
+  }
+  .identity-actions > div {
+    gap: 8px;
+  }
+  .outline {
+    font-size: 12px;
+    padding: 10px 13px;
+  }
+  .identity-card {
+    padding: 19px;
+  }
+  .identity-symbol {
+    width: 62px;
+    height: 62px;
+  }
+  .identity-copy h2 {
+    font-size: 22px;
+  }
+}
+@media (max-width: 1000px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+  .school-details {
+    grid-template-columns: 1fr 1fr;
+  }
+  .identity-card {
+    flex-wrap: wrap;
+  }
+  .identity-actions {
+    flex-basis: 100%;
+    margin-left: 0;
+    text-align: left;
+  }
+  .identity-actions > div {
+    justify-content: flex-start;
+  }
+  .identity-actions small {
+    margin-top: 8px;
+  }
+  .profile-header h1 {
+    font-size: 32px;
+  }
+  .preferences-card {
+    max-width: none;
+  }
+}
+@media (max-width: 800px) {
+  main,
+  .collapsed main {
+    margin-left: 0;
+    padding: 25px 17px 100px;
+  }
+  .sidebar,
+  .collapsed .sidebar {
+    width: auto;
+    left: 12px;
+    right: 12px;
+    top: auto;
+    bottom: 12px;
+  }
+  .profile-header h1 {
+    font-size: 28px;
+  }
+  .profile-header p {
+    font-size: 14px;
+  }
+  .identity-card {
+    padding: 18px;
+    gap: 13px;
+    border-radius: 18px;
+  }
+  .identity-copy h2 {
+    font-size: 22px;
+  }
+  .school-card,
+  .preferences-card {
+    padding: 20px;
+    border-radius: 18px;
+  }
+  .school-card h2,
+  .preferences-card h2 {
+    font-size: 19px;
+  }
+  .school-details {
+    gap: 8px;
+  }
+  .school-details > div {
+    padding: 13px 10px;
+    gap: 8px;
+  }
+  .school-details svg {
+    width: 28px;
+  }
+  .school-details strong {
+    font-size: 13px;
+  }
+  .helper {
+    bottom: 83px;
+    width: 50px;
+    height: 60px;
+  }
+  .preferences-intro {
+    margin-left: 35px;
+  }
+  .setting-copy label {
+    font-size: 14px;
+  }
+  .setting-copy p {
+    font-size: 12px;
+  }
+  .outline {
+    min-height: 42px;
+  }
+  .identity-actions > div .outline {
+    flex: 1;
+  }
+  .preview-pill {
+    margin-bottom: 16px;
+    font-size: 12px;
+  }
+  .preference-status {
+    font-size: 12px;
+  }
+}
+@media (max-width: 390px) {
+  .school-details {
+    grid-template-columns: 1fr;
+  }
+  .setting-icon {
+    width: 33px;
+    height: 33px;
+  }
+  .setting-row {
+    gap: 9px;
+  }
+  .identity-actions > div {
+    flex-direction: column;
+  }
+  .identity-actions > div .outline {
+    width: 100%;
+  }
+}

@@ -1,0 +1,18 @@
+/* Professor: mantém a composição, com o personagem aprovado de um olho. */
+@import url("./cadastro-aluno.css");
+.cadastro-professor .cenario-neutro {
+  background-image: url("../../../assets/imagens/login/poses-e-versoes/observatory-neutral.png");
+}
+.cadastro-professor .cenario-timido {
+  background-image: url("../../../assets/imagens/login/poses-e-versoes/observatory-shy.png");
+}
+.cadastro-professor .olho-esquerdo {
+  left: 27.8%;
+  top: 49.9%;
+  width: 2.8%;
+  height: 4.9%;
+  background:
+    radial-gradient(circle at 34% 24%, #fff 0 10%, transparent 13%),
+    radial-gradient(ellipse at center, #102d32 50%, #245a60 77%, #386c6c);
+  box-shadow: inset 0 0 3px #09272e;
+}

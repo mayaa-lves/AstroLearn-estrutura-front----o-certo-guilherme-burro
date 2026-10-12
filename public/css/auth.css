@@ -1,0 +1,121 @@
+/* Compartilhado por login e cadastros. TODO: composição aprovada e transições. */
+/* Componentes compartilhados.
+   Classes próprias para preservar o login atual. */
+
+.auth-eyebrow {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+}
+
+.auth-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Botões */
+
+.auth-primary,
+.auth-secondary,
+.auth-reveal,
+.auth-link-button {
+  font: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.auth-primary {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 48px;
+  padding: 11px 18px;
+  border: 0;
+  border-radius: 14px;
+  background: #553286;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 5px 14px #55328624;
+  transition: transform .18s ease, background .18s ease;
+}
+
+.auth-primary:hover {
+  background: #422368;
+  transform: translateY(-2px);
+}
+
+.auth-primary:active,
+.auth-secondary:active {
+  transform: scale(.98);
+}
+
+.auth-secondary {
+  min-height: 48px;
+  padding: 10px 16px;
+  border: 1px solid #b7a7bd;
+  border-radius: 14px;
+  background: #fff9;
+  color: #473154;
+}
+
+/* Campo com botão de revelar senha */
+
+.auth-password {
+  position: relative;
+}
+
+.auth-password input {
+  padding-right: 88px;
+}
+
+.auth-reveal {
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 10px;
+  color: #553286;
+  background: transparent;
+  font-size: .8rem;
+  font-weight: 700;
+}
+
+.auth-reveal:hover {
+  background: #5532860d;
+}
+
+.auth-link-button {
+  border: 0;
+  min-height: 44px;
+  padding: 8px;
+  background: transparent;
+  color: #493753;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  font-size: .8rem;
+}
+
+/* Mensagens dos campos */
+
+.auth-error {
+  color: #9e2536;
+  font-size: .8rem;
+  margin: 5px 0 0;
+}
+
+.auth-help {
+  color: #615467;
+  font-size: .75rem;
+  margin: 5px 0 0;
+}

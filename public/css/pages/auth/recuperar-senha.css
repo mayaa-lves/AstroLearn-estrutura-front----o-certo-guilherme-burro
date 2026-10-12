@@ -1,0 +1,275 @@
+/* Recuperação compartilha o cenário cinematográfico e a tipografia do login. */
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: Astro, Arial, sans-serif;
+  color: #302246;
+  min-height: 100svh;
+  background: #f5eee9;
+  isolation: isolate;
+}
+.recovery-scene {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    linear-gradient(90deg, #faf5edeb 0%, #faf5edc7 43%, #f1e9f533 78%),
+    url("../../../assets/imagens/login/cenarios-e-personagens/scene-cinematic-v5.png")
+      center/cover no-repeat;
+}
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 27px 5vw;
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 24px;
+  font-weight: 700;
+  text-decoration: none;
+  color: #533375;
+}
+.brand svg {
+  width: 40px;
+  height: 40px;
+  fill: #9565be;
+  stroke: #ab83c3;
+  stroke-width: 2;
+}
+.brand ellipse {
+  fill: none;
+}
+.login-link {
+  padding: 10px 18px;
+  text-decoration: none;
+  color: #61447a;
+  border: 1px solid #cdb8da;
+  border-radius: 25px;
+  background: #fffa;
+  font-size: 14px;
+}
+main {
+  padding: clamp(16px, 5vh, 70px) 8vw 28px;
+}
+.recovery-content {
+  max-width: 460px;
+}
+.eyebrow {
+  font-size: 13px;
+  color: #695075;
+}
+h1 {
+  font-size: clamp(34px, 4vw, 54px);
+  line-height: 1.08;
+  letter-spacing: -1.8px;
+  margin: 14px 0 18px;
+}
+h2 {
+  font-size: 20px;
+  line-height: 1.4;
+  margin: 0 0 10px;
+}
+.intro {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0 0 25px;
+  color: #624b70;
+}
+form {
+  display: grid;
+  gap: 8px;
+}
+label {
+  font-size: 14px;
+}
+input {
+  width: 100%;
+  height: 47px;
+  background: #fffaf5e8;
+  border: 1px solid #c3add1;
+  border-radius: 12px;
+  padding: 12px;
+  color: #342044;
+  font: inherit;
+  min-width: 0;
+}
+.primary,
+.secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 47px;
+  padding: 12px 18px;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.4;
+  border: 0;
+  border-radius: 13px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.primary {
+  background: #7749ac;
+  color: white;
+  margin-top: 5px;
+}
+.secondary {
+  color: #644182;
+  background: #f1e7f7;
+}
+.primary:hover {
+  background: #60368f;
+}
+.field-error {
+  color: #a02344;
+  font-size: 13px;
+  margin: 0;
+  line-height: 1.4;
+}
+.field-error:empty {
+  display: none;
+}
+.stage-note {
+  font-size: 12px;
+  color: #6d587a;
+  line-height: 1.5;
+  margin: 20px 0 15px;
+}
+.text-link,
+.text-button {
+  color: #64427c;
+  font-size: 14px;
+  text-underline-offset: 4px;
+}
+.text-button {
+  background: transparent;
+  border: 0;
+  display: block;
+  margin: 15px auto 0;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.feedback {
+  background: #fffaf4d9;
+  border: 1px solid #dccde6;
+  border-radius: 16px;
+  padding: 20px;
+  margin-top: 18px;
+}
+.feedback p {
+  line-height: 1.6;
+  font-size: 14px;
+  color: #644d71;
+}
+.password-wrap {
+  display: flex;
+  align-items: center;
+  background: #fffaf5e8;
+  border: 1px solid #c3add1;
+  border-radius: 12px;
+}
+.password-wrap input {
+  border: 0;
+  background: transparent;
+  flex: 1;
+}
+.reveal {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  color: #624478;
+}
+.reveal svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+}
+.skip {
+  position: fixed;
+  top: 4px;
+  left: 12px;
+  padding: 10px;
+  background: white;
+  transform: translateY(-150%);
+  z-index: 10;
+}
+.skip:focus {
+  transform: none;
+}
+:focus-visible {
+  outline: 3px solid #70469c;
+  outline-offset: 4px;
+}
+[hidden] {
+  display: none !important;
+}
+.reset-content h1 {
+  font-size: 44px;
+}
+.reset-content .intro {
+  margin-bottom: 18px;
+}
+@media (max-height: 800px) and (min-width: 801px) {
+  header {
+    padding: 19px 5vw;
+  }
+  main {
+    padding-top: 16px;
+  }
+  h1 {
+    font-size: 44px;
+  }
+  .intro {
+    margin-bottom: 20px;
+  }
+  .stage-note {
+    margin-top: 16px;
+  }
+  .reset-content h1 {
+    font-size: 38px;
+  }
+}
+@media (max-width: 800px) {
+  header {
+    padding: 20px;
+    gap: 10px;
+  }
+  .brand {
+    font-size: 20px;
+  }
+  .brand svg {
+    width: 30px;
+  }
+  .login-link {
+    font-size: 12px;
+    padding: 9px 12px;
+  }
+  main {
+    padding: 28px 24px 32px;
+  }
+  .recovery-content {
+    max-width: 480px;
+    margin: auto;
+  }
+  .recovery-scene {
+    background:
+      linear-gradient(180deg, #fbf6efe8, #fbf6efef),
+      url("../../../assets/imagens/login/cenarios-e-personagens/scene-cinematic-v5.png")
+        center/cover;
+  }
+  h1,
+  .reset-content h1 {
+    font-size: 39px;
+  }
+}

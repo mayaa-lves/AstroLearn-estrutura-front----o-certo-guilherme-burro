@@ -1,0 +1,144 @@
+/* Configurações salvas no Perfil acompanham as páginas do aluno. */
+.astro-motion-off *,
+.astro-motion-off *:before,
+.astro-motion-off *:after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+.astro-high-contrast {
+  --ink: #241131;
+  --muted: #3e284a;
+  --purple: #55268c;
+  color: #241131 !important;
+}
+.astro-high-contrast:before {
+  background: #eee9f3 !important;
+}
+.astro-high-contrast .sidebar,
+.astro-high-contrast dialog,
+.astro-high-contrast main > header,
+.astro-high-contrast .identity-card,
+.astro-high-contrast .school-card,
+.astro-high-contrast .preferences-card,
+.astro-high-contrast .achievement,
+.astro-high-contrast .next,
+.astro-high-contrast .member,
+.astro-high-contrast .mission-card,
+.astro-high-contrast .tasks-card,
+.astro-high-contrast .wall-card,
+.astro-high-contrast .material,
+.astro-high-contrast .parts,
+.astro-high-contrast .preview,
+.astro-high-contrast .editor-top,
+.astro-high-contrast .assignment-card {
+  background: #fff !important;
+  border: 1px solid #5f4276 !important;
+  backdrop-filter: none !important;
+}
+.astro-high-contrast main :is(p, small, label, output, h1, h2, h3, strong),
+.astro-high-contrast dialog p,
+.astro-high-contrast .local-hint,
+.astro-high-contrast .school-hint,
+.astro-high-contrast .identity-actions small {
+  color: #352043 !important;
+}
+.astro-high-contrast nav :is(a, button),
+.astro-high-contrast .text-button,
+.astro-high-contrast .outline,
+.astro-high-contrast .team-link {
+  color: #452063 !important;
+}
+.astro-high-contrast nav .active,
+.astro-high-contrast .primary,
+.astro-high-contrast .category-tabs [aria-selected="true"],
+.astro-high-contrast .view-switch [aria-pressed="true"],
+.astro-high-contrast .filters [aria-pressed="true"] {
+  background: #55248b !important;
+  color: #fff !important;
+}
+.astro-high-contrast .switch:checked {
+  background: #55248b !important;
+  border-color: #55248b !important;
+}
+.astro-high-contrast :is(button, a, input, textarea):focus-visible {
+  outline: 3px solid #261336 !important;
+  outline-offset: 4px !important;
+}
+/* Texto ampliado pode quebrar linhas sem encobrir os controles. */
+.identity-actions,
+.setting-row,
+.wallet,
+.editor-actions,
+.card-heading {
+  min-width: 0;
+}
+.school-details strong,
+.setting-copy label,
+.identity-copy h2,
+.character strong,
+.item strong {
+  overflow-wrap: anywhere;
+}
+.astro-high-contrast .school-details > div,
+.astro-high-contrast .setting-icon {
+  background: #eee7f5 !important;
+}
+.astro-high-contrast .preference-status {
+  color: #234f37 !important;
+}
+.astro-high-contrast .card,
+.astro-high-contrast .feedback-card,
+.astro-high-contrast .mission-banner,
+.astro-high-contrast .continue-panel,
+.astro-high-contrast .search {
+  background: #fff !important;
+  border: 1px solid #5f4276 !important;
+}
+.astro-high-contrast textarea,
+.astro-high-contrast input[type="text"],
+.astro-high-contrast input[type="search"] {
+  background: #fff !important;
+  color: #241131 !important;
+  border-color: #624475 !important;
+}
+.astro-high-contrast input::placeholder,
+.astro-high-contrast textarea::placeholder {
+  color: #5e486b !important;
+}
+.astro-text-large .brand {
+  white-space: normal;
+}
+.astro-text-large .editor-actions,
+.astro-text-large .card-heading,
+.astro-text-large .identity-actions > div {
+  flex-wrap: wrap;
+}
+.astro-text-large .preferences-card,
+.astro-text-large .school-card {
+  min-width: 0;
+}
+
+.astro-high-contrast .panel,
+.astro-high-contrast .game-card,
+.astro-high-contrast .settings-card,
+.astro-high-contrast .game-brief,
+.astro-high-contrast .game-board,
+.astro-high-contrast .result-card {
+  background: #fff !important;
+  border: 1px solid #624475 !important;
+  color: #241131 !important;
+}
+.astro-high-contrast .space-background {
+  opacity: 0.1 !important;
+}
+.astro-high-contrast .status-error {
+  color: #8b1535 !important;
+}
+.astro-text-large
+  :is(.game-header, .page-actions, .game-controls, .settings-actions) {
+  flex-wrap: wrap;
+}
+.astro-motion-off .sky {
+  opacity: 0.7;
+}

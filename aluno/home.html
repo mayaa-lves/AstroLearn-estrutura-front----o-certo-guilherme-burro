@@ -1,0 +1,518 @@
+<!doctype html>
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <title>AstroLearn · Minha expedição</title>
+    <meta
+      content="Explore, investigue e crie no AstroLearn."
+      name="description"
+    />
+    <link
+      as="image"
+      href="../public/assets/imagens/aluno/inicial/horizonte-v7.png"
+      rel="preload"
+    />
+    <link
+      as="image"
+      href="../public/assets/imagens/aluno/inicial/avatar-vistas-v4.png"
+      rel="preload"
+    />
+    <link href="../public/css/pages/aluno/home.css" rel="stylesheet" />
+    <link href="../public/css/menu-pdf.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../public/css/preferencias.css" />
+  </head>
+  <body class="menu-collapsed">
+    <a class="skip" href="#main">Pular para a trilha</a>
+    <!-- Atmosfera discreta: decorativa, sem disputar atenção com as missões. -->
+    <div aria-hidden="true" class="space-background">
+      <span class="sky-orbit orbit-one"> </span>
+      <span class="sky-orbit orbit-two"> </span>
+      <span class="sky-orbit orbit-three"> </span>
+      <span class="sky-star star-one">✦</span>
+      <span class="sky-star star-two">✧</span>
+      <span class="sky-star star-three">✦</span>
+      <span class="asteroid asteroid-one">
+        <svg aria-hidden="true" viewBox="0 0 100 100">
+          <defs>
+            <radialgradient cx="30%" cy="20%" id="rock">
+              <stop stop-color="#e0d1c6"></stop>
+              <stop offset=".55" stop-color="#ab98a9"></stop>
+              <stop offset="1" stop-color="#766b86"></stop>
+            </radialgradient>
+          </defs>
+          <path
+            d="M27 8 61 6 83 22 94 51 79 78 58 92 23 81 8 56 13 29Z"
+            fill="url(#rock)"
+          ></path>
+          <g fill="#655671" opacity=".3">
+            <ellipse cx="32" cy="35" rx="11" ry="9"></ellipse>
+            <ellipse cx="67" cy="55" rx="13" ry="11"></ellipse>
+            <circle cx="31" cy="66" r="7"></circle>
+            <circle cx="68" cy="26" r="5"></circle>
+          </g>
+        </svg>
+      </span>
+      <span class="asteroid asteroid-two">
+        <svg aria-hidden="true" viewBox="0 0 100 100">
+          <defs>
+            <radialgradient cx="30%" cy="20%" id="rock2">
+              <stop stop-color="#e0d1c6"></stop>
+              <stop offset=".55" stop-color="#ab98a9"></stop>
+              <stop offset="1" stop-color="#766b86"></stop>
+            </radialgradient>
+          </defs>
+          <path
+            d="M27 8 61 6 83 22 94 51 79 78 58 92 23 81 8 56 13 29Z"
+            fill="url(#rock2)"
+          ></path>
+          <g fill="#655671" opacity=".3">
+            <ellipse cx="32" cy="35" rx="11" ry="9"></ellipse>
+            <ellipse cx="67" cy="55" rx="13" ry="11"></ellipse>
+            <circle cx="31" cy="66" r="7"></circle>
+            <circle cx="68" cy="26" r="5"></circle>
+          </g>
+        </svg>
+      </span>
+      <span class="satellite">
+        <svg viewBox="0 0 120 75">
+          <defs>
+            <lineargradient id="metal">
+              <stop stop-color="#f2ddbe"></stop>
+              <stop offset="1" stop-color="#8c819e"></stop>
+            </lineargradient>
+          </defs>
+          <g transform="rotate(-20 60 38)">
+            <path
+              d="M4 20h35v32H4Zm77 0h35v32H81Z"
+              fill="#8997af"
+              stroke="#d9dde7"
+              stroke-width="2"
+            ></path>
+            <path
+              d="M15 20v32m12-32v32m66-32v32m12-32v32M4 31h35M4 42h35m42-11h35m-35 11h35"
+              stroke="#d3d2de"
+            ></path>
+            <path d="M39 36h42" stroke="#9e8ba8" stroke-width="5"></path>
+            <rect
+              fill="url(#metal)"
+              height="31"
+              rx="7"
+              width="28"
+              x="46"
+              y="22"
+            ></rect>
+            <path d="M60 22V9m-9 0h18" stroke="#ad8a5c" stroke-width="3"></path>
+          </g>
+        </svg>
+      </span>
+    </div>
+    <!-- Menu flutuante. Recolher mantém ícones e nomes acessíveis. -->
+    <aside class="sidebar">
+      <a class="brand" href="home.html">
+        <span class="brand-orbit">✦</span>Astro<span>Learn</span>
+      </a>
+      <button
+        aria-controls="mainNav"
+        aria-expanded="true"
+        aria-label="Recolher menu"
+        class="menu-toggle"
+        id="menuToggle"
+      >
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="m14 6-6 6 6 6"></path>
+        </svg>
+      </button>
+      <nav aria-label="Navegação principal" id="mainNav">
+        <button
+          aria-current="page"
+          aria-label="Início"
+          class="nav-item active"
+          data-nav="home"
+        >
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M3 10 12 3l9 7v10H3Zm6 10v-7h6v7"></path>
+          </svg>
+          <span>Início</span>
+        </button>
+        <button aria-label="Minha trilha" class="nav-item" data-nav="trail">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path
+              d="M6 3a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm12 12a3 3 0 1 0 0 6 3 3 0 0 0 0-6ZM6 9v3h12v3"
+            ></path>
+          </svg>
+          <span>Minha trilha</span>
+        </button>
+        <button aria-label="Biblioteca" class="nav-item" data-nav="book">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path
+              d="M12 5C9 3 5 3 2 4v16c4-1 7-1 10 1 3-2 6-2 10-1V4c-3-1-7-1-10 1Zm0 0v16"
+            ></path>
+          </svg>
+          <span>Biblioteca</span>
+        </button>
+        <button aria-label="Minha equipe" class="nav-item" data-nav="team">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path
+              d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM2 21v-3a7 7 0 0 1 14 0v3m1-17a4 4 0 0 1 0 8m2 2a6 6 0 0 1 3 5v2"
+            ></path>
+          </svg>
+          <span>Minha equipe</span>
+        </button>
+        <button aria-label="Conquistas" class="nav-item" data-nav="star">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1Z"></path>
+          </svg>
+          <span>Conquistas</span>
+        </button>
+        <button aria-label="Loja" class="nav-item" data-nav="shop">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M3 9h18v12H3ZM2 9l3-6h14l3 6M9 21v-7h6v7"></path>
+          </svg>
+          <span>Loja</span>
+        </button>
+        <button aria-label="Perfil" class="nav-item" data-nav="user">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path
+              d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10ZM3 22a9 9 0 0 1 18 0"
+            ></path>
+          </svg>
+          <span>Perfil</span>
+        </button>
+      </nav>
+      <div class="side-footer">
+        Aprender, criar e descobrir juntos.<a href="../auth/login.html"
+          >Voltar ao login</a
+        >
+      </div>
+    </aside>
+    <div class="app">
+      <header class="topbar">
+        <span class="demo-label">PRÉVIA · DADOS DE EXEMPLO</span>
+        <div class="top-actions">
+          <button aria-label="Ver meu progresso" class="fuel" id="progress">
+            ★ <strong>120 XP</strong>
+          </button>
+          <button
+            aria-label="Avisos do professor"
+            class="icon-button"
+            id="notifications"
+          >
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M5 17h14l-2-3V9a5 5 0 0 0-10 0v5Zm5 3h4"></path>
+            </svg>
+            <i> </i>
+          </button>
+          <button
+            aria-label="Reduzir animações"
+            aria-pressed="false"
+            class="icon-button"
+            id="motion"
+          >
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M20 15A9 9 0 0 1 9 3a9 9 0 1 0 11 12"></path>
+            </svg>
+          </button>
+          <button
+            aria-label="Abrir meu perfil"
+            class="profile-button"
+            data-nav="user"
+          >
+            <span class="avatar">M</span>
+            <span>Explorador</span>
+            <span>⌄</span>
+          </button>
+        </div>
+      </header>
+      <main id="main">
+        <section
+          aria-labelledby="welcomeTitle"
+          class="page-heading landing-intro"
+        >
+          <h1 id="welcomeTitle">Bem-vinda, Maya!</h1>
+          <p class="intro-copy">Vamos continuar sua expedição?</p>
+          <div class="intro-actions">
+            <button class="primary" id="continue">
+              Continuar missão
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M4 12h16m-6-6 6 6-6 6"></path>
+              </svg>
+            </button>
+            <button class="text-action" id="enterTrail">
+              Explorar minha trilha <span aria-hidden="true">↓</span>
+            </button>
+          </div>
+          <p class="intro-detail">
+            Missão atual · <strong id="introMission">Órbita das ideias</strong>
+            <span>Individual · 10 min</span>
+          </p>
+        </section>
+        <div class="learning-layout">
+          <section
+            aria-label="Trilha da expedição"
+            class="journey"
+            id="journey"
+          >
+            <div class="trail-heading">
+              <div>
+                <p class="trail-kicker">SEU MAPA DE DESCOBERTAS</p>
+                <h2>Um mundo de cada vez.</h2>
+              </div>
+              <button class="guide-button" id="guide">
+                Como jogar <span>↗</span>
+              </button>
+            </div>
+            <div class="path-wrap">
+              <svg aria-hidden="true" class="path-line">
+                <path id="pathCurve"></path>
+              </svg>
+              <ol class="steps">
+                <li class="step done step-0">
+                  <button
+                    aria-label="Primeiro contato: concluída"
+                    class="planet"
+                    data-step="0"
+                  >
+                    <span class="planet-surface world-0"> </span>
+                    <span class="planet-status">✓</span>
+                  </button>
+                  <div class="step-copy">
+                    <div class="step-title">
+                      <span class="step-number">1</span>
+                      <h2>Primeiro contato</h2>
+                    </div>
+                    <p>Explore o universo da ciência e do seu potencial.</p>
+                  </div>
+                </li>
+                <li class="step current step-1">
+                  <button
+                    aria-label="Órbita das ideias: disponível"
+                    class="planet"
+                    data-step="1"
+                  >
+                    <span class="planet-surface world-1"> </span>
+                    <span class="active-orbit"> </span>
+                    <span class="orbit-ship">
+                      <img
+                        alt=""
+                        src="../public/assets/imagens/login/cenarios-e-personagens/rocket.png"
+                      />
+                    </span>
+                    <span class="planet-status">▶</span>
+                  </button>
+                  <div class="step-copy">
+                    <span class="here">⌖ VOCÊ ESTÁ AQUI</span>
+                    <div class="step-title">
+                      <span class="step-number">2</span>
+                      <h2>Órbita das ideias</h2>
+                    </div>
+                    <p>Observe, faça perguntas e investigue.</p>
+                  </div>
+                </li>
+                <li class="step locked step-2">
+                  <button
+                    aria-label="Mundo desconhecido: bloqueado"
+                    class="planet"
+                    data-step="2"
+                  >
+                    <span class="planet-surface world-2"> </span>
+                    <span class="planet-status">
+                      <svg aria-hidden="true" viewBox="0 0 24 24">
+                        <rect height="11" rx="3" width="14" x="5" y="10"></rect>
+                        <path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"></path>
+                      </svg>
+                    </span>
+                  </button>
+                  <div class="step-copy">
+                    <div class="step-title">
+                      <span class="step-number">3</span>
+                      <h2>Mundo desconhecido</h2>
+                    </div>
+                    <p>Uma nova descoberta espera por você.</p>
+                  </div>
+                </li>
+                <li class="step locked step-3">
+                  <button
+                    aria-label="Mundo desconhecido: bloqueado"
+                    class="planet"
+                    data-step="3"
+                  >
+                    <span class="planet-surface world-3"> </span>
+                    <span class="planet-status">
+                      <svg aria-hidden="true" viewBox="0 0 24 24">
+                        <rect height="11" rx="3" width="14" x="5" y="10"></rect>
+                        <path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"></path>
+                      </svg>
+                    </span>
+                  </button>
+                  <div class="step-copy">
+                    <div class="step-title">
+                      <span class="step-number">4</span>
+                      <h2>Mundo desconhecido</h2>
+                    </div>
+                    <p>Uma nova descoberta espera por você.</p>
+                  </div>
+                </li>
+                <li class="step locked step-4">
+                  <button
+                    aria-label="Mundo desconhecido: bloqueado"
+                    class="planet"
+                    data-step="4"
+                  >
+                    <span class="planet-surface world-4"> </span>
+                    <span class="planet-status">
+                      <svg aria-hidden="true" viewBox="0 0 24 24">
+                        <rect height="11" rx="3" width="14" x="5" y="10"></rect>
+                        <path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"></path>
+                      </svg>
+                    </span>
+                  </button>
+                  <div class="step-copy">
+                    <div class="step-title">
+                      <span class="step-number">5</span>
+                      <h2>Mundo desconhecido</h2>
+                    </div>
+                    <p>Uma nova descoberta espera por você.</p>
+                  </div>
+                </li>
+              </ol>
+              <button
+                aria-label="Descobrir uma curiosidade espacial"
+                class="floating-star"
+                id="curiosity"
+              >
+                ✦
+              </button>
+            </div>
+            <p class="journey-note">
+              Uma pergunta. Uma descoberta. Um novo mundo.
+            </p>
+          </section>
+          <!-- Visualização por vistas renderizadas; sem opções de personalização. -->
+          <aside
+            aria-label="Visualização do seu explorador"
+            class="avatar-viewer"
+          >
+            <button
+              aria-label="Interagir com seu explorador"
+              class="avatar-stage"
+              id="avatarStage"
+            >
+              <div class="avatar-render" id="avatarRender"></div>
+              <span aria-hidden="true" class="avatar-eye eye-left"> </span>
+              <span aria-hidden="true" class="avatar-eye eye-right"> </span>
+              <span aria-hidden="true" class="eyelid lid-left"> </span>
+              <span aria-hidden="true" class="eyelid lid-right"> </span>
+            </button>
+            <p
+              aria-live="polite"
+              class="avatar-reaction"
+              id="avatarReaction"
+              role="status"
+            ></p>
+            <div class="rotation-control">
+              <label for="avatarRotation">Girar avatar</label>
+              <div class="slider-row">
+                <span>0°</span>
+                <input
+                  aria-valuetext="Vista de frente, 0 graus"
+                  id="avatarRotation"
+                  max="360"
+                  min="0"
+                  step="1"
+                  type="range"
+                  value="0"
+                />
+                <span>360°</span>
+              </div>
+              <output class="sr-only" for="avatarRotation" id="avatarAngle"
+                >0 graus</output
+              >
+            </div>
+          </aside>
+        </div>
+      </main>
+      <footer>AstroLearn · Dados e progresso demonstrativos.</footer>
+    </div>
+    <!-- Assistente compacto, separado do avatar pessoal. -->
+    <div class="chat-launcher">
+      <button
+        aria-controls="chatPanel"
+        aria-expanded="false"
+        aria-label="Conversar com seu copiloto"
+        class="helper-mascot"
+        id="helperMascot"
+      >
+        <span class="helper-sprite" id="helperSprite"> </span>
+        <span class="jet-flame"> </span>
+        <span class="helper-tip" role="tooltip">Precisa de uma dica?</span>
+      </button>
+    </div>
+    <section
+      aria-label="Chat de ajuda"
+      class="chat-panel"
+      hidden=""
+      id="chatPanel"
+      inert=""
+    >
+      <header>
+        <div>
+          <strong>Seu copiloto</strong>
+          <span>Ajuda demonstrativa · sem IA conectada</span>
+        </div>
+        <button aria-label="Fechar chat" id="chatClose">×</button>
+      </header>
+      <div
+        aria-live="polite"
+        aria-relevant="additions"
+        class="chat-log"
+        id="chatLog"
+        role="log"
+      >
+        <p class="chat-message bot">
+          Oi, explorador! Posso ajudar você a encontrar sua missão, entender a
+          trilha ou pensar em uma pergunta para investigar.
+        </p>
+      </div>
+      <div class="chat-prompts">
+        <button data-prompt="Como começo a missão?">Minha missão</button>
+        <button data-prompt="Como trabalho com minha equipe?">
+          Minha equipe
+        </button>
+        <button data-prompt="Me conte uma curiosidade espacial">
+          Curiosidade
+        </button>
+      </div>
+      <form id="chatForm">
+        <label class="sr-only" for="chatInput">Sua pergunta</label>
+        <input
+          autocomplete="off"
+          id="chatInput"
+          maxlength="400"
+          placeholder="O que você quer descobrir?"
+        />
+        <button aria-label="Enviar pergunta">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M4 12h16m-6-6 6 6-6 6"></path>
+          </svg>
+        </button>
+      </form>
+    </section>
+    <dialog id="dialog">
+      <button aria-label="Fechar" class="dialog-close" id="closeDialog">
+        ×
+      </button>
+      <span class="dialog-kicker" id="dialogKicker">MISSÃO</span>
+      <h2 id="dialogTitle"></h2>
+      <div id="dialogContent"></div>
+      <button class="primary" id="dialogAction">Entendi</button>
+    </dialog>
+
+    <script defer src="../public/js/pages/aluno/home.js"></script>
+    <script defer src="../public/js/components/estrelas-home.js"></script>
+    <script defer src="../public/js/components/menu-pdf.js"></script>
+    <script src="../public/js/components/preferencias.js"></script>
+    <script src="../public/js/components/identidade.js"></script>
+  </body>
+</html>

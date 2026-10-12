@@ -1,0 +1,81 @@
+@import url("./fonts.css");
+/* Base compartilhada: ajuste os valores ao implementar o visual aprovado. */
+:root {
+  --cor-fundo: #f7f6fb;
+  --cor-superficie: #fff;
+  --cor-texto: #25213a;
+  --cor-secundaria: #575269;
+  --cor-destaque: #6440a6;
+  --cor-borda: #d8d3e3;
+  --raio-card: 1rem;
+  --espaco-base: 1rem;
+  --fonte-principal: Astro, Arial, Helvetica, sans-serif;
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  font-family: var(--fonte-principal);
+  line-height: 1.6;
+}
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+img {
+  max-width: 100%;
+  display: block;
+}
+a {
+  color: var(--cor-destaque);
+}
+button {
+  cursor: pointer;
+}
+[hidden] {
+  display: none !important;
+}
+:focus-visible {
+  outline: 3px solid var(--cor-destaque);
+  outline-offset: 4px;
+}
+.page-base {
+  width: min(100% - 2rem, 68rem);
+  margin: 3rem auto;
+}
+.eyebrow {
+  color: var(--cor-secundaria);
+}
+.page-index {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+  padding-left: 1.25rem;
+}
+.skip-link {
+  position: absolute;
+  top: -10rem;
+  left: 1rem;
+  padding: 0.75rem;
+  background: white;
+  z-index: 100;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

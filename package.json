@@ -1,0 +1,10 @@
+{
+  "name": "astrolearn-estrutura-front",
+  "version": "0.3.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node scripts/dev-server.cjs",
+    "check": "node scripts/check.cjs"
+  }
+}

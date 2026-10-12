@@ -1,0 +1,252 @@
+/* Compartilhado por aluno e professor. TODO: menu lateral e navegação inferior no mobile. */
+/* Estrutura das áreas internas */
+
+.dashboard-page {
+  --menu-width: 210px;
+  margin: 0;
+  min-height: 100svh;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #30283d;
+  line-height: 1.5;
+}
+
+.dashboard-page.menu-collapsed {
+  --menu-width: 76px;
+}
+
+.dashboard-main {
+  margin-left: calc(var(--menu-width) + 38px);
+  padding: 0 clamp(22px, 3vw, 48px);
+  min-width: 0;
+  transition: margin-left .28s ease;
+}
+
+/* Menu de vidro afastado das bordas */
+
+.app-menu {
+  position: fixed;
+  left: 16px;
+  top: 16px;
+  bottom: 16px;
+  width: var(--menu-width);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 10px;
+  border: 1px solid #fffc;
+  border-radius: 24px;
+  background: #fffaf0b8;
+  backdrop-filter: blur(18px);
+  box-shadow: 0 12px 36px #49334c14;
+  transition: width .28s ease;
+}
+
+.menu-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 2px 18px;
+}
+
+.menu-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #4c355e;
+  font-weight: 700;
+  text-decoration: none;
+  min-width: 0;
+}
+
+.menu-brand svg {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.menu-toggle {
+  margin-left: auto;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 10px;
+  background: #fff9;
+  color: #4c355e;
+  cursor: pointer;
+}
+
+.menu-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+.menu-links {
+  display: grid;
+  gap: 6px;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.menu-extras {
+  display: grid;
+  gap: 6px;
+}
+
+.menu-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 46px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  text-decoration: none;
+  color: #51415f;
+  font-size: .88rem;
+  white-space: nowrap;
+  transition: background .2s, transform .2s;
+}
+
+.menu-link svg {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.menu-link:hover {
+  background: #ffffff9c;
+  transform: translateX(2px);
+}
+
+.menu-link[aria-current="page"] {
+  color: #553087;
+  background: #e9dff3d9;
+  font-weight: 700;
+}
+
+.menu-caption {
+  margin: auto 8px 0;
+  padding-top: 16px;
+  font-size: .7rem;
+  color: #6c5a73;
+}
+
+.menu-more {
+  display: none;
+}
+
+/* Menu recolhido: preservar os ícones */
+
+.menu--recolhido .menu-text,
+.menu--recolhido .menu-caption {
+  display: none;
+}
+
+.menu--recolhido .menu-heading {
+  flex-direction: column;
+  padding-bottom: 12px;
+}
+
+.menu--recolhido .menu-toggle {
+  margin: 0;
+}
+
+.menu--recolhido .menu-link {
+  justify-content: center;
+  padding: 10px;
+}
+
+/* Celular: navegação inferior */
+
+@media (max-width: 760px) {
+  .dashboard-main {
+    margin-left: 0;
+    padding: 0 20px 104px;
+  }
+
+  .app-menu {
+    inset: auto 10px calc(10px + env(safe-area-inset-bottom));
+    width: auto;
+    padding: 7px;
+    border-radius: 22px;
+    overflow: visible;
+  }
+
+  .menu-heading,
+  .menu-caption {
+    display: none;
+  }
+
+  .menu-links {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 2px;
+    overflow: visible;
+  }
+
+  .menu-link,
+  .menu--recolhido .menu-link,
+  .menu-more {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3px;
+    padding: 6px 1px;
+    min-height: 54px;
+    font-size: .61rem;
+  }
+
+  .menu--recolhido .menu-text {
+    display: inline;
+  }
+
+  .menu-link:hover {
+    transform: none;
+  }
+
+  .menu-more {
+    border: 0;
+    border-radius: 14px;
+    color: #51415f;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .menu-more svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .menu-extras {
+    display: none;
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 10px);
+    width: 200px;
+    padding: 10px;
+    border: 1px solid #fff;
+    border-radius: 18px;
+    background: #fffaf2f5;
+    box-shadow: 0 8px 28px #49334c24;
+  }
+
+  .menu-mobile-open .menu-extras {
+    display: grid;
+  }
+
+  .menu-extras .menu-link {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 10px;
+    font-size: .88rem;
+    padding: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-page *,
+  .dashboard-page *::before,
+  .dashboard-page *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

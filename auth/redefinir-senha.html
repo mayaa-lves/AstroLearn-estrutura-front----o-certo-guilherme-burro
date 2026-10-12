@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Nova senha · AstroLearn</title>
+    <link rel="stylesheet" href="../public/css/fonts.css" />
+    <link
+      rel="stylesheet"
+      href="../public/css/pages/auth/recuperar-senha.css"
+    />
+  </head>
+  <body>
+    <a class="skip" href="#main">Pular para o formulário</a>
+    <div class="recovery-scene" aria-hidden="true"></div>
+    <header>
+      <a class="brand" href="login.html"
+        ><svg viewBox="0 0 40 40" aria-hidden="true">
+          <circle cx="20" cy="20" r="9" />
+          <ellipse
+            cx="20"
+            cy="20"
+            rx="18"
+            ry="6"
+            transform="rotate(-28 20 20)"
+          /></svg
+        >AstroLearn</a
+      ><a class="login-link" href="login.html">Voltar ao login</a>
+    </header>
+    <main id="main" tabindex="-1">
+      <section class="recovery-content reset-content" aria-labelledby="title">
+        <span class="eyebrow">Um novo começo</span>
+        <h1 id="title">Defina sua<br />nova senha.</h1>
+        <p class="intro">
+          Na plataforma integrada, esta tela será aberta por um link de
+          recuperação válido.
+        </p>
+        <div id="invalidLink" class="feedback" hidden>
+          <h2>Solicite um link de recuperação</h2>
+          <p>
+            Esta prévia não valida tokens. Para testar o formulário, comece pela
+            tela de recuperação de senha.
+          </p>
+          <a class="secondary" href="recuperar-senha.html">Recuperar senha</a>
+        </div>
+        <form id="resetForm" novalidate>
+          <label for="newPassword">Nova senha</label>
+          <div class="password-wrap">
+            <input
+              id="newPassword"
+              type="password"
+              autocomplete="new-password"
+              minlength="8"
+              maxlength="128"
+              required
+              aria-describedby="passwordHint passwordError"
+            /><button
+              class="reveal"
+              type="button"
+              data-reveal="newPassword"
+              aria-label="Mostrar nova senha"
+              aria-pressed="false"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7Z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </button>
+          </div>
+          <small id="passwordHint" class="stage-note" style="margin: 0"
+            >Use entre 8 e 128 caracteres nesta demonstração.</small
+          >
+          <p id="passwordError" class="field-error" role="alert"></p>
+          <label for="confirmPassword">Confirme a nova senha</label>
+          <div class="password-wrap">
+            <input
+              id="confirmPassword"
+              type="password"
+              autocomplete="new-password"
+              maxlength="128"
+              required
+              aria-describedby="confirmError"
+            /><button
+              class="reveal"
+              type="button"
+              data-reveal="confirmPassword"
+              aria-label="Mostrar confirmação da senha"
+              aria-pressed="false"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7Z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </button>
+          </div>
+          <p id="confirmError" class="field-error" role="alert"></p>
+          <button type="submit" class="primary">Testar redefinição</button>
+        </form>
+        <div id="resetResult" class="feedback" hidden>
+          <h2>Formulário validado</h2>
+          <p>
+            Nenhuma senha foi alterada ou armazenada. A redefinição real
+            dependerá da validação do link e da atualização da conta pelo
+            backend.
+          </p>
+          <a class="secondary" href="login.html">Voltar ao login</a>
+        </div>
+        <p class="stage-note">Prévia do frontend · use uma senha fictícia.</p>
+      </section>
+    </main>
+    <script src="../public/js/pages/auth/redefinir-senha.js"></script>
+  </body>
+</html>
