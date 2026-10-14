@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Biblioteca da turma · AstroLearn</title>
+
+  <link rel="stylesheet" href="../public/css/aluno-pdf.css">
+  <link rel="stylesheet" href="../public/css/professor.css">
+  <link rel="stylesheet" href="../public/css/menu-professor.css">
+  <link rel="stylesheet" href="../public/css/preferencias.css">
+
+  <style>
+    .library-layout {
+      display: grid;
+      grid-template-columns: minmax(280px, 1fr) minmax(300px, 1.3fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    #materialForm {
+      display: grid;
+      gap: 12px;
+    }
+
+    #materialForm input,
+    #materialForm textarea,
+    #materialForm select,
+    #search {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    #materialForm textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    #materialList {
+      display: grid;
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .material-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .material-description {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    @media (max-width: 900px) {
+      .library-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body data-page="library">
+  <a class="skip" href="#main">Pular para o conteúdo</a>
+
+  <aside class="sidebar">
+    <a class="brand" href="home.html">
+      Astro<span>Learn</span>
+    </a>
+
+    <button
+      id="menuToggle"
+      aria-controls="mainNav"
+      aria-expanded="true"
+      aria-label="Recolher menu"
+    >
+      ‹‹
+    </button>
+
+    <nav id="mainNav" aria-label="Menu do professor">
+      <a href="home.html">
+        <span aria-hidden="true">▦</span>
+        <span class="label">Turmas</span>
+      </a>
+
+      <a data-room-route="turma.html">
+        <span aria-hidden="true">⌂</span>
+        <span class="label">Sala</span>
+      </a>
+
+      <a data-room-route="atividades.html">
+        <span aria-hidden="true">▤</span>
+        <span class="label">Atividades</span>
+      </a>
+
+      <a
+        data-room-route="biblioteca.html"
+        class="active"
+        aria-current="page"
+      >
+        <span aria-hidden="true">▥</span>
+        <span class="label">Biblioteca</span>
+      </a>
+
+      <a data-room-route="equipes.html">
+        <span aria-hidden="true">♧</span>
+        <span class="label">Equipes</span>
+      </a>
+
+      <a data-room-route="correcoes.html">
+        <span aria-hidden="true">✓</span>
+        <span class="label">Correções</span>
+      </a>
+    </nav>
+
+    <div class="side-bottom">
+      <a href="../auth/login.html">
+        ← <span class="label">Sair</span>
+      </a>
+    </div>
+  </aside>
+
+  <main id="main" tabindex="-1">
+    <header class="teacher-top">
+      <span class="mode">ESTAÇÃO DO PROFESSOR</span>
+
+      <button id="refresh" class="text-button" type="button">
+        ↻ Atualizar
+      </button>
+    </header>
+
+    <nav class="breadcrumbs" aria-label="Caminho da página">
+      <a href="home.html">Turmas</a>
+      <span> / </span>
+      <a id="roomLink">Minha turma</a>
+      <span> / Biblioteca</span>
+    </nav>
+
+    <section class="page-heading">
+      <p class="eyebrow">
+        CONHECIMENTO PARA A PRÓXIMA DESCOBERTA
+      </p>
+
+      <h1>Biblioteca da turma</h1>
+      <p id="roomName">Carregando turma…</p>
+    </section>
+
+    <p id="error" class="error-panel" role="alert"></p>
+
+    <p
+      id="status"
+      class="status"
+      role="status"
+      aria-live="polite"
+    ></p>
+
+    <div class="library-layout">
+      <section class="panel" aria-labelledby="formTitle">
+        <h2 id="formTitle">Novo material</h2>
+        <p>Reúna referências e orientações para seus alunos.</p>
+
+        <form id="materialForm">
+          <label for="title">Título *</label>
+          <input
+            id="title"
+            required
+            maxlength="120"
+            placeholder="Ex.: Guia de investigação"
+          >
+
+          <label for="description">Descrição</label>
+          <textarea
+            id="description"
+            maxlength="10000"
+            placeholder="Explique como o material pode ajudar na atividade."
+          ></textarea>
+
+          <label for="mission">Relacionar com uma atividade</label>
+          <select id="mission">
+            <option value="">Biblioteca geral da turma</option>
+          </select>
+
+          <label for="links">Links — um por linha</label>
+          <textarea
+            id="links"
+            aria-describedby="linksHint"
+            placeholder="https://..."
+            spellcheck="false"
+          ></textarea>
+
+          <p id="linksHint" class="hint">
+            Use links compartilhados que os alunos possam acessar.
+            Você também pode salvar uma orientação sem links.
+          </p>
+
+          <label for="files">PDFs e imagens</label>
+          <input
+            id="files"
+            type="file"
+            disabled
+            aria-describedby="uploadHint"
+          >
+
+          <p id="uploadHint" class="hint">
+            Upload indisponível até a implementação no backend.
+            Por enquanto, compartilhe o link do arquivo.
+          </p>
+
+          <button
+            id="save"
+            class="primary"
+            type="submit"
+            disabled
+          >
+            Salvar material
+          </button>
+        </form>
+      </section>
+
+      <section class="panel" aria-labelledby="listTitle">
+        <h2 id="listTitle">Materiais compartilhados</h2>
+
+        <label for="search">Buscar por título ou descrição</label>
+        <input
+          id="search"
+          type="search"
+          placeholder="Buscar material…"
+        >
+
+        <p id="count" class="hint" role="status"></p>
+
+        <div id="materialList" aria-busy="true"></div>
+      </section>
+    </div>
+
+    <footer>AstroLearn · Uma descoberta de cada vez.</footer>
+  </main>
+
+  <script src="../public/js/components/preferencias.js"></script>
+  <script src="../public/js/components/menu-professor.js"></script>
+  <script
+    type="module"
+    src="../public/js/components/sessao.js"
+  ></script>
+
+  <script type="module">
+    import {
+      api,
+      sessaoObrigatoria
+    } from "../public/js/services/conexao.js";
+
+    sessaoObrigatoria("professor");
+
+    const $ = id => document.getElementById(id);
+
+    const sala = new URLSearchParams(location.search).get("sala");
+
+    const base =
+      "/api/professor/salas/" + encodeURIComponent(sala || "");
+
+    let materiais = [];
+    let ocupado = false;
+    let pronta = false;
+
+    function roomURL(route) {
+      return route + "?sala=" + encodeURIComponent(sala || "");
+    }
+
+    document.querySelectorAll("[data-room-route]").forEach(link => {
+      link.href = roomURL(link.dataset.roomRoute);
+    });
+
+    $("roomLink").href = roomURL("turma.html");
+
+    function elemento(tag, texto, classe = "") {
+      const node = document.createElement(tag);
+      node.textContent = texto;
+      node.className = classe;
+      return node;
+    }
+
+    function normalizarLink(valor) {
+      const entrada = valor.trim();
+
+      const candidato = /^[a-z][a-z\d+.-]*:/i.test(entrada)
+        ? entrada
+        : "https://" + entrada;
+
+      try {
+        const url = new URL(candidato);
+
+        if (
+          url.protocol !== "https:" ||
+          !url.hostname.includes(".") ||
+          url.username ||
+          url.password
+        ) {
+          throw new Error();
+        }
+
+        return url.href;
+      } catch {
+        throw new Error(
+          "Link inválido: " + entrada +
+          ". Use um endereço HTTPS completo."
+        );
+      }
+    }
+
+    function renderizar() {
+      const busca = $("search").value
+        .trim()
+        .toLocaleLowerCase("pt-BR");
+
+      const lista = materiais.filter(material =>
+        (
+          material.titulo + " " +
+          (material.descricao || "")
+        )
+          .toLocaleLowerCase("pt-BR")
+          .includes(busca)
+      );
+
+      $("materialList").replaceChildren();
+
+      $("count").textContent =
+        lista.length + " materiais encontrados";
+
+      if (!lista.length) {
+        $("materialList").append(
+          elemento(
+            "p",
+            busca
+              ? "Nenhum material corresponde à busca."
+              : "Sua turma ainda não tem materiais compartilhados.",
+            "empty"
+          )
+        );
+      }
+
+      lista.forEach(material => {
+        const card = elemento("article", "", "panel");
+
+        card.append(
+          elemento("h3", material.titulo),
+          elemento(
+            "p",
+            material.descricao || "Sem descrição.",
+            "material-description"
+          )
+        );
+
+        card.append(
+          elemento(
+            "p",
+            material.missoes?.titulo
+              ? "Atividade: " + material.missoes.titulo
+              : "Biblioteca geral da turma",
+            "hint"
+          )
+        );
+
+        const links = elemento("div", "", "material-links");
+
+        (material.links || []).forEach((raw, index) => {
+          try {
+            const url = new URL(
+              typeof raw === "string" ? raw : raw.url
+            );
+
+            if (
+              !["https:", "http:"].includes(url.protocol) ||
+              url.username ||
+              url.password
+            ) {
+              return;
+            }
+
+            const link = elemento(
+              "a",
+              "Abrir material " + (index + 1) + " ↗",
+              "secondary"
+            );
+
+            link.href = url.href;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+
+            links.append(link);
+          } catch {
+            // Um link inválido não impede os outros de aparecer.
+          }
+        });
+
+        card.append(links);
+        $("materialList").append(card);
+      });
+    }
+
+    async function carregar() {
+      if (ocupado) return;
+
+      if (!sala) {
+        $("error").textContent =
+          "Abra a biblioteca pelo botão dentro da turma.";
+
+        $("roomName").textContent = "Selecione uma turma";
+
+        $("materialList").setAttribute("aria-busy", "false");
+        return;
+      }
+
+      ocupado = true;
+
+      $("refresh").disabled = true;
+      $("save").disabled = true;
+      $("error").textContent = "";
+
+      $("materialList").setAttribute("aria-busy", "true");
+
+      try {
+        const [turma, dados] = await Promise.all([
+          api(base),
+          api(base + "/biblioteca")
+        ]);
+
+        $("roomName").textContent = turma.sala.nome;
+        $("roomLink").textContent = turma.sala.nome;
+
+        const escolhido = $("mission").value;
+
+        $("mission").replaceChildren(
+          new Option("Biblioteca geral da turma", "")
+        );
+
+        (dados.missoes || []).forEach(missao => {
+          $("mission").append(
+            new Option(missao.titulo, missao.id)
+          );
+        });
+
+        if (
+          [...$("mission").options].some(
+            option => option.value === escolhido
+          )
+        ) {
+          $("mission").value = escolhido;
+        }
+
+        materiais = dados.materiais || [];
+
+        renderizar();
+
+        pronta = true;
+      } catch (error) {
+        $("error").textContent = error.message;
+        pronta = false;
+      } finally {
+        ocupado = false;
+
+        $("refresh").disabled = false;
+        $("save").disabled = !pronta;
+
+        $("materialList").setAttribute("aria-busy", "false");
+      }
+    }
+
+    $("materialForm").onsubmit = async event => {
+      event.preventDefault();
+
+      if (ocupado || !pronta) return;
+
+      const titulo = $("title").value.trim();
+
+      if (!titulo) {
+        $("error").textContent = "Informe o título do material.";
+        $("title").focus();
+        return;
+      }
+
+      let links;
+
+      try {
+        links = [
+          ...new Set(
+            $("links").value
+              .split(/\r?\n/)
+              .map(value => value.trim())
+              .filter(Boolean)
+              .map(normalizarLink)
+          )
+        ];
+      } catch (error) {
+        $("error").textContent = error.message;
+        $("links").focus();
+        return;
+      }
+
+      ocupado = true;
+
+      $("save").disabled = true;
+      $("refresh").disabled = true;
+
+      $("materialForm").setAttribute("aria-busy", "true");
+
+      $("error").textContent = "";
+      $("status").textContent = "Salvando material…";
+
+      try {
+        const salvo = await api(
+          base + "/biblioteca",
+          "POST",
+          {
+            titulo,
+            descricao: $("description").value.trim(),
+            missao_id: $("mission").value || null,
+            links
+          }
+        );
+
+        const tituloAtividade = $("mission").value
+          ? $("mission").selectedOptions[0].textContent
+          : null;
+
+        materiais.unshift({
+          ...salvo,
+          missoes: tituloAtividade
+            ? { titulo: tituloAtividade }
+            : null
+        });
+
+        $("materialForm").reset();
+        $("search").value = "";
+
+        renderizar();
+
+        $("status").textContent =
+          "Material salvo na biblioteca da turma.";
+      } catch (error) {
+        $("status").textContent = "";
+        $("error").textContent = error.message;
+      } finally {
+        ocupado = false;
+
+        $("save").disabled = false;
+        $("refresh").disabled = false;
+
+        $("materialForm").setAttribute("aria-busy", "false");
+      }
+    };
+
+    $("refresh").onclick = carregar;
+    $("search").oninput = renderizar;
+
+    carregar();
+  </script>
+</body>
+</html>

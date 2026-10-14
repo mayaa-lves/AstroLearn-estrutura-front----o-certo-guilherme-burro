@@ -2459,33 +2459,18 @@
           return;
         }
         detail = await D.room(roomId);
-        if (page === "room")
-          $("pageActions").append(
-            button(
-              "Materiais da biblioteca",
-              async () => {
-                try {
-                  const nome = window.prompt("Título do material:");
-                  if (!nome?.trim()) return;
-                  const descricao =
-                    window.prompt("Descrição do material:") || "";
-                  const endereco =
-                    window.prompt("Link HTTPS do material (opcional):") || "";
-                  if (endereco && new URL(endereco).protocol !== "https:")
-                    throw Error("Use um link HTTPS.");
-                  await D.createMaterial(roomId, {
-                    titulo: nome.trim(),
-                    descricao,
-                    links: endereco ? [endereco] : [],
-                  });
-                  window.alert("Material salvo na biblioteca da turma.");
-                } catch (e) {
-                  err(e);
-                }
-              },
-              "secondary",
-            ),
+        if (page === "room") {
+          const biblioteca = E(
+            "a",
+            "Materiais da biblioteca",
+            "secondary"
           );
+
+          biblioteca.href =
+            "biblioteca.html?sala=" + encodeURIComponent(roomId);
+
+          $("pageActions").append(biblioteca);
+        }
         if (token !== renderToken) return;
         breadcrumbs();
         periodFilter();
