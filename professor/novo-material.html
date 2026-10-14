@@ -120,13 +120,7 @@
     </section>
 
     <p id="error" class="error-panel" role="alert"></p>
-
-    <p
-      id="status"
-      class="status"
-      role="status"
-      aria-live="polite"
-    ></p>
+    <p id="status" class="status" role="status" aria-live="polite"></p>
 
     <div class="page-actions">
       <a id="backLibrary" class="secondary">
@@ -219,8 +213,11 @@
     sessaoObrigatoria("professor");
 
     const $ = id => document.getElementById(id);
+    const params = new URLSearchParams(location.search);
 
-    const sala = new URLSearchParams(location.search).get("sala");
+    const sala = params.get("sala");
+    const materialId = params.get("material");
+    const editando = Boolean(materialId);
 
     const base =
       "/api/professor/salas/" + encodeURIComponent(sala || "");
@@ -239,6 +236,19 @@
     $("backLibrary").href = sala
       ? roomURL("biblioteca.html")
       : "biblioteca.html";
+
+    document.querySelector(".page-heading h1").textContent =
+      editando ? "Editar material" : "Criar novo material";
+
+    $("formTitle").textContent =
+      editando ? "Editar material" : "Novo material";
+
+    $("save").textContent =
+      editando ? "Salvar alterações" : "Salvar material";
+
+    document.title =
+      (editando ? "Editar material" : "Criar material") +
+      " · AstroLearn";
 
     let ocupado = false;
     let pronta = false;
@@ -315,6 +325,31 @@
           $("mission").value = escolhido;
         }
 
+        if (editando) {
+          const material = (dados.materiais || []).find(
+            item => item.id === materialId
+          );
+
+          if (!material) {
+            throw new Error(
+              "Material não encontrado nesta turma. " +
+              "Volte à biblioteca e atualize a lista."
+            );
+          }
+
+          $("title").value = material.titulo || "";
+          $("description").value = material.descricao || "";
+          $("mission").value = material.missao_id || "";
+
+          $("links").value = (material.links || [])
+            .map(link =>
+              typeof link === "string"
+                ? link
+                : link.url || ""
+            )
+            .join("\n");
+        }
+
         pronta = true;
       } catch (error) {
         $("error").textContent = error.message;
@@ -369,9 +404,15 @@
       $("status").textContent = "Salvando material…";
 
       try {
-        await api(
-          base + "/biblioteca",
-          "POST",
+        const caminho =
+          base + "/biblioteca" +
+          (editando
+            ? "/" + encodeURIComponent(materialId)
+            : "");
+
+        const salvo = await api(
+          caminho,
+          editando ? "PUT" : "POST",
           {
             titulo,
             descricao: $("description").value.trim(),
@@ -379,6 +420,13 @@
             links
           }
         );
+
+        if (!salvo?.id) {
+          throw new Error(
+            "O servidor não confirmou o salvamento. " +
+            "Confira o material antes de tentar novamente."
+          );
+        }
 
         location.assign(roomURL("biblioteca.html"));
       } catch (error) {

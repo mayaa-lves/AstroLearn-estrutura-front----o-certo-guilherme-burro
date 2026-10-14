@@ -17,11 +17,9 @@
       margin-top: 18px;
     }
 
-    .material-links {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 14px;
+    #search {
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .material-description {
@@ -29,9 +27,27 @@
       overflow-wrap: anywhere;
     }
 
-    #search {
-      width: 100%;
-      box-sizing: border-box;
+    .material-links,
+    .material-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .material-preview {
+      width: min(680px, calc(100vw - 40px));
+      max-height: 85vh;
+      overflow: auto;
+    }
+
+    .material-preview::backdrop {
+      background: rgba(30, 18, 48, 0.4);
+      backdrop-filter: blur(4px);
+    }
+
+    .material-preview .close {
+      float: right;
     }
 
     [hidden] {
@@ -103,7 +119,6 @@
   <main id="main" tabindex="-1">
     <header class="teacher-top">
       <span class="mode">ESTAÇÃO DO PROFESSOR</span>
-
       <button id="refresh" class="text-button" type="button">
         ↻ Atualizar
       </button>
@@ -120,19 +135,12 @@
       <p class="eyebrow">
         CONHECIMENTO PARA A PRÓXIMA DESCOBERTA
       </p>
-
       <h1>Biblioteca da turma</h1>
       <p id="roomName">Carregando turma…</p>
     </section>
 
     <p id="error" class="error-panel" role="alert"></p>
-
-    <p
-      id="status"
-      class="status"
-      role="status"
-      aria-live="polite"
-    ></p>
+    <p id="status" class="status" role="status" aria-live="polite"></p>
 
     <div class="page-actions">
       <a id="createMaterial" class="primary" hidden>
@@ -148,20 +156,73 @@
       <h2 id="listTitle">Materiais compartilhados</h2>
 
       <label for="search">Buscar por título ou descrição</label>
+      <input id="search" type="search" placeholder="Buscar material…">
 
-      <input
-        id="search"
-        type="search"
-        placeholder="Buscar material…"
-      >
+      <p class="hint">
+        Arquivar ainda não está disponível:
+        depende de uma atualização no backend.
+      </p>
 
       <p id="count" class="hint" role="status"></p>
-
       <div id="materialList" aria-busy="true"></div>
     </section>
 
     <footer>AstroLearn · Uma descoberta de cada vez.</footer>
   </main>
+
+  <dialog
+    id="previewDialog"
+    class="material-preview"
+    aria-labelledby="previewTitle"
+  >
+    <button
+      id="closePreview"
+      class="close"
+      type="button"
+      aria-label="Fechar prévia"
+    >
+      ×
+    </button>
+
+    <p class="eyebrow">PRÉVIA DO ALUNO</p>
+    <h2 id="previewTitle"></h2>
+    <div id="previewContent"></div>
+  </dialog>
+
+  <dialog
+    id="deleteDialog"
+    class="material-preview"
+    aria-labelledby="deleteTitle"
+  >
+    <button
+      id="closeDelete"
+      class="close"
+      type="button"
+      aria-label="Fechar confirmação"
+    >
+      ×
+    </button>
+
+    <h2 id="deleteTitle">Excluir material?</h2>
+    <p id="deleteText"></p>
+
+    <p>
+      Ele será removido da biblioteca da turma.
+      Esta ação não pode ser desfeita.
+    </p>
+
+    <p id="deleteError" class="error-panel" role="alert"></p>
+
+    <div class="material-actions">
+      <button id="cancelDelete" class="secondary" type="button">
+        Cancelar
+      </button>
+
+      <button id="confirmDelete" class="primary" type="button">
+        Excluir material
+      </button>
+    </div>
+  </dialog>
 
   <script src="../public/js/components/preferencias.js"></script>
   <script src="../public/js/components/menu-professor.js"></script>
@@ -179,7 +240,6 @@
     sessaoObrigatoria("professor");
 
     const $ = id => document.getElementById(id);
-
     const sala = new URLSearchParams(location.search).get("sala");
 
     const base =
@@ -200,6 +260,9 @@
 
     let materiais = [];
     let ocupado = false;
+    let alvoExcluir = null;
+    let excluindo = false;
+    let origemDialog = null;
 
     function elemento(tag, texto, classe = "") {
       const node = document.createElement(tag);
@@ -207,6 +270,169 @@
       node.className = classe;
       return node;
     }
+
+    function button(texto, acao, classe = "secondary") {
+      const botao = elemento("button", texto, classe);
+      botao.type = "button";
+      botao.onclick = acao;
+      return botao;
+    }
+
+    // Conteúdo de leitura, sem os controles do professor.
+    function adicionarConteudo(container, material) {
+      container.append(
+        elemento(
+          "p",
+          material.descricao || "Sem descrição.",
+          "material-description"
+        )
+      );
+
+      container.append(
+        elemento(
+          "p",
+          material.missoes?.titulo
+            ? "Atividade: " + material.missoes.titulo
+            : "Biblioteca geral da turma",
+          "hint"
+        )
+      );
+
+      const links = elemento("div", "", "material-links");
+
+      (material.links || []).forEach((raw, index) => {
+        try {
+          const url = new URL(
+            typeof raw === "string" ? raw : raw.url
+          );
+
+          if (
+            !["https:", "http:"].includes(url.protocol) ||
+            url.username ||
+            url.password
+          ) {
+            return;
+          }
+
+          const link = elemento(
+            "a",
+            "Abrir material " + (index + 1) + " ↗",
+            "secondary"
+          );
+
+          link.href = url.href;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+
+          links.append(link);
+        } catch {
+          // Ignora um link inválido sem interromper os outros.
+        }
+      });
+
+      container.append(links);
+    }
+
+    function visualizar(material) {
+      origemDialog = document.activeElement;
+
+      $("previewTitle").textContent = material.titulo;
+      $("previewContent").replaceChildren();
+
+      adicionarConteudo($("previewContent"), material);
+
+      $("previewDialog").showModal();
+      $("closePreview").focus();
+    }
+
+    $("closePreview").onclick = () => {
+      $("previewDialog").close();
+    };
+
+    function confirmarExclusao(material) {
+      origemDialog = document.activeElement;
+      alvoExcluir = material;
+
+      $("deleteText").textContent =
+        'Você está excluindo: "' + material.titulo + '".';
+
+      $("deleteError").textContent = "";
+
+      $("deleteDialog").showModal();
+      $("cancelDelete").focus();
+    }
+
+    function fecharExclusao() {
+      if (!excluindo) {
+        $("deleteDialog").close();
+      }
+    }
+
+    $("closeDelete").onclick = fecharExclusao;
+    $("cancelDelete").onclick = fecharExclusao;
+
+    $("deleteDialog").addEventListener("cancel", event => {
+      if (excluindo) {
+        event.preventDefault();
+      }
+    });
+
+    [$("previewDialog"), $("deleteDialog")].forEach(dialog => {
+      dialog.addEventListener("close", () => {
+        if (origemDialog?.isConnected) {
+          origemDialog.focus();
+        } else {
+          $("search").focus();
+        }
+      });
+    });
+
+    $("confirmDelete").onclick = async () => {
+      if (excluindo || !alvoExcluir) return;
+
+      const material = alvoExcluir;
+
+      excluindo = true;
+      ocupado = true;
+
+      $("refresh").disabled = true;
+
+      ["confirmDelete", "cancelDelete", "closeDelete"].forEach(id => {
+        $(id).disabled = true;
+      });
+
+      $("deleteError").textContent = "";
+
+      try {
+        await api(
+          base + "/biblioteca/" + encodeURIComponent(material.id),
+          "DELETE"
+        );
+
+        materiais = materiais.filter(item =>
+          item.id !== material.id
+        );
+
+        renderizar();
+
+        $("deleteDialog").close();
+        alvoExcluir = null;
+
+        $("status").textContent =
+          "Material excluído da biblioteca da turma.";
+      } catch (error) {
+        $("deleteError").textContent = error.message;
+      } finally {
+        excluindo = false;
+        ocupado = false;
+
+        $("refresh").disabled = false;
+
+        ["confirmDelete", "cancelDelete", "closeDelete"].forEach(id => {
+          $(id).disabled = false;
+        });
+      }
+    };
 
     function renderizar() {
       const busca = $("search").value
@@ -242,58 +468,44 @@
       lista.forEach(material => {
         const card = elemento("article", "", "panel");
 
-        card.append(
-          elemento("h3", material.titulo),
-          elemento(
-            "p",
-            material.descricao || "Sem descrição.",
-            "material-description"
-          )
+        card.append(elemento("h3", material.titulo));
+        adicionarConteudo(card, material);
+
+        const actions = elemento("div", "", "material-actions");
+
+        const edit = elemento("a", "Editar", "secondary");
+
+        edit.href =
+          roomURL("novo-material.html") +
+          "&material=" +
+          encodeURIComponent(material.id);
+
+        const archive = elemento(
+          "button",
+          "Arquivar",
+          "secondary"
         );
 
-        card.append(
-          elemento(
-            "p",
-            material.missoes?.titulo
-              ? "Atividade: " + material.missoes.titulo
-              : "Biblioteca geral da turma",
-            "hint"
-          )
+        archive.type = "button";
+        archive.disabled = true;
+
+        archive.title =
+          "Arquivamento ainda depende de implementação no backend.";
+
+        actions.append(
+          button(
+            "Visualizar como aluno",
+            () => visualizar(material)
+          ),
+          edit,
+          button(
+            "Excluir",
+            () => confirmarExclusao(material)
+          ),
+          archive
         );
 
-        const links = elemento("div", "", "material-links");
-
-        (material.links || []).forEach((raw, index) => {
-          try {
-            const url = new URL(
-              typeof raw === "string" ? raw : raw.url
-            );
-
-            if (
-              !["https:", "http:"].includes(url.protocol) ||
-              url.username ||
-              url.password
-            ) {
-              return;
-            }
-
-            const link = elemento(
-              "a",
-              "Abrir material " + (index + 1) + " ↗",
-              "secondary"
-            );
-
-            link.href = url.href;
-            link.target = "_blank";
-            link.rel = "noopener noreferrer";
-
-            links.append(link);
-          } catch {
-            // Ignora links inválidos sem interromper a lista.
-          }
-        });
-
-        card.append(links);
+        card.append(actions);
         $("materialList").append(card);
       });
     }
@@ -360,6 +572,7 @@
         $("error").textContent = error.message;
       } finally {
         ocupado = false;
+
         $("refresh").disabled = false;
 
         $("materialList").setAttribute("aria-busy", "false");
