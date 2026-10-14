@@ -36,6 +36,7 @@
       "atividade/nova/": "editor-atividade.html",
       "atividade/editar/": "editor-atividade.html",
       "atividades/": "atividades.html",
+      "biblioteca/": "biblioteca.html",
       "equipes/": "equipes.html",
       "correcoes/": "correcoes.html",
       "correcao/": "correcao.html",
@@ -415,6 +416,15 @@
       {},
       "M18 8a6 6 0 0 0-12 0c0 8-3 7-3 10h18c0-3-3-2-3-10M10 21h4",
     ]);
+
+    items.splice(roomId ? 3 : 1, 0, [
+      "library",
+      "Biblioteca",
+      "biblioteca/",
+      roomId ? { sala: roomId } : {},
+      "M3 4h7a3 3 0 0 1 3 3v14a3 3 0 0 0-3-3H3Zm10 3a3 3 0 0 1 3-3h5v14h-5a3 3 0 0 0-3 3"
+    ]);
+
     $("mainNav").replaceChildren();
     for (const [key, label, route, values, path] of items) {
       const a = link("", route, values, "");

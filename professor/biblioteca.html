@@ -11,31 +11,6 @@
   <link rel="stylesheet" href="../public/css/preferencias.css">
 
   <style>
-    .library-layout {
-      display: grid;
-      grid-template-columns: minmax(280px, 1fr) minmax(300px, 1.3fr);
-      gap: 24px;
-      align-items: start;
-    }
-
-    #materialForm {
-      display: grid;
-      gap: 12px;
-    }
-
-    #materialForm input,
-    #materialForm textarea,
-    #materialForm select,
-    #search {
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    #materialForm textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-
     #materialList {
       display: grid;
       gap: 16px;
@@ -54,14 +29,13 @@
       overflow-wrap: anywhere;
     }
 
-    [hidden] {
-      display: none !important;
+    #search {
+      width: 100%;
+      box-sizing: border-box;
     }
 
-    @media (max-width: 900px) {
-      .library-layout {
-        grid-template-columns: 1fr;
-      }
+    [hidden] {
+      display: none !important;
     }
   </style>
 </head>
@@ -160,84 +134,31 @@
       aria-live="polite"
     ></p>
 
-    <div class="library-layout">
-      <section class="panel" aria-labelledby="formTitle">
-        <h2 id="formTitle">Novo material</h2>
-        <p>Reúna referências e orientações para seus alunos.</p>
-
-        <form id="materialForm">
-          <label for="title">Título *</label>
-          <input
-            id="title"
-            required
-            maxlength="120"
-            placeholder="Ex.: Guia de investigação"
-          >
-
-          <label for="description">Descrição</label>
-          <textarea
-            id="description"
-            maxlength="10000"
-            placeholder="Explique como o material pode ajudar na atividade."
-          ></textarea>
-
-          <label for="mission">Relacionar com uma atividade</label>
-          <select id="mission">
-            <option value="">Biblioteca geral da turma</option>
-          </select>
-
-          <label for="links">Links — um por linha</label>
-          <textarea
-            id="links"
-            aria-describedby="linksHint"
-            placeholder="https://..."
-            spellcheck="false"
-          ></textarea>
-
-          <p id="linksHint" class="hint">
-            Use links compartilhados que os alunos possam acessar.
-            Você também pode salvar uma orientação sem links.
-          </p>
-
-          <label for="files">PDFs e imagens</label>
-          <input
-            id="files"
-            type="file"
-            disabled
-            aria-describedby="uploadHint"
-          >
-
-          <p id="uploadHint" class="hint">
-            Upload indisponível até a implementação no backend.
-            Por enquanto, compartilhe o link do arquivo.
-          </p>
-
-          <button
-            id="save"
-            class="primary"
-            type="submit"
-            disabled
-          >
-            Salvar material
-          </button>
-        </form>
-      </section>
-
-      <section class="panel" aria-labelledby="listTitle">
-        <h2 id="listTitle">Materiais compartilhados</h2>
-
-        <label for="search">Buscar por título ou descrição</label>
-        <input
-          id="search"
-          type="search"
-          placeholder="Buscar material…"
-        >
-
-        <p id="count" class="hint" role="status"></p>
-
-        <div id="materialList" aria-busy="true"></div>
-      </section>
+    <div class="page-actions">
+      <a id="createMaterial" class="primary" hidden>
+        + Criar novo material
+      </a>
     </div>
+
+    <section
+      id="listPanel"
+      class="panel"
+      aria-labelledby="listTitle"
+    >
+      <h2 id="listTitle">Materiais compartilhados</h2>
+
+      <label for="search">Buscar por título ou descrição</label>
+
+      <input
+        id="search"
+        type="search"
+        placeholder="Buscar material…"
+      >
+
+      <p id="count" class="hint" role="status"></p>
+
+      <div id="materialList" aria-busy="true"></div>
+    </section>
 
     <footer>AstroLearn · Uma descoberta de cada vez.</footer>
   </main>
@@ -264,53 +185,27 @@
     const base =
       "/api/professor/salas/" + encodeURIComponent(sala || "");
 
-    let materiais = [];
-    let ocupado = false;
-    let pronta = false;
-
-    function roomURL(route) {
-      return route + "?sala=" + encodeURIComponent(sala || "");
-    }
+    const roomURL = route =>
+      route + "?sala=" + encodeURIComponent(sala || "");
 
     document.querySelectorAll("[data-room-route]").forEach(link => {
       link.href = roomURL(link.dataset.roomRoute);
     });
 
-    $("roomLink").href = roomURL("turma.html");
+    $("roomLink").href = sala
+      ? roomURL("turma.html")
+      : "home.html";
+
+    $("createMaterial").href = roomURL("novo-material.html");
+
+    let materiais = [];
+    let ocupado = false;
 
     function elemento(tag, texto, classe = "") {
       const node = document.createElement(tag);
       node.textContent = texto;
       node.className = classe;
       return node;
-    }
-
-    function normalizarLink(valor) {
-      const entrada = valor.trim();
-
-      const candidato = /^[a-z][a-z\d+.-]*:/i.test(entrada)
-        ? entrada
-        : "https://" + entrada;
-
-      try {
-        const url = new URL(candidato);
-
-        if (
-          url.protocol !== "https:" ||
-          !url.hostname.includes(".") ||
-          url.username ||
-          url.password
-        ) {
-          throw new Error();
-        }
-
-        return url.href;
-      } catch {
-        throw new Error(
-          "Link inválido: " + entrada +
-          ". Use um endereço HTTPS completo."
-        );
-      }
     }
 
     function renderizar() {
@@ -394,7 +289,7 @@
 
             links.append(link);
           } catch {
-            // Um link inválido não impede os outros de aparecer.
+            // Ignora links inválidos sem interromper a lista.
           }
         });
 
@@ -406,25 +301,48 @@
     async function carregar() {
       if (ocupado) return;
 
-      if (!sala) {
-        $("error").textContent =
-          "Abra a biblioteca pelo botão dentro da turma.";
-
-        $("roomName").textContent = "Selecione uma turma";
-
-        $("materialList").setAttribute("aria-busy", "false");
-        return;
-      }
-
       ocupado = true;
 
       $("refresh").disabled = true;
-      $("save").disabled = true;
       $("error").textContent = "";
 
       $("materialList").setAttribute("aria-busy", "true");
 
       try {
+        if (!sala) {
+          $("roomName").textContent =
+            "Escolha a turma para consultar os materiais.";
+
+          $("search").disabled = true;
+          $("listTitle").textContent = "Suas turmas";
+
+          $("materialList").replaceChildren();
+
+          const salas = await api("/api/professor/salas");
+
+          salas.forEach(turma => {
+            const link = elemento("a", turma.nome, "secondary");
+
+            link.href =
+              "biblioteca.html?sala=" +
+              encodeURIComponent(turma.id);
+
+            $("materialList").append(link);
+          });
+
+          if (!salas.length) {
+            $("materialList").append(
+              elemento(
+                "p",
+                "Crie uma turma para começar.",
+                "empty"
+              )
+            );
+          }
+
+          return;
+        }
+
         const [turma, dados] = await Promise.all([
           api(base),
           api(base + "/biblioteca")
@@ -433,130 +351,23 @@
         $("roomName").textContent = turma.sala.nome;
         $("roomLink").textContent = turma.sala.nome;
 
-        const escolhido = $("mission").value;
-
-        $("mission").replaceChildren(
-          new Option("Biblioteca geral da turma", "")
-        );
-
-        (dados.missoes || []).forEach(missao => {
-          $("mission").append(
-            new Option(missao.titulo, missao.id)
-          );
-        });
-
-        if (
-          [...$("mission").options].some(
-            option => option.value === escolhido
-          )
-        ) {
-          $("mission").value = escolhido;
-        }
-
         materiais = dados.materiais || [];
 
         renderizar();
 
-        pronta = true;
+        $("createMaterial").hidden = false;
       } catch (error) {
         $("error").textContent = error.message;
-        pronta = false;
       } finally {
         ocupado = false;
-
         $("refresh").disabled = false;
-        $("save").disabled = !pronta;
 
         $("materialList").setAttribute("aria-busy", "false");
       }
     }
 
-    $("materialForm").onsubmit = async event => {
-      event.preventDefault();
-
-      if (ocupado || !pronta) return;
-
-      const titulo = $("title").value.trim();
-
-      if (!titulo) {
-        $("error").textContent = "Informe o título do material.";
-        $("title").focus();
-        return;
-      }
-
-      let links;
-
-      try {
-        links = [
-          ...new Set(
-            $("links").value
-              .split(/\r?\n/)
-              .map(value => value.trim())
-              .filter(Boolean)
-              .map(normalizarLink)
-          )
-        ];
-      } catch (error) {
-        $("error").textContent = error.message;
-        $("links").focus();
-        return;
-      }
-
-      ocupado = true;
-
-      $("save").disabled = true;
-      $("refresh").disabled = true;
-
-      $("materialForm").setAttribute("aria-busy", "true");
-
-      $("error").textContent = "";
-      $("status").textContent = "Salvando material…";
-
-      try {
-        const salvo = await api(
-          base + "/biblioteca",
-          "POST",
-          {
-            titulo,
-            descricao: $("description").value.trim(),
-            missao_id: $("mission").value || null,
-            links
-          }
-        );
-
-        const tituloAtividade = $("mission").value
-          ? $("mission").selectedOptions[0].textContent
-          : null;
-
-        materiais.unshift({
-          ...salvo,
-          missoes: tituloAtividade
-            ? { titulo: tituloAtividade }
-            : null
-        });
-
-        $("materialForm").reset();
-        $("search").value = "";
-
-        renderizar();
-
-        $("status").textContent =
-          "Material salvo na biblioteca da turma.";
-      } catch (error) {
-        $("status").textContent = "";
-        $("error").textContent = error.message;
-      } finally {
-        ocupado = false;
-
-        $("save").disabled = false;
-        $("refresh").disabled = false;
-
-        $("materialForm").setAttribute("aria-busy", "false");
-      }
-    };
-
-    $("refresh").onclick = carregar;
     $("search").oninput = renderizar;
+    $("refresh").onclick = carregar;
 
     carregar();
   </script>
