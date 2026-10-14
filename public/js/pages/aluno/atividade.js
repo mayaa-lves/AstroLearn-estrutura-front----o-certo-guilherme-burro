@@ -62,6 +62,57 @@ function materials(rows) {
     $("materials").append(e);
   }
 }
+
+function atualizarRetorno(progresso, mensagem) {
+  const card = document.querySelector(".feedback-card");
+  const container = card?.querySelector("div");
+
+  if (!container) return;
+
+  container.querySelectorAll("p").forEach((elemento) => {
+    elemento.remove();
+  });
+
+  card.setAttribute("aria-live", "polite");
+
+  function adicionar(texto) {
+    const paragrafo = document.createElement("p");
+    paragrafo.textContent = texto;
+    container.append(paragrafo);
+  }
+
+  if (mensagem) {
+    adicionar(mensagem);
+    return;
+  }
+
+  if (progresso?.status === "corrigido") {
+    adicionar("Nota: " + (progresso.nota ?? "Não informada"));
+
+    adicionar(
+      progresso.comentario_professor?.trim() ||
+        "O professor não adicionou um comentário."
+    );
+
+    return;
+  }
+
+  if (progresso?.status === "entregue") {
+    adicionar(
+      "Atividade registrada. Aguardando a correção do professor."
+    );
+
+    return;
+  }
+
+  adicionar(
+    "O retorno aparecerá aqui depois que o professor corrigir sua atividade."
+  );
+}
+
+atualizarRetorno(null, "Carregando retorno do professor…");
+
+
 async function load() {
   if (!missionId) {
     text("entrega-status", "Abra uma atividade pela trilha da sua turma.");
@@ -98,6 +149,10 @@ async function load() {
         : "Sem prazo definido",
     );
     const prog = d.progresso;
+    atualizarRetorno(
+    prog,
+    preview ? "Prévia do professor: sem retorno de aluno." : null
+     );
     text(
       "deliveryStatus",
       d.bloqueada
@@ -146,6 +201,7 @@ $("entrega-form").onsubmit = async (e) => {
   submit.disabled = true;
   try {
     await registrarConclusao(missionId);
+    atualizarRetorno({ status: "entregue" });
     text("deliveryStatus", "Aguardando correção");
     text(
       "entrega-status",
