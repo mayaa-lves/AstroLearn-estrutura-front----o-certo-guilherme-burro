@@ -134,7 +134,7 @@
         </button>
       </div>
       <div class="filter-row">
-        <div aria-label="Filtrar por assunto" class="filters" role="group">
+        <div aria-label="Filtrar por assunto" class="filters" hidden role="group">
           <button aria-pressed="true" data-topic="Todos" type="button">
             Todos
           </button>
@@ -154,7 +154,7 @@
         <button
           aria-pressed="false"
           class="favorite-filter"
-          id="favorites"
+          hidden id="favorites"
           type="button"
         >
           ☆ Favoritos <span id="favoriteCount">0</span>
@@ -259,9 +259,10 @@
       <p id="infoText"></p>
       <button class="primary" data-close="" type="button">Entendi</button>
     </dialog>
-    <script defer="True" src="../public/js/pages/aluno/biblioteca.js"></script>
+    <script defer="True" type="module" src="../public/js/pages/aluno/biblioteca.js"></script>
     <script defer="True" src="../public/js/components/estrelas-pdf.js"></script>
     <script defer="True" src="../public/js/components/menu-pdf.js"></script>
     <script src="../public/js/components/preferencias.js"></script>
-  </body>
+  <script type="module" src="../public/js/components/sessao.js"></script>
+</body>
 </html>

@@ -794,3 +794,15 @@ dialog p {
     font-size: 11px;
   }
 }
+/* Retorno do login real, sem alterar o cenário. */
+#login-status[data-estado="erro"] { color: #922342; font-weight: 700; }
+#login-status[data-estado="sucesso"] { color: #285b3c; font-weight: 700; }
+#login-form[aria-busy="true"] input { opacity: .8; }
+@media (prefers-reduced-motion: reduce) {
+  .login-page *, .login-page *::before, .login-page *::after {
+    animation: none !important; transition: none !important;
+  }
+}
+/* As áreas vazias do cabeçalho deixam as estrelas clicáveis. */
+.login-header { pointer-events: none; }
+.login-header a, .login-header button { pointer-events: auto; }

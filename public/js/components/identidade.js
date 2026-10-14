@@ -1,25 +1,7 @@
-/* Nome de exibição da prévia. Dados escolares serão fornecidos pela API. */
-(() => {
-  function render() {
-    let name = "Maya";
-    try {
-      const v = JSON.parse(
-        localStorage.getItem("astrolearn-display-name-v1") || "null",
-      );
-      if (
-        v?.version === 1 &&
-        typeof v.name === "string" &&
-        v.name.trim().length >= 2 &&
-        v.name.length <= 40
-      )
-        name = v.name.trim();
-    } catch {}
-    const el = document.getElementById("welcomeTitle");
-    if (el) el.textContent = "Boas-vindas, " + name + "!";
-    document
-      .querySelectorAll("[data-student-name]")
-      .forEach((el) => (el.textContent = name));
-  }
-  render();
-  window.addEventListener("storage", render);
-})();
+import { obterSessao } from "../services/autenticacao.js";
+const nome = obterSessao()?.usuario.nome || "Explorador";
+const e = document.getElementById("welcomeTitle");
+if (e) e.textContent = "Boas-vindas, " + nome + "!";
+document
+  .querySelectorAll("[data-student-name]")
+  .forEach((e) => (e.textContent = nome));

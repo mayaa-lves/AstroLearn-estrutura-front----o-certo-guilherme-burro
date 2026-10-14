@@ -1,0 +1,27 @@
+VERIFICAÇÃO — 14/10/2026
+
+63 scripts JavaScript: sintaxe verificada; imports relativos sem arquivos ausentes.
+Navegador Chromium, com respostas simuladas conforme os contratos do app.py:
+- cadastro aluno e professor, payload e confirmação;
+- login e redirecionamento;
+- trilha dinâmica, título real, mundo bloqueado e ID real na navegação;
+- atividade e registro apenas de realização;
+- biblioteca e descarte de links javascript:;
+- equipe com usuário da sessão e colegas da API;
+- ingresso em turma pelo código;
+- oito telas do professor: turmas, turma, aluno, atividades, equipes, correções, correção e editor;
+- prévia da atividade como professor, sem entrega;
+- contratos de criação de turma/período/missão/equipe, associação de membro, material e correção;
+- consulta do retorno pelo aluno após correção;
+- resposta 401: limpeza da sessão e retorno ao login.
+60 requisições simuladas; nenhuma exceção JavaScript nas telas testadas.
+
+API HOSPEDADA, SEM CREDENCIAIS
+GET / respondeu 200 com status online.
+GET /api/aluno/dashboard e GET /api/professor/salas responderam 401 com erro de token não fornecido.
+CORS respondeu ao Origin do Go Live.
+
+LIMITES
+Não foram usadas contas reais, nem gravados dados no Supabase. Não se confirmou se a versão implantada é exatamente o commit analisado, nem se políticas do banco/buckets permitem todos os fluxos.
+O ZIP fornecido não incluía imagens/fontes. Os testes de integração usaram imagens substitutas, sem validação visual da composição completa.
+O teste real aluno → professor → banco ainda precisa seguir COMO-APLICAR.txt.

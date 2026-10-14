@@ -941,7 +941,7 @@
         copy.append(
           E(
             "span",
-            draft ? "Rascunho · só o professor" : "Publicada",
+            draft ? "Nova atividade" : "Publicada",
             draft ? "badge" : "badge green",
           ),
           E("h2", m.titulo),
@@ -1064,6 +1064,7 @@
         "extra-files",
       );
     input.multiple = true;
+    input.disabled = true;
     input.accept = ".pdf,.jpg,.jpeg,.png,.webp";
     const save = E("button", "Adicionar materiais", "secondary");
     save.type = "submit";
@@ -1130,7 +1131,7 @@
       model ? "Preparar a próxima descoberta." : "Uma nova descoberta.",
       model?.status_publicacao === "publicado"
         ? "As alterações salvas ficam visíveis para os alunos."
-        : "Prepare com calma. O rascunho só fica visível para o professor.",
+        : "Ao salvar, a atividade será disponibilizada aos alunos. O backend atual não possui rascunhos.",
     );
     $("pageActions").append(
       link("← Atividades da turma", "atividades/", {
@@ -1190,6 +1191,7 @@
     option(mode, "Individual", "individual");
     option(mode, "Em equipe", "equipe");
     mode.value = model?.tipo_atividade || "individual";
+    mode.disabled = true;
     const modeHelp = E("p", "", "hint");
     form.append(modeHelp);
     const teamsLink = link(
@@ -1228,7 +1230,7 @@
       cr,
       E(
         "p",
-        "O período permite até 5 atividades, contando rascunhos. A ordem é definida automaticamente.",
+        "O período permite até 5 atividades, por período. A ordem é definida automaticamente.",
         "hint",
       ),
     );
@@ -1236,7 +1238,11 @@
     const material = E("div", "", "editor-materials");
     material.append(
       E("h2", "Materiais de apoio"),
-      E("p", "Anexe a proposta, uma imagem ou um roteiro em PDF.", "hint"),
+      E(
+        "p",
+        "Upload ainda indisponível no backend. Adicione links pela biblioteca da turma.",
+        "hint",
+      ),
     );
     const existingList = E("ul", "", "files-list"),
       input = formField(
@@ -1246,6 +1252,7 @@
         "mission-files",
       );
     input.multiple = true;
+    input.disabled = true;
     input.accept = ".pdf,.jpg,.jpeg,.png,.webp";
     const pendingList = E("ul", "", "files-list");
     material.append(
@@ -1265,7 +1272,7 @@
     errors.setAttribute("role", "alert");
     form.append(notice, errors);
     const actions = E("div", "", "editor-actions"),
-      save = E("button", "Salvar rascunho", "secondary"),
+      save = E("button", "Salvar e disponibilizar", "secondary"),
       see = button("Ver como aluno", () => perform("preview"), "secondary"),
       publish = button(
         "Revisar e publicar",
@@ -1292,7 +1299,7 @@
       summaryText,
       E(
         "p",
-        "Na prévia, tudo fica neste navegador. Nenhum aluno real receberá a atividade.",
+        "Ao salvar, os alunos da turma poderão ver esta atividade. Texto e anexos de entrega ainda dependem do backend.",
         "hint",
       ),
     );
@@ -1301,9 +1308,11 @@
     function sync() {
       const published = model?.status_publicacao === "publicado",
         team = mode.value === "equipe";
-      save.textContent = published ? "Salvar alterações" : "Salvar rascunho";
-      publish.hidden = published;
-      badge.textContent = published ? "Publicada" : "Rascunho · só o professor";
+      save.textContent = published
+        ? "Salvar alterações"
+        : "Salvar e disponibilizar";
+      publish.hidden = true;
+      badge.textContent = published ? "Publicada" : "Nova atividade";
       badge.className = published ? "badge green" : "badge";
       summaryTitle.textContent = title.value.trim() || "Sua próxima atividade";
       summaryText.replaceChildren(
@@ -1340,7 +1349,8 @@
           : "?") +
         "periodo=" +
         encodeURIComponent(period.value);
-      period.disabled = mode.disabled = published;
+      period.disabled = published;
+      mode.disabled = true;
       const hasWork = detail.entregas.some((e) => e.missao_id === model?.id);
       weight.disabled = xp.disabled = hasWork;
       existingList.replaceChildren();
@@ -1430,6 +1440,10 @@
     }
     async function persist() {
       const body = values();
+      if (chosen.length)
+        throw new Error(
+          "O backend ainda não recebe arquivos. Remova os anexos antes de salvar.",
+        );
       const total = [
         ...existing.filter((f) => !removed.has(f.path)),
         ...chosen,
@@ -1892,7 +1906,8 @@
       meta,
       E(
         "p",
-        delivery.resposta_entrega || "O aluno enviou apenas arquivos.",
+        delivery.resposta_entrega ||
+          "O backend registra apenas a realização. Solicite o trabalho pelo meio combinado; texto e arquivos ainda não são recebidos pela API.",
         "document-copy",
       ),
     );
@@ -2417,9 +2432,9 @@
     $("error").textContent = "";
     $("pageActions").replaceChildren();
     $("refresh").disabled = true;
-    $("mode").textContent = "PRÉVIA DO PROFESSOR";
+    $("mode").textContent = "ÁREA DO PROFESSOR";
     $("modeNote").textContent =
-      "Dados de exemplo. Criações, equipes e correções ficam somente neste navegador.";
+      "Dados da sua conta. Atualize para consultar as alterações dos alunos.";
     nav();
     try {
       rooms = await D.rooms();
@@ -2444,6 +2459,33 @@
           return;
         }
         detail = await D.room(roomId);
+        if (page === "room")
+          $("pageActions").append(
+            button(
+              "Materiais da biblioteca",
+              async () => {
+                try {
+                  const nome = window.prompt("Título do material:");
+                  if (!nome?.trim()) return;
+                  const descricao =
+                    window.prompt("Descrição do material:") || "";
+                  const endereco =
+                    window.prompt("Link HTTPS do material (opcional):") || "";
+                  if (endereco && new URL(endereco).protocol !== "https:")
+                    throw Error("Use um link HTTPS.");
+                  await D.createMaterial(roomId, {
+                    titulo: nome.trim(),
+                    descricao,
+                    links: endereco ? [endereco] : [],
+                  });
+                  window.alert("Material salvo na biblioteca da turma.");
+                } catch (e) {
+                  err(e);
+                }
+              },
+              "secondary",
+            ),
+          );
         if (token !== renderToken) return;
         breadcrumbs();
         periodFilter();

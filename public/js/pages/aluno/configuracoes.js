@@ -3,7 +3,9 @@ const $ = (id) => document.getElementById(id),
   prefs = window.AstroPrefs;
 function values() {
   return {
-    animations: prefs.systemReduced() ? prefs.get().animations : $("animations").checked,
+    animations: prefs.systemReduced()
+      ? prefs.get().animations
+      : $("animations").checked,
     textSize: Number($("textSize").value),
     contrast: $("contrast").checked,
   };
@@ -54,7 +56,9 @@ $("restore").onclick = () => {
 };
 document.addEventListener("astrolearn:preferences", () => {
   $("animations").disabled = prefs.systemReduced();
-  $("animations").checked = prefs.systemReduced() ? false : prefs.get().animations;
+  $("animations").checked = prefs.systemReduced()
+    ? false
+    : prefs.get().animations;
 });
 $("clearLocal").onclick = () => {
   $("clearError").textContent = "";
@@ -88,7 +92,12 @@ $("confirmClear").onclick = () => {
     controls(prefs.defaults);
     document
       .querySelectorAll("[data-student-name]")
-      .forEach((e) => (e.textContent = "Maya"));
+      .forEach(
+        (e) =>
+          (e.textContent =
+            document.getElementById("studentName")?.textContent ||
+            "Explorador"),
+      );
     $("storageStatus").textContent =
       "Dados de demonstração apagados. Outras abas refletem as mudanças ao recarregar.";
     $("clearDialog").close();

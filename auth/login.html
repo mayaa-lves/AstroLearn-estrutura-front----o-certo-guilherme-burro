@@ -60,7 +60,7 @@
           Investigue o universo. Experimente ideias.<br />
           Crie novas descobertas com sua equipe.
         </p>
-        <form id="login-form" novalidate="">
+        <form id="login-form" method="post" novalidate="">
           <label for="email">E-mail</label>
           <div class="input-wrap">
             <svg aria-hidden="true" class="input-symbol" viewBox="0 0 24 24">
@@ -77,7 +77,7 @@
               type="email"
             />
           </div>
-          <p class="field-error" id="email-error"></p>
+          <p class="field-error" id="email-error" role="alert"></p>
           <label for="senha">Senha</label>
           <div class="input-wrap">
             <svg aria-hidden="true" class="input-symbol" viewBox="0 0 24 24">
@@ -106,7 +106,7 @@
               </svg>
             </button>
           </div>
-          <p class="field-error" id="senha-error"></p>
+          <p class="field-error" id="senha-error" role="alert"></p>
           <div class="form-options">
             <span>Seu espaço de aprendizagem.</span>
             <a href="recuperar-senha.html">Esqueci minha senha</a>
@@ -122,11 +122,10 @@
           <a href="cadastro-aluno.html">Cadastre-se</a>
         </p>
         <small class="stage-note">
-          <a href="../aluno/home.html">Explorar como aluno →</a><br /><a
+          <a href="../aluno/home.html">Prévia do aluno, sem login →</a><br /><a
             href="../professor/home.html"
-            >Explorar como professor →</a
-          ><br />Prévia da interface · use dados fictícios. O acesso real será
-          conectado na próxima etapa.
+            >Prévia do professor, sem login →</a
+          ><br />Login conectado à sua conta. As áreas internas ainda estão em integração.
         </small>
       </section>
     </main>

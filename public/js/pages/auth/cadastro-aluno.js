@@ -1,4 +1,7 @@
 // Cadastro visual fiel à referência. Valida os campos, mas não cria uma conta.
+import { conectarCadastro } from '../../components/cadastro-api.js';
+
+
 const form = document.querySelector("#cadastro-form");
 const pagina = document.body;
 const status = document.querySelector("#cadastro-status");
@@ -21,58 +24,9 @@ function erro(campo, mensagem) {
   aviso.hidden = !mensagem;
   return !mensagem;
 }
-form.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const nome = document.getElementById("nome");
-  const email = document.getElementById("email");
-  const [senha, confirmar] = senhas;
-  const checks = [
-    [nome, nome.value.trim() ? "" : "Informe seu nome."],
-    [
-      email,
-      email.value.trim() && email.validity.valid
-        ? ""
-        : "Informe um e-mail válido.",
-    ],
-    [senha, senha.value.length >= 8 ? "" : "Use pelo menos 8 caracteres."],
-    [
-      confirmar,
-      confirmar.value && confirmar.value === senha.value
-        ? ""
-        : "As duas senhas precisam ser iguais.",
-    ],
-  ];
-  const escola = document.getElementById("escola");
-  const chave = document.getElementById("chave");
-  if (escola)
-    checks.splice(2, 0, [
-      escola,
-      escola.value.trim() ? "" : "Informe sua escola.",
-    ]);
-  if (chave)
-    checks.push([
-      chave,
-      chave.value.trim() ? "" : "Informe a chave fornecida pela coordenação.",
-    ]);
-  let first = null;
-  checks.forEach(([campo, mensagem]) => {
-    if (!erro(campo, mensagem) && !first) first = campo;
-  });
-  if (first) {
-    if (first.id === "chave")
-      document.getElementById("autorizacao").open = true;
-    status.textContent = "Confira os campos destacados.";
-    first.focus();
-    return;
-  }
-  status.textContent =
-    "Campos validados nesta prévia. Nenhuma conta foi criada nem chave verificada pelo servidor.";
-});
-form.addEventListener("input", (event) => {
-  if (document.getElementById(event.target.id + "-erro"))
-    erro(event.target, "");
-  status.textContent = "";
-});
+
+conectarCadastro({ form, status, senhas, erro });
+
 // Cobre os olhos nos dois campos, mesmo com senha revelada.
 
 function atualizarPrivacidade() {

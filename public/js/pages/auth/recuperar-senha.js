@@ -1,28 +1,25 @@
-/* Apenas validação visual. Não envia e-mail nem identifica contas. */
+// O backend atual ainda não tem recuperação de senha.
 (() => {
-  const $ = (id) => document.getElementById(id);
-  $("recoveryForm").onsubmit = (e) => {
-    e.preventDefault();
-    const input = $("email"),
-      valid = input.value.trim() !== "" && input.validity.valid;
-    input.setAttribute("aria-invalid", String(!valid));
-    $("emailError").textContent = valid ? "" : "Digite um e-mail válido.";
-    if (!valid) {
-      input.focus();
-      return;
-    }
-    $("recoveryForm").hidden = true;
-    $("recoveryResult").hidden = false;
-    $("recoveryResult").tabIndex = -1;
-    $("recoveryResult").focus();
-  };
-  $("email").oninput = () => {
-    $("emailError").textContent = "";
-    $("email").removeAttribute("aria-invalid");
-  };
-  $("tryAgain").onclick = () => {
-    $("recoveryResult").hidden = true;
-    $("recoveryForm").hidden = false;
-    $("email").focus();
-  };
+  const $ = id => document.getElementById(id);
+
+  $('recoveryForm').hidden = true;
+  $('recoveryResult').hidden = false;
+
+  $('recoveryResult').querySelector('h2').textContent =
+    'Recuperação ainda indisponível';
+
+  $('recoveryResult').querySelector('p').textContent =
+    'O backend ainda precisa implementar o envio do link de recuperação. Por enquanto, procure o responsável pela plataforma.';
+
+  const link = $('recoveryResult').querySelector('a');
+  link.href = 'login.html';
+  link.textContent = 'Voltar ao login';
+
+  $('tryAgain').hidden = true;
+
+  document.querySelector('.intro').textContent =
+    'Vamos ajudar você a recuperar o acesso.';
+
+  document.querySelector('.stage-note').textContent =
+    'Nenhum e-mail de recuperação é enviado nesta etapa.';
 })();

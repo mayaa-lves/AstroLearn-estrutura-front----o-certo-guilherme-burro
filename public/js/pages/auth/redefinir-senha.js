@@ -1,58 +1,21 @@
-/* Nunca persiste senhas. O parâmetro demo apenas libera a prévia visual. */
+// Nunca altera uma senha sem uma operação confirmada no backend.
 (() => {
-  const $ = (id) => document.getElementById(id),
-    demo = new URLSearchParams(location.search).get("demo") === "1";
-  if (!demo) {
-    $("resetForm").hidden = true;
-    $("invalidLink").hidden = false;
-  }
-  document.querySelectorAll("[data-reveal]").forEach(
-    (b) =>
-      (b.onclick = () => {
-        const input = $(b.dataset.reveal),
-          show = input.type === "password";
-        input.type = show ? "text" : "password";
-        b.setAttribute("aria-pressed", String(show));
-        b.setAttribute(
-          "aria-label",
-          (show ? "Ocultar" : "Mostrar") +
-            (b.dataset.reveal === "newPassword"
-              ? " nova senha"
-              : " confirmação da senha"),
-        );
-      }),
-  );
-  function error(input, id, message) {
-    $(id).textContent = message;
-    $(input).setAttribute("aria-invalid", String(Boolean(message)));
-  }
-  $("resetForm").onsubmit = (e) => {
-    e.preventDefault();
-    if (!demo) return;
-    const valid =
-        $("newPassword").value.length >= 8 &&
-        $("newPassword").value.length <= 128,
-      match =
-        $("confirmPassword").value !== "" &&
-        $("confirmPassword").value === $("newPassword").value;
-    error(
-      "newPassword",
-      "passwordError",
-      valid ? "" : "Use entre 8 e 128 caracteres.",
-    );
-    error(
-      "confirmPassword",
-      "confirmError",
-      match ? "" : "As senhas precisam ser iguais.",
-    );
-    if (!valid || !match) {
-      $(valid ? "confirmPassword" : "newPassword").focus();
-      return;
-    }
-    $("resetForm").reset();
-    $("resetForm").hidden = true;
-    $("resetResult").hidden = false;
-    $("resetResult").tabIndex = -1;
-    $("resetResult").focus();
-  };
+  const $ = id => document.getElementById(id);
+
+  $('resetForm').reset();
+  $('resetForm').hidden = true;
+  $('resetResult').hidden = true;
+  $('invalidLink').hidden = false;
+
+  $('invalidLink').querySelector('h2').textContent =
+    'Redefinição ainda indisponível';
+
+  $('invalidLink').querySelector('p').textContent =
+    'O backend precisa validar o link de recuperação e atualizar a senha. Nenhuma senha é alterada por esta tela por enquanto.';
+
+  document.querySelector('.intro').textContent =
+    'A redefinição será liberada quando a recuperação de conta estiver integrada.';
+
+  document.querySelector('.stage-note').textContent =
+    'Precisa de acesso agora? Procure o responsável pela plataforma.';
 })();

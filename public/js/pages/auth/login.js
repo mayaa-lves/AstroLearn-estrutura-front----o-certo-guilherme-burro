@@ -1,5 +1,5 @@
-// Etapa 1: aparência e interações.
-// Não faz autenticação nem redireciona.
+// Login real. As interações do cenário continuam independentes do acesso.
+import { entrar, destinoAposLogin } from '../../services/autenticacao.js';
 
 const pegar = (id) => document.getElementById(id);
 
@@ -18,6 +18,10 @@ let timerFoguete;
 let frame;
 let ponteiro;
 let processando = false;
+let controleLogin;
+let timerTransicao;
+let concluirTransicao;
+let paginaAtiva = true;
 
 // ========================================
 // 1. MENSAGENS DO MASCOTE
@@ -135,6 +139,7 @@ document.addEventListener('pointermove', (event) => {
   if (
     event.pointerType === 'touch' ||
     document.hidden ||
+    preferencia.matches || pausaManual ||
     document.body.classList.contains('motion-paused')
   ) {
     return;
@@ -192,6 +197,7 @@ atualizarMovimentos();
 // ========================================
 
 function decolar() {
+  if (pausaManual || preferencia.matches || document.hidden) return;
   if (foguete.classList.contains('is-flying')) {
     return;
   }
@@ -238,67 +244,132 @@ function mostrarErro(id, texto) {
 ['email', 'senha'].forEach((id) => {
   pegar(id).addEventListener('input', () => {
     mostrarErro(id, '');
-    pegar('login-status').textContent = '';
+    if (!processando) mostrarStatus('', '');
   });
 });
 
-pegar('login-form').addEventListener('submit', (event) => {
-  event.preventDefault();
+function mostrarStatus(texto, estado) {
+  const status = pegar('login-status');
+  status.dataset.estado = estado;
+  status.setAttribute('role', estado === 'erro' ? 'alert' : 'status');
+  status.setAttribute('aria-live', estado === 'erro' ? 'assertive' : 'polite');
+  status.textContent = texto;
+}
 
-  if (processando) {
-    return;
+function bloquearFormulario(bloqueado) {
+  pegar('login-form').setAttribute('aria-busy', String(bloqueado));
+  ['email', 'senha', 'mostrar-senha', 'entrar', 'foguete'].forEach((id) => {
+    pegar(id).disabled = bloqueado;
+  });
+}
+
+function esperarDecolagem() {
+  atualizarMovimentos();
+  if (pausaManual || preferencia.matches || document.hidden) {
+    return Promise.resolve();
   }
+  decolar();
+  return new Promise((resolve) => {
+    concluirTransicao = () => {
+      clearTimeout(timerTransicao);
+      concluirTransicao = null;
+      resolve();
+    };
+    timerTransicao = setTimeout(concluirTransicao, 2100);
+  });
+}
 
-  const emailValido =
-    pegar('email').value.trim() !== '' &&
-    pegar('email').validity.valid;
+pegar('login-form').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  if (processando) return;
 
+  const email = pegar('email');
+  const emailValido = email.value.trim() !== '' && email.validity.valid;
   const senhaValida = senha.value.length > 0;
-
-  mostrarErro(
-    'email',
-    emailValido ? '' : 'Digite um e-mail válido.'
-  );
-
-  mostrarErro(
-    'senha',
-    senhaValida ? '' : 'Digite sua senha.'
-  );
-
+  mostrarErro('email', emailValido ? '' : 'Digite um e-mail válido.');
+  mostrarErro('senha', senhaValida ? '' : 'Digite sua senha.');
+  mostrarStatus('', '');
   if (!emailValido || !senhaValida) {
-    (emailValido ? senha : pegar('email')).focus();
+    (emailValido ? senha : email).focus();
     return;
   }
 
   processando = true;
+  controleLogin = new AbortController();
+  clearTimeout(timerFoguete);
+  foguete.classList.remove('is-flying');
+  bloquearFormulario(true);
+  pegar('entrar').textContent = 'Conectando…';
+  mostrarStatus('Confirmando seu acesso…', 'carregando');
+  let confirmado = false;
 
-  pegar('entrar').disabled = true;
-  pegar('entrar').textContent = 'Testando decolagem…';
+  try {
+    await entrar({ email: email.value.trim(), senha: senha.value }, {
+      sinal: controleLogin.signal,
+    });
+    if (!paginaAtiva) return;
+    const destino = destinoAposLogin();
+    senha.value = '';
+    senha.type = 'password';
+    pegar('mostrar-senha').setAttribute('aria-pressed', 'false');
+    pegar('mostrar-senha').setAttribute('aria-label', 'Mostrar senha');
+    pegar('entrar').textContent = 'Acesso confirmado!';
+    mostrarStatus('Login confirmado. Abrindo sua plataforma…', 'sucesso');
+    if (pegar('curiosidade').open) pegar('curiosidade').close();
+    await esperarDecolagem();
+    if (!paginaAtiva) return;
+    window.location.assign(destino);
+    confirmado = true;
+  } catch (erro) {
+    if (!paginaAtiva) return;
+    mostrarStatus(erro.status === 401
+      ? 'Não foi possível entrar. Confira o e-mail, a senha e a confirmação do seu e-mail.'
+      : erro.message || 'Não foi possível entrar. Tente novamente.', 'erro');
+    falar('Vamos tentar novamente? Confira os dados de acesso.');
+  } finally {
+    controleLogin = null;
+    if (!confirmado && paginaAtiva) {
+      processando = false;
+      bloquearFormulario(false);
+      pegar('entrar').textContent = 'Entrar na plataforma →';
+    }
+  }
+});
 
-  pegar('login-status').textContent =
-    'Prévia visual: nenhuma conta está sendo autenticada.';
+// Concluir a transição imediatamente se o usuário solicitar menos movimento.
+preferencia.addEventListener('change', () => {
+  if (preferencia.matches) concluirTransicao?.();
+});
+movimento.addEventListener('click', () => {
+  if (pausaManual) concluirTransicao?.();
+});
 
-  decolar();
+window.addEventListener('pagehide', () => {
+  paginaAtiva = false;
+  controleLogin?.abort();
+  concluirTransicao?.();
+  clearTimeout(timerPose);
+  clearTimeout(timerMensagem);
+  centralizarOlhar();
+});
 
-  const tempo = document.body.classList.contains('motion-paused')
-    ? 200
-    : 2100;
-
-  setTimeout(() => {
-    pegar('entrar').disabled = false;
-    pegar('entrar').textContent = 'Entrar na plataforma →';
-
-    pegar('login-status').textContent =
-      'Interação concluída. Na próxima etapa, conectaremos o acesso real.';
-
+window.addEventListener('pageshow', (event) => {
+  paginaAtiva = true;
+  if (event.persisted) {
     processando = false;
-  }, tempo);
+    bloquearFormulario(false);
+    pegar('entrar').textContent = 'Entrar na plataforma →';
+    senha.value = '';
+    mostrarStatus('', '');
+    atualizarMovimentos();
+  }
 });
 
 // Evita deixar o foguete preso ao trocar de aba.
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) {
     centralizarOlhar();
+    concluirTransicao?.();
 
     clearTimeout(timerFoguete);
     foguete.classList.remove('is-flying');

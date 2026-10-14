@@ -431,3 +431,5 @@ button[hidden] {
     padding: 9px 10px;
   }
 }
+
+.filters[hidden] { display: none; }

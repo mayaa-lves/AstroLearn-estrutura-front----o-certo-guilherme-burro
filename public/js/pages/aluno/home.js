@@ -53,141 +53,184 @@
   dialog.addEventListener("cancel", () =>
     setTimeout(() => trigger?.focus(), 0),
   );
-  const names = [
-    "Primeiro contato",
-    "Órbita das ideias",
-    "Laboratório lunar",
-    "Engenharia em Marte",
-    "Constelação criativa",
-  ];
-  let currentStep = 1;
-  const steps = [...document.querySelectorAll(".step")];
-  const descriptions = [
-    "Explore o universo da ciência e do seu potencial.",
-    "Observe, faça perguntas e investigue.",
-    "Experimente, crie e teste suas hipóteses.",
-    "Construa soluções para grandes desafios.",
-    "Una ciência, arte e tecnologia para imaginar novos futuros.",
-  ];
-  function refresh() {
-    steps.forEach((s, i) => {
-      s.classList.toggle("locked", i > currentStep);
-      s.classList.toggle("current", i === currentStep);
-      s.classList.toggle("done", i < currentStep);
-      s.querySelector("h2").textContent =
-        i > currentStep ? "Mundo desconhecido" : names[i];
-      s.querySelector(".step-copy p").textContent =
-        i > currentStep
-          ? "Uma nova descoberta espera por você."
-          : descriptions[i];
-      s.querySelector(".planet").setAttribute(
-        "aria-label",
-        i > currentStep
-          ? `Etapa ${i + 1}: mundo desconhecido, bloqueado`
-          : `${names[i]}: ${i < currentStep ? "concluída" : "missão atual"}`,
-      );
-      s.querySelector(".here")?.remove();
-      if (i === currentStep) {
-        const badge = document.createElement("span");
-        badge.className = "here";
-        badge.textContent = "⌖ VOCÊ ESTÁ AQUI";
-        s.querySelector(".step-copy").prepend(badge);
-      }
-      const status = s.querySelector(".planet-status");
-      if (i <= currentStep) status.textContent = i < currentStep ? "✓" : "▶";
-    });
-  }
-  function complete() {
-    close();
-    const previous = currentStep;
-    currentStep = 2;
-    refresh();
-    $("progress").querySelector("strong").textContent = "180 XP";
-    document.dispatchEvent(
-      new CustomEvent("astrolearn:reveal", {
-        detail: { previous, current: currentStep },
-      }),
+  let missions = [],
+    currentStep = -1,
+    dashboard = null;
+  const templates = [...document.querySelectorAll(".step")].map((e) =>
+    e.cloneNode(true),
+  );
+  document.querySelector(".steps").replaceChildren();
+  $("introMission").textContent = "Carregando suas missões…";
+  $("progress").querySelector("strong").textContent = "Carregando…";
+  const connection = import("../../services/conexao.js");
+  const services = import("../../services/aluno.js");
+  const escape = (value) =>
+    String(value ?? "").replace(
+      /[&<>"']/g,
+      (c) =>
+        ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;",
+        })[c],
     );
-    $("introMission").textContent = names[currentStep];
-    document.querySelector(".intro-detail span").textContent =
-      "Individual · 15 min";
-  }
-  refresh();
-  window.AstroLearnJourney = { mission, getCurrent: () => currentStep };
   function mission(i) {
-    if (i <= currentStep) {
-      window.location.assign(`atividade.html?missao=${i}`);
-      return;
-    }
-    if (i > currentStep) {
+    const m = missions[i];
+    if (!m) return;
+    if (m.status_aluno === "bloqueada") {
       open(
         "Mundo desconhecido",
-        "<p>Esta é uma próxima parada da sua expedição. Conclua a missão anterior para chegar até aqui.</p><p>Na plataforma conectada, o professor define a sequência das atividades.</p>",
-        "PRÓXIMA PARADA",
+        "<p>Conclua e aguarde a validação da missão anterior para explorar este planeta.</p>",
       );
       return;
     }
-    if (i === 2) {
-      open(
-        names[i],
-        "<p><strong>Objetivo:</strong> planejar um experimento com luz e plantas.</p><p>Registre sua hipótese, escolha o que vai medir e mantenha água, solo e tempo iguais.</p><p>Individual · 15 minutos. Esta atividade é uma demonstração.</p>",
-        "MISSÃO 03",
+    location.assign("atividade.html?atividade=" + encodeURIComponent(m.id));
+  }
+  window.AstroLearnJourney = { mission, getCurrent: () => currentStep };
+  async function loadJourney() {
+    const c = await connection;
+    const session = c.sessaoObrigatoria("aluno");
+    const service = await services;
+    $("continue").disabled = true;
+    try {
+      dashboard = await service.dashboard();
+      missions = (dashboard.periodos_trilha || []).flatMap((p) =>
+        (p.missoes || []).map((m) => ({
+          ...m,
+          periodo_nome: p.nome,
+          status_aluno: p.acessivel === false ? "bloqueada" : m.status_aluno,
+        })),
       );
-      return;
+      currentStep = missions.findIndex((m) => m.status_aluno === "disponivel");
+      if (currentStep < 0)
+        currentStep = missions.findIndex(
+          (m) =>
+            m.status_aluno !== "bloqueada" && m.status_aluno !== "concluida",
+        );
+      const list = document.querySelector(".steps");
+      list.replaceChildren();
+      const labels = {
+        disponivel: "Disponível",
+        entregue: "Aguardando correção",
+        concluida: "Concluída",
+        corrigida_sem_validacao: "Confira a correção",
+        bloqueada: "Mundo desconhecido",
+      };
+      missions.forEach((m, i) => {
+        const e = templates[i % templates.length].cloneNode(true);
+        e.classList.toggle("locked", m.status_aluno === "bloqueada");
+        e.classList.toggle("done", m.status_aluno === "concluida");
+        e.classList.toggle("current", i === currentStep);
+        e.querySelector(".here")?.remove();
+        e.querySelector("h2").textContent =
+          m.status_aluno === "bloqueada" ? "Mundo desconhecido" : m.titulo;
+        e.querySelector(".step-number").textContent = i + 1;
+        e.querySelector(".step-copy p").textContent =
+          m.status_aluno === "bloqueada"
+            ? "Uma nova descoberta espera por você."
+            : m.periodo_nome +
+              " · " +
+              (labels[m.status_aluno] || "Confira sua atividade");
+        const b = e.querySelector(".planet");
+        b.dataset.step = i;
+        b.setAttribute(
+          "aria-label",
+          labels[m.status_aluno] +
+            ": " +
+            (m.status_aluno === "bloqueada" ? "próxima missão" : m.titulo),
+        );
+        b.onclick = () => mission(i);
+        e.querySelector(".planet-status").textContent =
+          m.status_aluno === "concluida"
+            ? "✓"
+            : m.status_aluno === "bloqueada"
+              ? "🔒"
+              : m.status_aluno === "entregue"
+                ? "⌛"
+                : "▶";
+        list.append(e);
+      });
+      $("introMission").textContent =
+        missions[currentStep]?.titulo ||
+        (dashboard.tem_sala
+          ? "Nenhuma missão disponível"
+          : "Entre na sua turma");
+      document.querySelector(".intro-detail span").textContent =
+        dashboard.sala?.nome || "Peça o código ao professor";
+      $("progress").querySelector("strong").textContent =
+        (dashboard.concluidas || 0) +
+        " / " +
+        (dashboard.total || 0) +
+        " missões";
+      $("continue").textContent = dashboard.tem_sala
+        ? currentStep >= 0
+          ? "Continuar missão"
+          : "Consultar trilha"
+        : "Entrar na turma";
+      $("continue").onclick = dashboard.tem_sala
+        ? () =>
+            currentStep >= 0
+              ? mission(currentStep)
+              : $("journey").scrollIntoView()
+        : join;
+      $("continue").disabled = false;
+      if (!missions.length) {
+        const e = document.createElement("li");
+        e.textContent = dashboard.tem_sala
+          ? "Seu professor ainda não disponibilizou missões."
+          : "Entre em uma turma para iniciar sua expedição.";
+        list.append(e);
+      }
+      document.dispatchEvent(new CustomEvent("astrolearn:journey-loaded"));
+    } catch (e) {
+      $("introMission").textContent = e.message;
+      $("continue").textContent = "Tentar novamente";
+      $("continue").onclick = loadJourney;
+      $("continue").disabled = false;
     }
-    if (i === 0) {
-      open(
-        names[i],
-        "<p>Primeira etapa concluída nesta demonstração: conhecer a missão e aprender a observar.</p><p>Vocês vão observar, investigar, construir e compartilhar o que aprenderem.</p>",
-        "REVISAR DESCOBERTA",
-      );
-      return;
-    }
+  }
+  function join() {
     open(
-      "Órbita das ideias",
-      "<p><strong>Objetivo:</strong> transformar uma observação em uma pergunta que possa ser investigada.</p><ol><li>Observe algo ao seu redor.</li><li>Escreva uma pergunta sobre sua observação.</li><li>Pense em como testar a pergunta e comparar resultados.</li></ol><p>Tempo sugerido: 10 minutos · Individual · Ciência</p>",
-      "MISSÃO 02",
-      "Experimentar uma pergunta",
-      quiz,
+      "Entre na sua turma",
+      '<label for="classCode">Código fornecido pelo professor</label><input id="classCode" autocomplete="off" maxlength="30"><p id="classStatus" role="status"></p>',
+      "SUA TURMA",
+      "Entrar",
+      async () => {
+        const code = $("classCode").value.trim();
+        if (!code) {
+          $("classStatus").textContent = "Informe o código.";
+          return;
+        }
+        $("dialogAction").disabled = true;
+        try {
+          await (await services).entrarSala(code);
+          close();
+          await loadJourney();
+        } catch (e) {
+          $("classStatus").textContent = e.message;
+        } finally {
+          $("dialogAction").disabled = false;
+        }
+      },
     );
   }
-  function quiz() {
-    $("dialogTitle").textContent = "Qual pergunta dá para investigar?";
-    $("dialogKicker").textContent = "EXPERIMENTO DA PRÉVIA";
-    $("dialogContent").innerHTML =
-      '<p>Escolha a pergunta que permite comparar resultados:</p><button class="answer" data-answer="no">Qual é a planta mais bonita do universo?</button><button class="answer" data-answer="yes">Uma planta cresce diferente com mais ou menos luz?</button><p id="answerFeedback" role="status"></p>';
-    $("dialogAction").textContent = "Voltar para a jornada";
-    action = close;
-    dialog.querySelectorAll(".answer").forEach(
-      (b) =>
-        (b.onclick = () => {
-          const right = b.dataset.answer === "yes";
-          $("answerFeedback").className = "feedback";
-          $("answerFeedback").textContent = right
-            ? "Boa descoberta! Você pode comparar plantas, manter as outras condições iguais e observar os resultados."
-            : "Essa pergunta depende de opinião. Tente escolher uma pergunta que permita medir ou comparar algo.";
-          if (right) {
-            document.dispatchEvent(new CustomEvent("astrolearn:answer"));
-            dialog
-              .querySelectorAll(".answer")
-              .forEach((a) => (a.disabled = true));
-            $("dialogAction").textContent =
-              "Concluir e descobrir o próximo mundo";
-            action = complete;
-          }
-        }),
-    );
-  }
-  document
-    .querySelectorAll("[data-step]")
-    .forEach((b) => (b.onclick = () => mission(Number(b.dataset.step))));
-  $("continue").onclick = () => mission(currentStep);
   $("guide").onclick = () =>
     open(
       "Como funciona sua expedição?",
-      "<ol><li>Comece pelo planeta marcado “Você está aqui”.</li><li>Leia o objetivo e veja se a atividade é individual ou em equipe.</li><li>Faça a atividade e compartilhe sua descoberta.</li><li>Avance quando a etapa estiver concluída.</li></ol><p>✓ significa concluído. O símbolo de bloqueio indica uma etapa futura. Nesta prévia, o progresso é demonstrativo.</p>",
-      "GUIA DA MISSÃO",
+      "<ol><li>Abra a missão disponível.</li><li>Leia as instruções do professor.</li><li>Realize a atividade.</li><li>Aguarde a correção para liberar a próxima etapa.</li></ol>",
     );
+  $("progress").onclick = () =>
+    open(
+      "Sua jornada",
+      "<p>" +
+        escape(dashboard?.concluidas || 0) +
+        " de " +
+        escape(dashboard?.total || 0) +
+        " missões concluídas.</p>",
+    );
+  loadJourney();
   const facts = [
     "Vênus gira tão devagar que uma rotação dura mais que uma volta completa dele ao redor do Sol.",
     "A luz do Sol leva cerca de oito minutos para chegar à Terra.",
@@ -201,18 +244,10 @@
       "ESTRELA DE CURIOSIDADE",
     );
 
-  $("progress").onclick = () =>
-    open(
-      "Sua jornada até aqui",
-      `<p><strong>${currentStep === 1 ? 120 : 180} XP · ${currentStep} de 5 missões concluídas.</strong></p><p>Progresso demonstrativo desta visita, sem registro escolar.</p>`,
-      "SEU PROGRESSO",
-    );
-
   $("notifications").onclick = () =>
     open(
-      "Transmissão do professor",
-      "<p>Na próxima atividade, tragam uma pergunta sobre algo que vocês observam no dia a dia.</p><p>Este aviso é um exemplo de como as orientações vão aparecer para o aluno.</p>",
-      "AVISO DE EXEMPLO",
+      "Avisos",
+      "<p>Consulte o retorno do professor dentro de cada atividade. Notificações ainda dependem de uma função no backend.</p>",
     );
   $("motion").onclick = () => {
     const reduced = document.body.classList.toggle("motion-reduced");
@@ -426,6 +461,7 @@
   window.addEventListener("load", drawPath);
   document.fonts?.ready.then(drawPath);
   drawPath();
+  document.addEventListener("astrolearn:journey-loaded", drawPath);
   /* Barra acessível seleciona oito vistas renderizadas do mesmo avatar. */
   const views = [
     "de frente",
@@ -521,10 +557,10 @@
   }
   const answers = {
     mission:
-      "Para começar, clique no planeta marcado “Você está aqui” ou em “Continuar missão”. Leia as instruções: cada atividade informa se é individual ou em equipe.",
+      "Para começar, clique no planeta disponível ou em “Continuar missão”. Leia as instruções e siga o combinado do professor.",
     team: "Ouçam os quatro integrantes e dividam as tarefas: observar, registrar, testar e compartilhar. Vocês podem trocar os papéis para que todo mundo participe.",
     trail:
-      "A trilha desce de planeta em planeta. O ✓ marca uma etapa concluída; o cadeado indica uma próxima parada. Clique nos mundos para conhecer a etapa. O progresso desta tela é demonstrativo.",
+      "A trilha desce de planeta em planeta. O ✓ marca uma etapa concluída; o cadeado indica uma próxima parada. Clique nos mundos para conhecer a etapa. O progresso vem das atividades da sua turma.",
     investigate:
       "Comece com algo que você observou. Uma boa pergunta permite medir ou comparar: por exemplo, uma planta cresce diferente com mais ou menos luz? Pense em como testar mantendo as outras condições iguais.",
     curiosity:
@@ -605,6 +641,7 @@
     } catch {}
     if (
       seen ||
+      !planet ||
       reduced() ||
       document.hidden ||
       typeof helper.animate !== "function"
@@ -652,6 +689,7 @@
         $("dialog").open ||
         ["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName);
     if (
+      !planet ||
       reduced() ||
       document.hidden ||
       busy ||
@@ -696,28 +734,33 @@
   pose(3, "hover");
   window.addEventListener("load", () => later(enter, 650), { once: true });
   /* Pequenas camadas dão vida aos renders sem girar suas construções. */
-  const planets = [...document.querySelectorAll(".planet")];
-  planets.forEach((planet, i) => {
-    ["cloud-layer", "world-glint", ...(i === 0 ? ["waterfall"] : [])].forEach(
-      (c) => {
-        const layer = document.createElement("span");
-        layer.className = c;
-        layer.setAttribute("aria-hidden", "true");
-        planet.append(layer);
-      },
-    );
-    planet.addEventListener("pointermove", (e) => {
-      if (reduced()) return;
-      const r = planet.getBoundingClientRect();
-      planet.style.setProperty(
-        "--tilt",
-        `${((e.clientX - r.left - r.width / 2) / r.width) * 8}deg`,
+  let planets = [];
+  function initializePlanets() {
+    planets = [...document.querySelectorAll(".planet")];
+    planets.forEach((planet, i) => {
+      ["cloud-layer", "world-glint", ...(i === 0 ? ["waterfall"] : [])].forEach(
+        (c) => {
+          const layer = document.createElement("span");
+          layer.className = c;
+          layer.setAttribute("aria-hidden", "true");
+          planet.append(layer);
+        },
+      );
+      planet.addEventListener("pointermove", (e) => {
+        if (reduced()) return;
+        const r = planet.getBoundingClientRect();
+        planet.style.setProperty(
+          "--tilt",
+          `${((e.clientX - r.left - r.width / 2) / r.width) * 8}deg`,
+        );
+      });
+      planet.addEventListener("pointerleave", () =>
+        planet.style.setProperty("--tilt", "0deg"),
       );
     });
-    planet.addEventListener("pointerleave", () =>
-      planet.style.setProperty("--tilt", "0deg"),
-    );
-  });
+  }
+  document.addEventListener("astrolearn:journey-loaded", initializePlanets);
+  initializePlanets();
   let flights = [];
   document.addEventListener("astrolearn:reading", cancelFlights);
   function cancelFlights() {
@@ -726,6 +769,7 @@
   }
   function launch(planet, reveal = false) {
     if (
+      !planet ||
       reduced() ||
       document.hidden ||
       document.body.classList.contains("activity-open") ||
@@ -876,16 +920,16 @@
     viewer.style.setProperty("--eye-x", "0px");
     viewer.style.setProperty("--eye-y", "0px");
   });
-  document.querySelectorAll(".planet").forEach((p) =>
-    p.addEventListener("click", () => {
-      glance();
-      say(
-        p.closest(".step").classList.contains("locked")
-          ? "Cada descoberta abre um novo caminho."
-          : "Vamos investigar esse mundo!",
-      );
-    }),
-  );
+  document.addEventListener("click", (event) => {
+    const p = event.target.closest(".planet");
+    if (!p) return;
+    glance();
+    say(
+      p.closest(".step").classList.contains("locked")
+        ? "Cada descoberta abre um novo caminho."
+        : "Vamos investigar esse mundo!",
+    );
+  });
   $("continue").addEventListener("click", () => {
     glance();
     say("Uma boa pergunta é o começo de tudo.");
@@ -895,12 +939,10 @@
     say("Boa descoberta! Um novo mundo espera por você.");
   });
   $("enterTrail").onclick = () => {
-    document
-      .getElementById("journey")
-      .scrollIntoView({
-        behavior: reduced() ? "auto" : "smooth",
-        block: "start",
-      });
+    document.getElementById("journey").scrollIntoView({
+      behavior: reduced() ? "auto" : "smooth",
+      block: "start",
+    });
     $("guide").focus({ preventScroll: true });
   };
   // Leve mudança de vista conecta o explorador ao planeta selecionado.

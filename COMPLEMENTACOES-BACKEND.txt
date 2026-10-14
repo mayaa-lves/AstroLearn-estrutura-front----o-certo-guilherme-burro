@@ -1,0 +1,25 @@
+ASTROLEARN — COMPLEMENTAÇÕES PARA O RESPONSÁVEL PELO BACKEND
+Base da análise: app.py do repositório Yan-Proenca/steam-project-backend, versão consultada em 14/10/2026. Sem alterações no backend ou no banco.
+
+PRIORIDADE 1 — ENTREGA ESCOLAR
+POST /api/aluno/missoes/enviar hoje só recebe missao_id e registra status/data. Não salva resposta_entrega nem arquivos. O front atualizado não manda esses dados para não perdê-los silenciosamente.
+Implementar recebimento do texto e anexos com limites de tamanho/tipo, armazenamento protegido, metadados da entrega, URLs temporárias para o professor autorizado e retorno persistido. Atualizar GET da missão e GET da entrega para devolver os anexos e texto.
+O POST de envio deve validar também o bloqueio/sequência da missão e do período no servidor, além da matrícula. Atualmente essa validação aparece na leitura da missão, mas não no POST de envio.
+O upload de materiais PDF/imagem pelo professor também não existe; biblioteca aceita descrição e links.
+
+PRIORIDADE 2 — PROPOSTAS E COMUNICAÇÃO
+Missões não armazenam tipo_atividade, status_publicacao ou revisão. Definir formato individual/equipe, rascunho/publicação e regra de edição após entregas. Hoje criar a missão já a torna visível; a UI informa esse comportamento.
+Perguntas/respostas e notificações não têm rotas. Implementar acesso por turma/aluno/professor, paginação, marcação de leitura e eventos de entrega/pergunta.
+
+PRIORIDADE 3 — PERFIL E RECOMPENSAS
+Não há consulta geral atualizada de perfil, alteração de nome, catálogo/saldo/compras ou consulta de conquistas/stickers do aluno. Definir contratos; validar compras e recompensas exclusivamente no servidor. O campo XP do login é uma fotografia daquele momento.
+A rota POST /api/perfil/avatar envia imagem; não representa o salvamento do personagem e das roupas da oficina. Esse contrato ainda precisa ser criado.
+
+PRIORIDADE 4 — QUIZZES, JOGOS E CONTA
+Há rota para responder quiz, mas o dashboard retorna apenas resumo, sem perguntas/opções. Implementar consulta de quiz para alunos autorizados, sem expor respostas corretas.
+Definir persistência e validação de resultados dos jogos, caso devam contar para desempenho/recompensas.
+Recuperação e redefinição de senha não têm rotas no código analisado.
+Cadastro pode continuar falhando por confirmação de e-mail/limite de SMTP. A chave administrativa não elimina o limite de envio de e-mails; verificar configuração do projeto Supabase.
+Validar role na inscrição como aluno/professor e manter autorização de professor no servidor.
+
+As rotas novas precisam ser combinadas antes de ligar os botões atualmente indisponíveis. Nenhuma chave administrativa deve ser exposta no navegador.

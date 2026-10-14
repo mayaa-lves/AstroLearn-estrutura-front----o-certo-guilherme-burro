@@ -1,0 +1,44 @@
+ASTROLEARN — CONEXÃO DO FRONT COM A API
+14/10/2026
+
+1. Faça uma cópia da sua pasta atual.
+2. Extraia este ZIP e copie auth, aluno, professor e public SOBRE as pastas correspondentes do projeto. Aceite substituir os arquivos.
+3. Preserve public/assets: este pacote não contém imagens nem fontes e não apaga as que você já tem.
+4. Abra index.html pelo Go Live. Entre com uma conta confirmada.
+5. Para publicar, envie estes arquivos ao repositório do FRONT e aguarde o deploy da Vercel. Não é necessário enviar arquivos deste pacote ao backend.
+
+A API pública está configurada em public/js/config.js:
+https://steam-project-backend.vercel.app
+Nenhuma chave administrativa deve ser adicionada ao front.
+
+CONECTADO
+- Login e cadastro de aluno/professor.
+- Verificação da sessão, separação dos perfis e saída da conta.
+- Turma do aluno, entrada por código, trilha com IDs reais e bloqueios do servidor.
+- Consulta da atividade, prazo e retorno da correção.
+- Registro de realização da atividade: NÃO ENVIA TEXTO OU ARQUIVOS.
+- Biblioteca e integrantes da equipe cadastrados pelo professor.
+- Nome/e-mail do perfil, turma/equipe e envio de imagem de perfil.
+- Professor: turmas, alunos, pauta/notas, atividades, equipes, entregas e correções.
+- Criação de turma/período, atividade, equipe e associação dos integrantes.
+- Biblioteca do professor: botão Materiais da biblioteca dentro da turma permite cadastrar título, descrição e link.
+- Prévia da atividade para o professor, somente leitura.
+
+IMPORTANTE
+Salvar uma atividade já a disponibiliza aos alunos: a API atual não implementa rascunho/publicação separados. O formato de atividade está limitado à entrega individual; equipes continuam podendo ser cadastradas.
+
+PERMANECE LOCAL OU INDISPONÍVEL
+Loja, roupas, saldo, exemplos de conquistas, jogos e preferências de acessibilidade continuam locais, com aviso. Mural de equipe, perguntas, notificações, recuperação de senha e entrega de texto/anexos dependem do backend. Botões incompatíveis foram bloqueados ou mostram a limitação, sem simular salvamento no banco.
+
+ROTEIRO DO TESTE REAL
+Use contas de teste com e-mails confirmados. Não use trabalhos ou notas reais durante o teste.
+1. Professor entra, cria turma e período; anota o código.
+2. Professor cria uma atividade com descrição; salvar a publica imediatamente.
+3. Aluno entra, informa o código e abre a missão pela trilha.
+4. Aluno registra que realizou a atividade. A entrega física/externa ainda precisa ser combinada.
+5. Professor abre Correções, registra nota e comentário.
+6. Aluno abre novamente a atividade e confere o retorno e a liberação da próxima missão.
+7. Professor cria equipe e cadastra aluno; aluno atualiza Minha equipe.
+8. Professor cadastra link na biblioteca; aluno atualiza Biblioteca.
+
+Se houver falha, copie a mensagem da interface e a resposta da requisição na aba Network do navegador. Não compartilhe token, senha ou chave do Supabase.
