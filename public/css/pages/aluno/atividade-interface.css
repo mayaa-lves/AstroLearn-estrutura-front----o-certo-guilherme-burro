@@ -1,0 +1,70 @@
+/* Atividade: o cenário muda com a missão; os cartões continuam priorizando leitura. */
+body.activity-page{--scene:none;--tint:#eaf2fa;--accent:#3e7a80;background:#f4f7fa;color:#304352;isolation:isolate;}
+body.activity-page[data-activity-world="0"],body.activity-page[data-activity-world="4"]{--scene:url('../../../assets/imagens/aluno/atividades/terra-amazonia.png');--tint:#e4f2ef;--accent:#36786b;}
+body.activity-page[data-activity-world="1"],body.activity-page[data-activity-world="3"]{--scene:url('../../../assets/imagens/aluno/atividades/marte-suave.png');--tint:#f6e9df;--accent:#9c664c;}
+body.activity-page[data-activity-world="2"]{--scene:url('../../../assets/imagens/aluno/atividades/lua-suave.png');--tint:#e9edf4;--accent:#65768f;}
+body.activity-page::before{content:"";position:fixed;inset:0;z-index:-3;background-image:linear-gradient(180deg,#f9fcffd9 0%,#f9fcffb5 55%,#f8fbff44 100%),var(--scene);background-size:cover;background-position:center;opacity:1;pointer-events:none;}
+/* Bruma de nuvens: acima do cenário, abaixo das estrelas e dos cartões. */
+body.activity-page::after{
+ content:"";display:block;position:fixed;inset:-6% -16%;z-index:-2;
+ pointer-events:none;opacity:.38;
+ background:
+  radial-gradient(ellipse 24% 8% at 14% 28%,#ffffffb3 0%,#ffffff59 38%,transparent 76%),
+  radial-gradient(ellipse 19% 6% at 37% 34%,#ffffff99 0%,#ffffff38 42%,transparent 78%),
+  radial-gradient(ellipse 28% 9% at 78% 64%,#ffffffa6 0%,#ffffff45 40%,transparent 78%),
+  radial-gradient(ellipse 17% 5% at 61% 71%,#ffffff80 0%,transparent 78%);
+ filter:blur(18px);animation:activity-cloud-drift 85s ease-in-out infinite alternate;
+}
+@keyframes activity-cloud-drift{
+ from{transform:translate3d(-3%,0,0)}
+ to{transform:translate3d(5%,-1%,0)}
+}
+.astro-motion-off body.activity-page::after,
+body.activity-page.astro-motion-off::after{animation:none!important;}
+@media(prefers-reduced-motion:reduce){body.activity-page::after{animation:none!important;}}
+@media(max-width:600px){body.activity-page::after{opacity:.28;filter:blur(12px);}}
+.activity-stars{position:fixed;inset:0;display:block;width:100%;height:100%;z-index:-1;pointer-events:none;}
+.activity-page .topbar nav,.activity-page .topbar nav a,.activity-page .shell>footer{color:#4f697c;text-shadow:none;}
+.activity-page .rail{background:#f9fcfce0;border-color:#fff;box-shadow:0 7px 25px #4261680b;}
+.activity-page .mission-banner{background:linear-gradient(115deg,#ffffffed,var(--tint));border:1px solid #fff;box-shadow:0 8px 26px #46616d0b;overflow:hidden;}
+.activity-page .mission-banner>div:first-child{position:relative;z-index:2;max-width:calc(100% - 230px);}
+.activity-page .banner-orbits{display:none;}
+.activity-page .mission-banner h1{color:#2d4853;}
+.activity-page .mission-banner p:not(.kicker){color:#607780;}
+.activity-page .preview-note{background:#ffffffa8;border-color:#fff;color:#62747f;}
+.activity-page .preview-note p{color:inherit;}
+.activity-page .card{background:#ffffffed;box-shadow:0 8px 30px #36546808;border-color:#fff;}
+.activity-page .teacher-line strong{color:var(--accent);}
+.activity-page .teacher-line span{color:#70808b;}
+.activity-tools{position:relative;display:flex;align-items:center;gap:10px;}
+.activity-home,.activity-account-toggle{position:relative;display:grid;place-items:center;width:42px;height:42px;flex:0 0 42px;border:1px solid #fff;border-radius:50%;background:#fffdf5e6;color:#7251a0;padding:0;text-decoration:none;box-shadow:0 3px 12px #50325d0d;}
+.activity-account-toggle{background:#e6d7f3;color:#765397;font-weight:700;font-size:15px;}
+.activity-home svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+.activity-home:hover,.activity-account-toggle:hover{background:#f2e4ff;box-shadow:0 5px 16px #5636671a;}
+.activity-tool-tip{position:absolute;right:0;top:calc(100% + 12px);font-size:12px;line-height:1.4;white-space:nowrap;border-radius:8px;padding:7px 10px;background:#382448ef;color:white;opacity:0;visibility:hidden;pointer-events:none;z-index:30;}
+.activity-home:hover .activity-tool-tip,.activity-home:focus-visible .activity-tool-tip{opacity:1;visibility:visible;}
+.activity-account-panel{position:absolute;right:0;top:calc(100% + 12px);width:320px;max-width:calc(100vw - 36px);padding:16px;border:1px solid #fff;border-radius:22px;background:#fffaf4f7;backdrop-filter:blur(20px);box-shadow:0 12px 40px #39254524;z-index:40;color:#302047;text-align:left;}
+.activity-account-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:15px;font-size:10px;letter-spacing:.1em;color:#725a80;}
+.activity-account-heading button{display:grid;place-items:center;width:30px;height:30px;border:0;border-radius:50%;font-size:23px;line-height:1;color:#684478;background:#eee1f3;}
+.activity-account-person{display:flex;align-items:center;gap:13px;padding-bottom:16px;border-bottom:1px solid #e5d7e7;margin-bottom:7px;}
+.activity-account-person>div{min-width:0;flex:1;}
+.activity-account-avatar{display:grid;place-items:center;width:52px;height:52px;flex:0 0 52px;border:1px solid #fff;border-radius:50%;background:linear-gradient(140deg,#e5d1fb,#cdb2e8);color:#623b87;font-size:24px;}
+.activity-account-panel h2{font-size:16px;line-height:1.25;margin:0 0 5px;overflow-wrap:anywhere;letter-spacing:-.02em;}
+.activity-account-panel p{font-size:12px;line-height:1.4;margin:0 0 5px;color:#685071;overflow-wrap:anywhere;}
+.activity-account-person small{font-size:11px;color:#7b6088;}
+.activity-account-panel>a{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 9px;border-radius:10px;text-decoration:none;font-size:13px;color:#5e3094;line-height:1.4;}
+.activity-account-panel>a:hover{background:#eee0fa;}
+#activityLogout{margin-top:10px;padding:11px;width:100%;font-size:13px;border-radius:11px;border:1px solid #dfcee5;background:transparent;color:#684674;}
+#activityLogout:hover{background:#f1e4ef;}
+[hidden]{display:none!important;}
+#activityPlanet{isolation:isolate;z-index:1;rotate:0deg;animation:none;background:none;aspect-ratio:1;width:205px;height:205px;right:3%;top:2px;opacity:1;filter:drop-shadow(0 7px 9px #54375d21);}
+#activityPlanet .planet-art{position:absolute;inset:0;background:url('../../../assets/imagens/aluno/inicial/mondes-v7.png') var(--world-x,0%) 50%/500% auto no-repeat;z-index:2;pointer-events:none;}
+.planet-local-canvas{position:absolute;left:0;top:0;width:100%;height:116%;z-index:1;pointer-events:none;}
+.planets-ready #activityPlanet .planet-art{mask-image:linear-gradient(to bottom,#000 0 17%,#0008 22%,transparent 29%);-webkit-mask-image:linear-gradient(to bottom,#000 0 17%,#0008 22%,transparent 29%);}
+.planets-ready #activityPlanet[data-world="4"] .planet-art,.planets-ready #activityPlanet[data-world="2"] .planet-art{visibility:hidden;}
+.planets-ready #activityPlanet[data-world="0"] .planet-art{background-image:url('../../../assets/imagens/aluno/inicial/observatorio-base-fixa.png');background-size:contain;background-position:center bottom;left:18%;top:-2%;right:auto;bottom:auto;width:64%;height:38%;mask-image:none;-webkit-mask-image:none;filter:drop-shadow(0 3px 2px #33272338);}
+.planets-ready #activityPlanet[data-world="0"]::before{content:"";position:absolute;left:25%;top:25%;width:50%;height:6%;border-radius:50%;background:radial-gradient(ellipse,#25392955,transparent 72%);filter:blur(2px);z-index:1;}
+.planets-ready #activityPlanet[data-world="0"]::after{content:"";position:absolute;left:64%;top:3%;width:3px;height:3px;border-radius:50%;background:#ffcf73;box-shadow:0 0 5px #ffc061;z-index:4;animation:activity-beacon 6s ease-in-out infinite;}
+@keyframes activity-beacon{0%,70%,100%{opacity:.25}80%,88%{opacity:.9}}
+@media(max-width:800px){#activityPlanet{width:155px;height:155px;right:2%;top:25px;}.activity-page .mission-banner>div:first-child{max-width:calc(100% - 155px);}.activity-tools{gap:8px;}.activity-home,.activity-account-toggle{width:38px;height:38px;flex-basis:38px;}}
+@media(max-width:500px){#activityPlanet{width:110px;height:110px;right:8px;top:12px;}.activity-page .mission-banner>div:first-child{max-width:100%;}.mission-banner .kicker{max-width:calc(100% - 110px);}.mission-banner h1{max-width:calc(100% - 125px);overflow-wrap:anywhere;}.activity-page .mission-banner>div:first-child>p:not(.kicker){max-width:100%;}.mission-banner .tags{margin-top:16px;}.activity-account-panel{max-width:calc(100vw - 28px);}}

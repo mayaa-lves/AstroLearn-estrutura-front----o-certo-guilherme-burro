@@ -12,8 +12,10 @@
     <link href="../public/css/pages/aluno/atividade.css" rel="stylesheet" />
     <link href="../public/css/menu-pdf.css" rel="stylesheet" />
     <link rel="stylesheet" href="../public/css/preferencias.css" />
+    <link rel="stylesheet" href="../public/css/pages/aluno/atividade-interface.css" />
   </head>
-  <body>
+  <body class="activity-page" data-page="activity" data-activity-world="loading">
+    <canvas id="activityStars" class="activity-stars" aria-hidden="true"></canvas>
     <a class="skip" href="#main">Pular para a atividade</a>
     <!-- Navegação compacta e sem animações de cenário durante a leitura. -->
     <aside class="rail">
@@ -72,29 +74,18 @@
           <span>Atividade</span>
         </nav>
         <div class="activity-tools">
-          <button
-            aria-label="Pausar movimento das estrelas"
-            aria-pressed="false"
-            class="star-motion"
-            id="starMotion"
-            title="Pausar estrelas"
-            type="button"
-          >
-            <svg aria-hidden="true" viewBox="0 0 24 24">
-              <path d="m12 3 2 7 7 2-7 2-2 7-2-7-7-2 7-2Z"></path>
-            </svg>
-          </button>
-          <span aria-label="Aluno demonstrativo Maya" class="profile">M</span>
+          <a class="activity-home" id="activityHome" href="home.html#journey" aria-label="Voltar à trilha" aria-describedby="activityHomeTip"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9M9 20v-7h6v7"/></svg><span id="activityHomeTip" class="activity-tool-tip" role="tooltip">Voltar à trilha</span></a>
+          <button type="button" class="activity-account-toggle" id="activityAccountToggle" aria-label="Abrir opções da minha conta" aria-expanded="false" aria-controls="activityAccountPanel"><span id="activityAccountInitial">M</span></button>
+          <section class="activity-account-panel" id="activityAccountPanel" aria-label="Minha conta" hidden>
+            <div class="activity-account-heading"><span>MINHA CONTA</span><button id="activityCloseAccount" type="button" aria-label="Fechar opções da conta">×</button></div>
+            <div class="activity-account-person"><span class="activity-account-avatar" id="activityProfileInitial" aria-hidden="true"></span><div><h2 id="activityProfileName"></h2><p id="activityProfileEmail"></p><small id="activityProfileRole">Aluno · AstroLearn</small></div></div>
+            <a id="activityProfileLink" href="perfil.html">Ver meu perfil <span aria-hidden="true">→</span></a>
+            <a id="activityPreferencesLink" href="perfil.html#preferencesTitle">Preferências e acessibilidade <span aria-hidden="true">→</span></a>
+            <button id="activityLogout" type="button">Sair da conta</button>
+          </section>
         </div>
       </header>
       <main id="main">
-        <div class="preview-note">
-          <span class="dot"> </span>
-          <p>
-            Demonstração local: confirme a revisão para guardar a entrega neste
-            navegador e vê-la na prévia do professor. Nada é enviado à escola.
-          </p>
-        </div>
         <section aria-labelledby="atividade-titulo" class="mission-banner">
           <div>
             <p class="kicker" id="missionNumber">MISSÃO 02 · CIÊNCIA</p>
@@ -113,7 +104,7 @@
             <span> </span>
             <i> </i>
           </div>
-          <div aria-hidden="true" class="banner-planet"></div>
+          <div aria-hidden="true" class="banner-planet" id="activityPlanet" hidden><span class="planet-art"></span></div>
         </section>
         <div class="activity-grid">
           <div class="lesson-column">
@@ -130,8 +121,8 @@
               </div>
               <div class="teacher-line">
                 <div>
-                  <strong>Professor da turma</strong>
-                  <span>Atividade de exemplo · sem prazo definido</span>
+                  <strong id="activityTeacher">Professor: carregando…</strong>
+                  <span id="activityTeacherDue">Consultando prazo…</span>
                 </div>
               </div>
               <p class="objective" id="atividade-objetivo">
@@ -339,10 +330,6 @@
                 </p>
               </div>
             </section>
-            <div class="quiet-companion">
-              <div aria-hidden="true" class="companion-image"></div>
-              <p>Uma boa pergunta já é<br />uma grande partida.</p>
-            </div>
           </aside>
         </div>
         <div
@@ -431,12 +418,11 @@
     </dialog>
 
     
-    <script type="module" src="../public/js/pages/aluno/atividade.js" type="module"></script>
-    <script
-      defer="True"
-      src="../public/js/components/estrelas-atividade.js"
-    ></script>
+    <script type="module" src="../public/js/pages/aluno/atividade.js"></script>
     <script src="../public/js/components/preferencias.js"></script>
   <script type="module" src="../public/js/components/sessao.js"></script>
+    <script type="module" src="../public/js/pages/aluno/atividade-interface.js"></script>
+    <script type="module" src="../public/js/pages/aluno/atividade-planeta.js"></script>
+    <script type="module" src="../public/js/pages/aluno/atividade-estrelas.js"></script>
 </body>
 </html>

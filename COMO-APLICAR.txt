@@ -1,15 +1,9 @@
-ASTROLEARN — ÁREA DE NOTIFICAÇÕES V6
+AstroLearn — ajuste v8 (aplicar sobre a versão v7 já instalada)
 
-Aplique no projeto com a versão v5 já instalada.
+1. Extraia este ZIP.
+2. Copie as pastas aluno e public para a pasta principal do projeto.
+3. Confirme a substituição dos dois arquivos existentes.
+4. Atualize a página com Ctrl + Shift + R.
 
-Copie as pastas aluno e public deste ZIP para a raiz do projeto. Mescle as pastas e substitua os três arquivos. Não apague as pastas existentes ou as imagens. Atualize a página com Ctrl + Shift + R.
-
-O QUE FOI FEITO
-Ao clicar no sino, abre um painel lateral no estilo da referência, adaptado às cores da plataforma. Inclui título, filtros Todas e Não lidas, estado vazio ilustrado, acesso às preferências e botão fechar. Fecha também com Esc ou clique fora. O foco retorna ao sino. Funciona no celular e com teclado.
-
-A área ainda não está conectada a notificações do backend. Por isso mostra que nenhum aviso foi carregado e informa que os avisos ainda não estão disponíveis nesta versão. Não foram criadas mensagens, contagens ou históricos fictícios. Os filtros trocam o estado vazio; futuramente deverão filtrar os dados reais.
-
-Os planetas, nuvens, observatório, avatar, estrelas, imagens e demais páginas permanecem iguais à v5. Não houve alteração no backend.
-
-VALIDAÇÃO
-Testado localmente no navegador com dados simulados da API: abertura pelo sino, fechamento pelo botão/Esc/clique fora, retorno do foco, filtros, menu da conta, layout no celular, fonte ampliada a 150% e contraste. Sem erros JavaScript ou arquivos ausentes. Nenhuma chamada de escrita ao backend. Confira também com sua conta real.
+Ajustes: casinha corrigida e nuvens discretas em movimento atrás dos cartões.
+As nuvens respeitam a preferência de reduzir movimento. As demais funções permanecem como na v7.

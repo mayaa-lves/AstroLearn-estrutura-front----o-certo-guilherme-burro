@@ -144,3 +144,6 @@
     });
   }
 })();
+
+/* Um único assistente compacto em todas as páginas internas. */
+(() => {const source=document.currentScript?.src;if(!source||! /\/(aluno|professor)\//.test(location.pathname))return;const script=document.createElement('script');script.src=new URL('./assistente-flutuante.js',source).href;script.defer=true;document.head.append(script);})();
