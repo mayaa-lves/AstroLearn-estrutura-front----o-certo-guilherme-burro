@@ -1,0 +1,32 @@
+ASTROLEARN — PENDÊNCIAS APÓS A REVISÃO DE 16/10/2026
+Fonte consultada: app.py do repositório Yan-Proenca/steam-project-backend, em 16/10/2026.
+O backend não foi alterado nesta entrega.
+
+JÁ EXISTE NO CÓDIGO DO BACKEND E FOI CONECTADO NO FRONT
+- Senha de cadastro: mínimo 8, maiúscula, minúscula, número e símbolo.
+- Criar/editar missão por JSON ou multipart/form-data, um arquivo no campo anexo, persistido em anexo_url.
+- Enviar/reentregar missão por multipart/form-data: missao_id e anexo opcional, persistido em url_entrega.
+- Validação de tamanho de anexo de até 20 MB e extensões permitidas.
+- Biblioteca por links: criar, listar, editar, excluir.
+- Consultar turmas, equipes, alunos, entregas, notas e corrigir.
+
+CONFIRMAR PUBLICAÇÃO
+O código do GitHub não comprova que a hospedagem já está na mesma versão. Publicar essa versão e conferir bucket anexos_geral, permissões e colunas anexo_url/url_entrega. Validar upload e leitura com contas de aluno e professor, sem service_role no front.
+
+PRIORIDADE PARA COMPLETAR O FLUXO
+1. Cadastro do aluno com código de turma obrigatório: a rota atual não recebe/vincula a turma. Validar o código e definir como a matrícula será concluída quando houver confirmação de e-mail. O front mantém o campo indisponível até existir contrato real; não simula matrícula.
+2. Cadastro: tratar e-mail duplicado, retorno de confirmação, limite de envio/SMTP e o erro de FK em perfis. Recuperar/redefinir senha com URLs válidas do projeto.
+3. Unificar as regras de desbloqueio do dashboard, detalhe da missão e POST de entrega. A lista e o detalhe podem divergir; o POST também precisa conferir a sequência.
+4. Resposta escrita na entrega, além do arquivo. Definir se múltiplos anexos serão suportados; hoje o contrato só aceita um.
+5. Perguntas/respostas e notificações de novas entregas/perguntas, com permissões, contagem de não lidas e marcar como lidas.
+6. Biblioteca com upload de arquivo, capa opcional, arquivar/restaurar e filtro de arquivados. O contrato atual é somente links; não recebe os arquivos do novo-material.html.
+7. Perfil: leitura atualizada, edição de nome e rota de foto. /api/perfil/avatar não aparece na versão consultada. O front mostra erro claro se a publicação não disponibilizar a rota.
+8. Incluir avatar_url nos colegas do dashboard e no usuário do login/perfil. Sem esse campo, o front mostra iniciais reais em vez de inventar o avatar.
+9. Tarefas de equipe e mural compartilhado: CRUD, responsável, prazo, estado e permissões; atividades individuais/em equipe devem ter semântica definida no servidor.
+10. Categoria, entregáveis e dica como campos próprios de missão. Por compatibilidade, a área e os itens de entrega foram incorporados à descrição nesta entrega; ainda não podem ser filtrados como metadados independentes.
+11. Controle de acesso aos jogos pelo professor com validação no servidor, além de catálogo, perguntas de quiz e progresso.
+12. Conquistas, saldo, catálogo, inventário, compras e visual equipável persistidos na conta e validados no servidor.
+13. Rascunho/publicação e revisões: atualmente salvar uma atividade já a disponibiliza.
+
+ASSETS, NÃO BACKEND
+Uma rotação 3D de verdade e animações corporais completas exigem modelo GLB/GLTF preparado para animação, ou sequências adicionais de vistas/poses. As imagens atuais permitem transições entre vistas; não contêm a geometria do personagem. Novas roupas precisam de imagens alinhadas à anatomia de cada mascote.

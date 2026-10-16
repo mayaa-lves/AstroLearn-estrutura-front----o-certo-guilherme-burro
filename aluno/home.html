@@ -1,519 +1,365 @@
 <!doctype html>
-
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <meta content="width=device-width,initial-scale=1" name="viewport" />
-    <title>AstroLearn · Minha expedição</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Minha expedição · AstroLearn</title>
     <meta
-      content="Explore, investigue e crie no AstroLearn."
       name="description"
+      content="Sua trilha de descobertas em ciências, tecnologia, engenharia, artes e matemática."
     />
-    <link
-      as="image"
-      href="../public/assets/imagens/aluno/inicial/horizonte-v7.png"
-      rel="preload"
-    />
-    <link
-      as="image"
-      href="../public/assets/imagens/aluno/inicial/avatar-vistas-v4.png"
-      rel="preload"
-    />
-    <link href="../public/css/pages/aluno/home.css" rel="stylesheet" />
-    <link href="../public/css/menu-pdf.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../public/css/pages/aluno/home.css" />
     <link rel="stylesheet" href="../public/css/preferencias.css" />
   </head>
   <body class="menu-collapsed">
     <a class="skip" href="#main">Pular para a trilha</a>
-    <!-- Atmosfera discreta: decorativa, sem disputar atenção com as missões. -->
-    <div aria-hidden="true" class="space-background">
-      <span class="sky-orbit orbit-one"> </span>
-      <span class="sky-orbit orbit-two"> </span>
-      <span class="sky-orbit orbit-three"> </span>
-      <span class="sky-star star-one">✦</span>
-      <span class="sky-star star-two">✧</span>
-      <span class="sky-star star-three">✦</span>
-      <span class="asteroid asteroid-one">
-        <svg aria-hidden="true" viewBox="0 0 100 100">
-          <defs>
-            <radialgradient cx="30%" cy="20%" id="rock">
-              <stop stop-color="#e0d1c6"></stop>
-              <stop offset=".55" stop-color="#ab98a9"></stop>
-              <stop offset="1" stop-color="#766b86"></stop>
-            </radialgradient>
-          </defs>
-          <path
-            d="M27 8 61 6 83 22 94 51 79 78 58 92 23 81 8 56 13 29Z"
-            fill="url(#rock)"
-          ></path>
-          <g fill="#655671" opacity=".3">
-            <ellipse cx="32" cy="35" rx="11" ry="9"></ellipse>
-            <ellipse cx="67" cy="55" rx="13" ry="11"></ellipse>
-            <circle cx="31" cy="66" r="7"></circle>
-            <circle cx="68" cy="26" r="5"></circle>
-          </g>
-        </svg>
-      </span>
-      <span class="asteroid asteroid-two">
-        <svg aria-hidden="true" viewBox="0 0 100 100">
-          <defs>
-            <radialgradient cx="30%" cy="20%" id="rock2">
-              <stop stop-color="#e0d1c6"></stop>
-              <stop offset=".55" stop-color="#ab98a9"></stop>
-              <stop offset="1" stop-color="#766b86"></stop>
-            </radialgradient>
-          </defs>
-          <path
-            d="M27 8 61 6 83 22 94 51 79 78 58 92 23 81 8 56 13 29Z"
-            fill="url(#rock2)"
-          ></path>
-          <g fill="#655671" opacity=".3">
-            <ellipse cx="32" cy="35" rx="11" ry="9"></ellipse>
-            <ellipse cx="67" cy="55" rx="13" ry="11"></ellipse>
-            <circle cx="31" cy="66" r="7"></circle>
-            <circle cx="68" cy="26" r="5"></circle>
-          </g>
-        </svg>
-      </span>
-      <span class="satellite">
-        <svg viewBox="0 0 120 75">
-          <defs>
-            <lineargradient id="metal">
-              <stop stop-color="#f2ddbe"></stop>
-              <stop offset="1" stop-color="#8c819e"></stop>
-            </lineargradient>
-          </defs>
-          <g transform="rotate(-20 60 38)">
-            <path
-              d="M4 20h35v32H4Zm77 0h35v32H81Z"
-              fill="#8997af"
-              stroke="#d9dde7"
-              stroke-width="2"
-            ></path>
-            <path
-              d="M15 20v32m12-32v32m66-32v32m12-32v32M4 31h35M4 42h35m42-11h35m-35 11h35"
-              stroke="#d3d2de"
-            ></path>
-            <path d="M39 36h42" stroke="#9e8ba8" stroke-width="5"></path>
-            <rect
-              fill="url(#metal)"
-              height="31"
-              rx="7"
-              width="28"
-              x="46"
-              y="22"
-            ></rect>
-            <path d="M60 22V9m-9 0h18" stroke="#ad8a5c" stroke-width="3"></path>
-          </g>
-        </svg>
-      </span>
-    </div>
-    <!-- Menu flutuante. Recolher mantém ícones e nomes acessíveis. -->
+    <div class="space-background" aria-hidden="true"></div>
+    <canvas id="spaceCanvas" class="space-canvas" aria-hidden="true"></canvas>
     <aside class="sidebar">
-      <a class="brand" href="home.html">
-        <span class="brand-orbit">✦</span>Astro<span>Learn</span>
-      </a>
-      <button
-        aria-controls="mainNav"
-        aria-expanded="true"
-        aria-label="Recolher menu"
-        class="menu-toggle"
-        id="menuToggle"
+      <a class="brand" href="home.html" aria-label="AstroLearn — início"
+        ><span class="brand-orbit" aria-hidden="true">✦</span
+        ><span class="brand-word">Astro<span>Learn</span></span></a
       >
-        <svg aria-hidden="true" viewBox="0 0 24 24">
-          <path d="m14 6-6 6 6 6"></path>
+      <button
+        id="menuToggle"
+        class="menu-toggle"
+        type="button"
+        aria-label="Expandir menu"
+        aria-controls="mainNav"
+        aria-expanded="false"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="16" rx="3" />
+          <path d="M9 4v16m4-11 3 3-3 3" />
         </svg>
       </button>
-      <nav aria-label="Navegação principal" id="mainNav">
-        <button
+      <nav id="mainNav" aria-label="Menu do aluno">
+        <a
+          class="nav-item active"
           aria-current="page"
           aria-label="Início"
-          class="nav-item active"
-          data-nav="home"
+          href="home.html"
+          ><svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 10 12 3l9 7v10h-6v-6H9v6H3Z" /></svg
+          ><span class="label">Início</span></a
         >
-          <svg aria-hidden="true" viewBox="0 0 24 24">
-            <path d="M3 10 12 3l9 7v10H3Zm6 10v-7h6v7"></path>
-          </svg>
-          <span>Início</span>
-        </button>
-        <button aria-label="Minha trilha" class="nav-item" data-nav="trail">
-          <svg aria-hidden="true" viewBox="0 0 24 24">
+        <a class="nav-item" aria-label="Minha trilha" href="#journey"
+          ><svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="6" cy="5" r="3" />
+            <circle cx="18" cy="19" r="3" />
+            <path d="M6 8v3a3 3 0 0 0 3 3h6a3 3 0 0 1 3 2" /></svg
+          ><span class="label">Minha trilha</span></a
+        >
+        <a class="nav-item" aria-label="Biblioteca" href="biblioteca.html"
+          ><svg viewBox="0 0 24 24" aria-hidden="true">
             <path
-              d="M6 3a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm12 12a3 3 0 1 0 0 6 3 3 0 0 0 0-6ZM6 9v3h12v3"
-            ></path>
-          </svg>
-          <span>Minha trilha</span>
-        </button>
-        <button aria-label="Biblioteca" class="nav-item" data-nav="book">
-          <svg aria-hidden="true" viewBox="0 0 24 24">
+              d="M12 5C8 3 5 3 2 4v16c4-1 7-1 10 1 3-2 6-2 10-1V4c-3-1-7-1-10 1Zm0 0v16"
+            /></svg
+          ><span class="label">Biblioteca</span></a
+        >
+        <a class="nav-item" aria-label="Conquistas" href="conquistas.html"
+          ><svg viewBox="0 0 24 24" aria-hidden="true">
             <path
-              d="M12 5C9 3 5 3 2 4v16c4-1 7-1 10 1 3-2 6-2 10-1V4c-3-1-7-1-10 1Zm0 0v16"
-            ></path>
-          </svg>
-          <span>Biblioteca</span>
-        </button>
-        <button aria-label="Minha equipe" class="nav-item" data-nav="team">
-          <svg aria-hidden="true" viewBox="0 0 24 24">
+              d="M8 3h8v7a4 4 0 0 1-8 0Zm0 2H3v3a5 5 0 0 0 5 5m8-8h5v3a5 5 0 0 1-5 5m-4 1v6m-5 1h10"
+            /></svg
+          ><span class="label">Conquistas</span></a
+        >
+        <a class="nav-item" aria-label="Loja" href="loja.html"
+          ><svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 8h16l1 13H3Zm4 0V6a4 4 0 0 1 8 0v2" /></svg
+          ><span class="label">Loja</span></a
+        >
+        <a class="nav-item" aria-label="Minha equipe" href="equipe.html"
+          ><svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="9" cy="7" r="4" />
             <path
-              d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM2 21v-3a7 7 0 0 1 14 0v3m1-17a4 4 0 0 1 0 8m2 2a6 6 0 0 1 3 5v2"
-            ></path>
-          </svg>
-          <span>Minha equipe</span>
-        </button>
-        <button aria-label="Conquistas" class="nav-item" data-nav="star">
-          <svg aria-hidden="true" viewBox="0 0 24 24">
-            <path d="m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1Z"></path>
-          </svg>
-          <span>Conquistas</span>
-        </button>
-        <button aria-label="Loja" class="nav-item" data-nav="shop">
-          <svg aria-hidden="true" viewBox="0 0 24 24">
-            <path d="M3 9h18v12H3ZM2 9l3-6h14l3 6M9 21v-7h6v7"></path>
-          </svg>
-          <span>Loja</span>
-        </button>
-        <button aria-label="Perfil" class="nav-item" data-nav="user">
-          <svg aria-hidden="true" viewBox="0 0 24 24">
+              d="M2 21v-3a7 7 0 0 1 14 0v3m1-17a4 4 0 0 1 0 8m2 2a6 6 0 0 1 3 5v2"
+            /></svg
+          ><span class="label">Minha equipe</span></a
+        >
+        <a class="nav-item" aria-label="Perfil" href="perfil.html"
+          ><svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="7" r="4" />
+            <path d="M4 21v-2a8 8 0 0 1 16 0v2" /></svg
+          ><span class="label">Perfil</span></a
+        >
+        <a class="nav-item" aria-label="Jogos" href="jogos/index.html"
+          ><svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 7h14l3 10-3 3-5-4h-4l-5 4-3-3ZM7 10v6m-3-3h6m6-2h1m1 3h1" /></svg
+          ><span class="label">Jogos</span></a
+        >
+        <a class="nav-item" aria-label="Configurações" href="configuracoes.html"
+          ><svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4" />
             <path
-              d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10ZM3 22a9 9 0 0 1 18 0"
-            ></path>
-          </svg>
-          <span>Perfil</span>
-        </button>
+              d="M12 2v3m0 14v3M2 12h3m14 0h3M5 5l2 2m10 10 2 2M5 19l2-2M17 7l2-2"
+            /></svg
+          ><span class="label">Configurações</span></a
+        >
       </nav>
-      <div class="side-footer">
-        Aprender, criar e descobrir juntos.<a href="../auth/login.html"
-          >Voltar ao login</a
-        >
-      </div>
+      <a
+        class="side-exit"
+        id="logout"
+        href="../auth/login.html"
+        aria-label="Sair da conta"
+        ><svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9 4H4v16h5m5-12 4 4-4 4M9 12h12" /></svg
+        ><span class="label">Sair</span></a
+      >
     </aside>
     <div class="app">
       <header class="topbar">
-        <span class="demo-label">PRÉVIA · DADOS DE EXEMPLO</span>
-        <div class="top-actions">
-          <button aria-label="Ver meu progresso" class="fuel" id="progress">
-            ★ <strong>120 XP</strong>
-          </button>
-          <button
-            aria-label="Avisos do professor"
-            class="icon-button"
-            id="notifications"
-          >
-            <svg aria-hidden="true" viewBox="0 0 24 24">
-              <path d="M5 17h14l-2-3V9a5 5 0 0 0-10 0v5Zm5 3h4"></path>
-            </svg>
-            <i> </i>
-          </button>
-          <button
-            aria-label="Reduzir animações"
-            aria-pressed="false"
-            class="icon-button"
-            id="motion"
-          >
-            <svg aria-hidden="true" viewBox="0 0 24 24">
-              <path d="M20 15A9 9 0 0 1 9 3a9 9 0 1 0 11 12"></path>
-            </svg>
-          </button>
-          <button
-            aria-label="Abrir meu perfil"
-            class="profile-button"
-            data-nav="user"
-          >
-            <span class="avatar">M</span>
-            <span>Explorador</span>
-            <span>⌄</span>
-          </button>
-        </div>
-      </header>
-      <main id="main">
-        <section
-          aria-labelledby="welcomeTitle"
-          class="page-heading landing-intro"
+        <button
+          id="notifications"
+          class="icon-button"
+          type="button"
+          aria-label="Notificações"
+          aria-haspopup="dialog"
+          aria-controls="notificationPanel"
+          aria-expanded="false"
+          aria-describedby="notificationHint"
         >
-          <h1 id="welcomeTitle">Bem-vinda, Maya!</h1>
-          <p class="intro-copy">Vamos continuar sua expedição?</p>
-          <div class="intro-actions">
-            <button class="primary" id="continue">
-              Continuar missão
-              <svg aria-hidden="true" viewBox="0 0 24 24">
-                <path d="M4 12h16m-6-6 6 6-6 6"></path>
-              </svg>
-            </button>
-            <button class="text-action" id="enterTrail">
-              Explorar minha trilha <span aria-hidden="true">↓</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18 8a6 6 0 0 0-12 0c0 8-3 7-3 10h18c0-3-3-2-3-10M10 21h4" />
+          </svg>
+          <span class="header-tooltip" id="notificationHint" role="tooltip">Notificações</span>
+        </button>
+        <button class="account-button" id="accountToggle" type="button" aria-label="Abrir opções da minha conta" aria-expanded="false" aria-controls="accountPopover">
+          <span id="accountInitial">M</span>
+        </button>
+        <section class="profile-popover" id="accountPopover" aria-label="Minha conta" hidden>
+          <div class="profile-popover-heading"><span>MINHA CONTA</span><button id="closeAccount" type="button" aria-label="Fechar opções da conta">×</button></div>
+          <div class="profile-popover-person">
+            <span class="profile-popover-avatar" id="profileInitial" aria-hidden="true">M</span>
+            <div><h2 id="profileName"></h2><p id="profileEmail"></p><span class="profile-role">Aluno · AstroLearn</span></div>
+          </div>
+          <a href="perfil.html" class="profile-popover-link">Ver meu perfil <span aria-hidden="true">→</span></a>
+          <a href="perfil.html#preferencesTitle" class="profile-popover-link">Preferências e acessibilidade <span aria-hidden="true">→</span></a>
+          <button id="accountLogout" type="button" class="profile-popover-logout">Sair da conta</button>
+        </section>
+      </header>
+      <main id="main" tabindex="-1">
+        <section class="welcome" aria-labelledby="welcomeTitle">
+          <h1 id="welcomeTitle">Boas-vindas!</h1>
+          <p>Vamos continuar sua expedição?</p>
+          <div class="welcome-actions">
+            <button class="primary" id="continue" type="button" disabled>
+              Carregando sua trilha…</button
+            ><button
+              class="journey-progress"
+              id="progress"
+              type="button"
+              aria-label="Consultar meu progresso"
+            >
+              <span id="progressLabel">Consultando missões…</span
+              ><span
+                class="progress-track"
+                role="progressbar"
+                aria-label="Missões concluídas"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow="0"
+                ><span id="progressFill"></span
+              ></span>
             </button>
           </div>
-          <p class="intro-detail">
-            Missão atual · <strong id="introMission">Órbita das ideias</strong>
-            <span>Individual · 10 min</span>
-          </p>
+          <p class="room-label" id="roomLabel"></p>
+          <button
+            class="mobile-avatar-open"
+            id="openAvatar"
+            type="button"
+            aria-haspopup="dialog"
+            aria-controls="avatarDialog"
+          >
+            Ver meu explorador
+          </button>
         </section>
         <div class="learning-layout">
-          <section
-            aria-label="Trilha da expedição"
-            class="journey"
-            id="journey"
-          >
-            <div class="trail-heading">
-              <div>
-                <p class="trail-kicker">SEU MAPA DE DESCOBERTAS</p>
-                <h2>Um mundo de cada vez.</h2>
-              </div>
-              <button class="guide-button" id="guide">
-                Como jogar <span>↗</span>
-              </button>
-            </div>
-            <div class="path-wrap">
-              <svg aria-hidden="true" class="path-line">
-                <path id="pathCurve"></path>
-              </svg>
-              <ol class="steps">
-                <li class="step done step-0">
-                  <button
-                    aria-label="Primeiro contato: concluída"
-                    class="planet"
-                    data-step="0"
-                  >
-                    <span class="planet-surface world-0"> </span>
-                    <span class="planet-status">✓</span>
-                  </button>
-                  <div class="step-copy">
-                    <div class="step-title">
-                      <span class="step-number">1</span>
-                      <h2>Primeiro contato</h2>
-                    </div>
-                    <p>Explore o universo da ciência e do seu potencial.</p>
-                  </div>
-                </li>
-                <li class="step current step-1">
-                  <button
-                    aria-label="Órbita das ideias: disponível"
-                    class="planet"
-                    data-step="1"
-                  >
-                    <span class="planet-surface world-1"> </span>
-                    <span class="active-orbit"> </span>
-                    <span class="orbit-ship">
-                      <img
-                        alt=""
-                        src="../public/assets/imagens/login/cenarios-e-personagens/rocket.png"
-                      />
-                    </span>
-                    <span class="planet-status">▶</span>
-                  </button>
-                  <div class="step-copy">
-                    <span class="here">⌖ VOCÊ ESTÁ AQUI</span>
-                    <div class="step-title">
-                      <span class="step-number">2</span>
-                      <h2>Órbita das ideias</h2>
-                    </div>
-                    <p>Observe, faça perguntas e investigue.</p>
-                  </div>
-                </li>
-                <li class="step locked step-2">
-                  <button
-                    aria-label="Mundo desconhecido: bloqueado"
-                    class="planet"
-                    data-step="2"
-                  >
-                    <span class="planet-surface world-2"> </span>
-                    <span class="planet-status">
-                      <svg aria-hidden="true" viewBox="0 0 24 24">
-                        <rect height="11" rx="3" width="14" x="5" y="10"></rect>
-                        <path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"></path>
-                      </svg>
-                    </span>
-                  </button>
-                  <div class="step-copy">
-                    <div class="step-title">
-                      <span class="step-number">3</span>
-                      <h2>Mundo desconhecido</h2>
-                    </div>
-                    <p>Uma nova descoberta espera por você.</p>
-                  </div>
-                </li>
-                <li class="step locked step-3">
-                  <button
-                    aria-label="Mundo desconhecido: bloqueado"
-                    class="planet"
-                    data-step="3"
-                  >
-                    <span class="planet-surface world-3"> </span>
-                    <span class="planet-status">
-                      <svg aria-hidden="true" viewBox="0 0 24 24">
-                        <rect height="11" rx="3" width="14" x="5" y="10"></rect>
-                        <path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"></path>
-                      </svg>
-                    </span>
-                  </button>
-                  <div class="step-copy">
-                    <div class="step-title">
-                      <span class="step-number">4</span>
-                      <h2>Mundo desconhecido</h2>
-                    </div>
-                    <p>Uma nova descoberta espera por você.</p>
-                  </div>
-                </li>
-                <li class="step locked step-4">
-                  <button
-                    aria-label="Mundo desconhecido: bloqueado"
-                    class="planet"
-                    data-step="4"
-                  >
-                    <span class="planet-surface world-4"> </span>
-                    <span class="planet-status">
-                      <svg aria-hidden="true" viewBox="0 0 24 24">
-                        <rect height="11" rx="3" width="14" x="5" y="10"></rect>
-                        <path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"></path>
-                      </svg>
-                    </span>
-                  </button>
-                  <div class="step-copy">
-                    <div class="step-title">
-                      <span class="step-number">5</span>
-                      <h2>Mundo desconhecido</h2>
-                    </div>
-                    <p>Uma nova descoberta espera por você.</p>
-                  </div>
-                </li>
-              </ol>
-              <button
-                aria-label="Descobrir uma curiosidade espacial"
-                class="floating-star"
-                id="curiosity"
-              >
-                ✦
-              </button>
-            </div>
-            <p class="journey-note">
-              Uma pergunta. Uma descoberta. Um novo mundo.
+          <section class="journey" id="journey" aria-label="Trilha de missões">
+            <p class="journey-message" id="journeyMessage" role="status">
+              Preparando sua próxima descoberta…
             </p>
+            <ol class="steps" id="missionList" aria-busy="true"></ol>
           </section>
-          <!-- Visualização por vistas renderizadas; sem opções de personalização. -->
-          <aside
-            aria-label="Visualização do seu explorador"
-            class="avatar-viewer"
-          >
+          <aside class="avatar-viewer" id="avatarViewer" aria-label="Seu explorador">
             <button
-              aria-label="Interagir com seu explorador"
               class="avatar-stage"
               id="avatarStage"
+              type="button"
+              aria-label="Interagir com seu explorador, visto de frente"
             >
-              <div class="avatar-render" id="avatarRender"></div>
-              <span aria-hidden="true" class="avatar-eye eye-left"> </span>
-              <span aria-hidden="true" class="avatar-eye eye-right"> </span>
-              <span aria-hidden="true" class="eyelid lid-left"> </span>
-              <span aria-hidden="true" class="eyelid lid-right"> </span>
+              <span class="avatar-shadow" aria-hidden="true"></span
+              ><span class="avatar-render" id="avatarRender" aria-hidden="true"></span
+              ><span
+                class="avatar-render avatar-ghost"
+                id="avatarGhost"
+                aria-hidden="true"
+              ></span>
             </button>
             <p
-              aria-live="polite"
-              class="avatar-reaction"
               id="avatarReaction"
+              class="avatar-reaction"
               role="status"
+              aria-live="polite"
             ></p>
             <div class="rotation-control">
               <label for="avatarRotation">Girar avatar</label>
               <div class="slider-row">
-                <span>0°</span>
-                <input
-                  aria-valuetext="Vista de frente, 0 graus"
+                <button
+                  type="button"
+                  class="turn-button"
+                  id="avatarLeft"
+                  aria-label="Girar explorador para a esquerda"
+                >
+                  ‹</button
+                ><input
                   id="avatarRotation"
-                  max="360"
-                  min="0"
-                  step="1"
                   type="range"
+                  min="0"
+                  max="360"
+                  step="1"
                   value="0"
-                />
-                <span>360°</span>
+                  aria-valuetext="De frente"
+                /><button
+                  type="button"
+                  class="turn-button"
+                  id="avatarRight"
+                  aria-label="Girar explorador para a direita"
+                >
+                  ›
+                </button>
               </div>
-              <output class="sr-only" for="avatarRotation" id="avatarAngle"
-                >0 graus</output
+              <output id="avatarAngle" class="sr-only" for="avatarRotation"
+                >De frente</output
               >
             </div>
           </aside>
         </div>
+        <footer>AstroLearn · Uma descoberta de cada vez.</footer>
       </main>
-      <footer>AstroLearn · Dados e progresso demonstrativos.</footer>
     </div>
-    <!-- Assistente compacto, separado do avatar pessoal. -->
-    <div class="chat-launcher">
-      <button
-        aria-controls="chatPanel"
-        aria-expanded="false"
-        aria-label="Conversar com seu copiloto"
-        class="helper-mascot"
-        id="helperMascot"
-      >
-        <span class="helper-sprite" id="helperSprite"> </span>
-        <span class="jet-flame"> </span>
-        <span class="helper-tip" role="tooltip">Precisa de uma dica?</span>
-      </button>
-    </div>
+    <button
+      class="chat-launcher"
+      id="chatToggle"
+      type="button"
+      aria-label="Abrir assistente"
+      aria-controls="chatPanel"
+      aria-expanded="false"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 3h16v14h-6l-4 4v-4H4Z" />
+        <path d="M8 8h1m3 0h1m3 0h1M8 12h8" /></svg
+      ><span class="chat-tooltip" role="tooltip">Precisa de uma ajuda?</span>
+    </button>
     <section
-      aria-label="Chat de ajuda"
       class="chat-panel"
-      hidden=""
       id="chatPanel"
-      inert=""
+      aria-label="Assistente AstroLearn"
+      hidden
+      inert
     >
       <header>
         <div>
-          <strong>Seu copiloto</strong>
-          <span>Ajuda demonstrativa · sem IA conectada</span>
+          <strong>Seu copiloto</strong
+          ><small>Guia com respostas preparadas · sem IA</small>
         </div>
-        <button aria-label="Fechar chat" id="chatClose">×</button>
+        <button
+          class="icon-button"
+          id="chatClose"
+          type="button"
+          aria-label="Fechar assistente"
+        >
+          ×
+        </button>
       </header>
       <div
-        aria-live="polite"
-        aria-relevant="additions"
         class="chat-log"
         id="chatLog"
         role="log"
+        aria-live="polite"
+        aria-label="Mensagens"
       >
         <p class="chat-message bot">
-          Oi, explorador! Posso ajudar você a encontrar sua missão, entender a
-          trilha ou pensar em uma pergunta para investigar.
+          Oi! Posso ajudar com a trilha, os materiais e o uso da plataforma. O que você
+          quer descobrir?
         </p>
       </div>
-      <div class="chat-prompts">
-        <button data-prompt="Como começo a missão?">Minha missão</button>
-        <button data-prompt="Como trabalho com minha equipe?">
-          Minha equipe
-        </button>
-        <button data-prompt="Me conte uma curiosidade espacial">
-          Curiosidade
+      <div class="chat-topics">
+        <button type="button" data-topic="Como começo uma missão?">Começar missão</button
+        ><button type="button" data-topic="Como envio minha atividade?">
+          Enviar atividade
         </button>
       </div>
       <form id="chatForm">
-        <label class="sr-only" for="chatInput">Sua pergunta</label>
-        <input
-          autocomplete="off"
+        <label for="chatInput" class="sr-only">Sua pergunta</label
+        ><input
           id="chatInput"
-          maxlength="400"
-          placeholder="O que você quer descobrir?"
-        />
-        <button aria-label="Enviar pergunta">
-          <svg aria-hidden="true" viewBox="0 0 24 24">
-            <path d="M4 12h16m-6-6 6 6-6 6"></path>
-          </svg>
-        </button>
+          maxlength="500"
+          placeholder="Escreva sua dúvida…"
+          autocomplete="off"
+          required
+        /><button class="primary" type="submit">Enviar</button>
       </form>
     </section>
-    <dialog id="dialog">
-      <button aria-label="Fechar" class="dialog-close" id="closeDialog">
+    <dialog id="notificationPanel" class="notification-drawer" aria-labelledby="notificationTitle" aria-describedby="notificationIntro">
+      <header class="notification-heading">
+        <div><p class="notification-eyebrow">SEU CENTRO DE AVISOS</p><h2 id="notificationTitle">Notificações</h2></div>
+        <div class="notification-tools">
+          <a href="perfil.html#preferencesTitle" class="notification-tool" aria-label="Abrir preferências no perfil" title="Preferências">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 3-.6 2.2-2 .9-2-.7-2 3.4 1.6 1.6-.2 2.2L3 14l2 3.5 2.2-.5 1.8 1.3.4 2.2h4l.6-2.2 2-.9 2 .7 2-3.4-1.6-1.6.2-2.2 1.8-1.4-2-3.5-2.2.5-1.8-1.3L14 3Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </a>
+          <button id="closeNotifications" type="button" class="notification-tool" aria-label="Fechar notificações">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+          </button>
+        </div>
+      </header>
+      <p id="notificationIntro" class="notification-intro">Os avisos da sua turma, reunidos em um só lugar.</p>
+      <div class="notification-filters" role="group" aria-label="Filtrar notificações">
+        <button type="button" data-notification-filter="all" aria-pressed="true" aria-controls="notificationFeed">Todas</button>
+        <button type="button" data-notification-filter="unread" aria-pressed="false" aria-controls="notificationFeed">Não lidas</button>
+      </div>
+      <div class="notification-feed" id="notificationFeed">
+        <div class="notification-empty">
+          <svg class="notification-illustration" viewBox="0 0 160 160" aria-hidden="true">
+            <defs><linearGradient id="noticeBell" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c9a1f7"/><stop offset=".5" stop-color="#9263d9"/><stop offset="1" stop-color="#694199"/></linearGradient><radialGradient id="noticeHalo"><stop stop-color="#e9d8ff" stop-opacity=".9"/><stop offset="1" stop-color="#e9d8ff" stop-opacity="0"/></radialGradient></defs>
+            <circle cx="80" cy="80" r="76" fill="url(#noticeHalo)"/>
+            <g transform="rotate(-14 80 80)"><path d="M49 91V70c0-19 12-32 31-32s31 13 31 32v21l10 16c2 4 0 7-5 7H44c-5 0-7-3-5-7Z" fill="url(#noticeBell)"/><path d="M68 120c2 14 22 14 24 0" fill="#70449f"/><path d="M74 33c0-8 12-8 12 0" fill="#ad85df"/><path d="M59 73c0-13 5-21 13-24" fill="none" stroke="#ead5ff" stroke-width="5" stroke-linecap="round"/></g>
+            <circle cx="119" cy="49" r="13" fill="#fff5db" stroke="#fff" stroke-width="2"/><path d="m119 42 2 5 5 2-5 2-2 5-2-5-5-2 5-2Z" fill="#d6a14e"/>
+            <circle cx="36" cy="48" r="3" fill="#d8b7f4"/><circle cx="125" cy="125" r="4" fill="#e3cdf8"/>
+          </svg>
+          <h3 id="notificationEmptyTitle" aria-live="polite">Nenhum aviso carregado</h3>
+          <p id="notificationEmptyDescription">Correções e novidades da turma aparecerão aqui quando os avisos estiverem disponíveis.</p>
+        </div>
+      </div>
+      <footer class="notification-availability"><span class="notification-preview">EM PREPARAÇÃO</span><p>Esta caixa ainda não recebe avisos da turma nesta versão.</p></footer>
+    </dialog>
+    <dialog id="dialog" aria-labelledby="dialogTitle">
+      <button type="button" class="dialog-close" id="closeDialog" aria-label="Fechar">
         ×
       </button>
-      <span class="dialog-kicker" id="dialogKicker">MISSÃO</span>
+      <p class="dialog-kicker" id="dialogKicker">SUA EXPEDIÇÃO</p>
       <h2 id="dialogTitle"></h2>
       <div id="dialogContent"></div>
-      <button class="primary" id="dialogAction">Entendi</button>
+      <button class="primary" id="dialogAction" type="button">Entendi</button>
     </dialog>
-
-    <script defer src="../public/js/pages/aluno/home.js"></script>
-    <script defer src="../public/js/components/estrelas-home.js"></script>
-    <script defer src="../public/js/components/menu-pdf.js"></script>
+    <dialog
+      class="avatar-dialog"
+      id="avatarDialog"
+      aria-label="Visualização do seu explorador"
+    >
+      <button
+        type="button"
+        class="dialog-close"
+        id="closeAvatar"
+        aria-label="Fechar visualização"
+      >
+        ×
+      </button>
+    </dialog>
     <script src="../public/js/components/preferencias.js"></script>
-    <script type="module" src="../public/js/components/identidade.js"></script>
-  <script type="module" src="../public/js/components/sessao.js"></script>
-</body>
+    <script defer src="../public/js/components/menu-pdf.js"></script>
+    <script type="module" src="../public/js/pages/aluno/home.js"></script>
+    <script type="module" src="../public/js/pages/aluno/home-cenario.js"></script>
+    <script type="module" src="../public/js/pages/aluno/home-planetas.js"></script>
+  </body>
 </html>

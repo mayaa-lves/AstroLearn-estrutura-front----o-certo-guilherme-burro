@@ -1,0 +1,453 @@
+/* Cadastro aprovado: o cenário original permanece nas duas etapas. */
+[hidden] {
+  display: none !important;
+}
+.cadastro-page {
+  min-height: 100svh;
+  grid-template-rows: auto minmax(min-content, 1fr) auto;
+}
+.cadastro-conteudo {
+  width: min(100%, 390px);
+}
+.cadastro-page main {
+  padding: 14px 5.6vw 14px 4vw;
+}
+.cadastro-header {
+  padding: 20px 4vw 8px;
+}
+.cadastro-header .marca {
+  color: #503086;
+}
+.cadastro-header .already-account {
+  color: #664386;
+  text-underline-offset: 5px;
+}
+.cadastro-header #movimento {
+  position: fixed;
+  bottom: 16px;
+  right: 28px;
+  background: #fff8;
+  border: 1px solid #d8c4e580;
+  border-radius: 22px;
+  padding: 8px 14px;
+  font-size: 11px;
+  z-index: 10;
+  min-height: 38px;
+  text-decoration: none;
+  backdrop-filter: blur(8px);
+}
+.cadastro-progress {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 0;
+  margin: 0 0 34px;
+  list-style: none;
+  font-size: 12px;
+  color: #796e84;
+  white-space: nowrap;
+}
+.cadastro-progress li:not(.progress-line) {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.cadastro-progress li > span {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #e9e0e4;
+  color: #6c5b7a;
+  font-size: 12px;
+}
+.cadastro-progress li[aria-current] > span {
+  background: #8044cd;
+  color: white;
+}
+.cadastro-progress li[aria-current] {
+  color: #37264e;
+  font-weight: 700;
+}
+.cadastro-progress .progress-line {
+  height: 1px;
+  width: 65px;
+  background: #cfc2da;
+}
+.cadastro-progress .complete > span {
+  background: #f5edf9;
+  color: #7a45ad;
+  border: 1px solid #b68bda;
+}
+.cadastro-page h1 {
+  font-size: clamp(34px, 3.2vw, 48px);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  color: #2d193f;
+  margin: 0 0 18px;
+  font-weight: 700;
+  outline: 0;
+}
+.cadastro-page h1 span {
+  color: #7840ba;
+}
+.cadastro-page .introducao {
+  color: #66546f;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0 0 28px;
+}
+.role-options {
+  display: grid;
+  gap: 16px;
+  margin-top: 8px;
+}
+.role-card {
+  width: 100%;
+  min-height: 84px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  text-align: left;
+  border: 1px solid #bd9cdb9c;
+  border-radius: 14px;
+  padding: 17px 22px;
+  background: linear-gradient(120deg, #fffaf5a6, #fff8ef70);
+  box-shadow: 0 3px 12px #67477906;
+  backdrop-filter: blur(6px);
+  color: #6e37a6;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s,
+    border-color 0.2s;
+}
+.role-card:hover {
+  background: #fffaf4da;
+  border-color: #9a6dc3;
+  transform: translateX(3px);
+  box-shadow: 0 7px 24px #6243730c;
+}
+.role-card:active {
+  transform: translateX(3px) scale(0.99);
+}
+.role-card > svg {
+  width: 29px;
+  height: 29px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.65;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+.role-card > span {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+  min-width: 0;
+}
+.role-card strong {
+  font-size: 16px;
+  color: #34203f;
+  font-weight: 700;
+}
+.role-card small {
+  font-size: 12px;
+  line-height: 1.4;
+  color: #796584;
+}
+.role-card .role-arrow {
+  width: 17px;
+  height: 17px;
+  stroke-width: 1.8;
+}
+:where(button, a, input, summary):focus-visible {
+  outline: 3px solid #8150b9;
+  outline-offset: 4px;
+}
+.back-profile {
+  display: block;
+  border: 0;
+  background: transparent;
+  color: #79549a;
+  font: inherit;
+  font-size: 12px;
+  padding: 4px 0;
+  margin: 0 0 12px;
+  cursor: pointer;
+  min-height: 30px;
+}
+.back-profile:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+#etapaDados h1 {
+  font-size: clamp(30px, 2.7vw, 40px);
+  margin-bottom: 10px;
+}
+.selected-profile {
+  font-size: 13px;
+  color: #6b5775;
+  margin: 0 0 12px;
+}
+.cadastro-page #dados-cadastro label {
+  margin: 8px 0 4px;
+  font-size: 12px;
+}
+.cadastro-page #dados-cadastro input {
+  height: 40px;
+  min-height: 40px;
+  border-radius: 11px;
+  font-size: 13px;
+  padding: 9px 13px;
+  background: #fffaf5b8;
+  color: #392644;
+  border-color: #cbb5cf;
+}
+.cadastro-page .auth-password input {
+  padding-right: 42px !important;
+}
+.cadastro-page .auth-reveal {
+  height: 40px;
+  min-height: 40px;
+  width: 40px;
+}
+.cadastro-page .auth-help,
+.cadastro-page .auth-error {
+  font-size: 10px;
+  line-height: 1.4;
+  margin: 4px 0 0;
+}
+.password-row {
+  gap: 12px;
+}
+.student-room {
+  margin-top: 10px;
+}
+.password-summary {
+  font-size: 10px;
+  line-height: 1.5;
+  margin: 6px 0;
+  color: #766080;
+  min-height: 15px;
+}
+.password-summary.is-valid {
+  color: #286047;
+}
+.cadastro-page #senha-ajuda {
+  display: none;
+}
+.cadastro-page .auth-primary {
+  height: 44px;
+  min-height: 44px;
+  margin-top: 16px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #9751df, #7134c2);
+  font-size: 13px;
+  box-shadow: 0 5px 17px #703ca415;
+  color: white;
+}
+.cadastro-page .auth-primary:hover {
+  background: linear-gradient(180deg, #8a45d4, #6229ad);
+}
+.authorization {
+  margin-top: 9px;
+}
+.authorization summary {
+  font-size: 12px;
+  color: #6b4f80;
+  min-height: 30px;
+}
+.confirmation-note {
+  font-size: 10px;
+  color: #75657f;
+  line-height: 1.5;
+  margin: 8px 0 0;
+}
+.cadastro-status {
+  font-size: 12px;
+  line-height: 1.55;
+  margin: 10px 0 0;
+  overflow-wrap: anywhere;
+}
+.cadastro-status:empty {
+  display: none;
+}
+.cadastro-status a {
+  font-weight: 700;
+  text-underline-offset: 4px;
+}
+.cadastro-footer {
+  font-size: 11px;
+  padding: 10px 4vw 18px;
+  text-align: left;
+}
+.cadastro-page[data-transition="true"] .role-card {
+  pointer-events: none;
+}
+.cadastro-page[data-step="dados"] .cadastro-progress {
+  margin-bottom: 16px;
+}
+.cadastro-page[data-step="dados"] .cadastro-conteudo {
+  padding: 4px 0;
+}
+@media (min-width: 801px) and (max-height: 800px) {
+  .cadastro-header {
+    padding-top: 12px;
+  }
+  .cadastro-page main {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+  .cadastro-page[data-step="dados"] .cadastro-progress {
+    margin-bottom: 8px;
+  }
+  #etapaDados h1 {
+    font-size: 31px;
+    margin-bottom: 6px;
+  }
+  .back-profile {
+    margin-bottom: 6px;
+    min-height: 25px;
+  }
+  .selected-profile {
+    margin-bottom: 6px;
+  }
+  .cadastro-page #dados-cadastro label {
+    margin-top: 6px;
+  }
+  .cadastro-page #dados-cadastro input,
+  .cadastro-page .auth-reveal {
+    height: 36px;
+    min-height: 36px;
+  }
+  .cadastro-page .auth-primary {
+    margin-top: 10px;
+    height: 40px;
+    min-height: 40px;
+  }
+  .student-room {
+    margin-top: 7px;
+  }
+  .confirmation-note {
+    margin-top: 6px;
+  }
+  .cadastro-footer {
+    padding-bottom: 12px;
+  }
+}
+@media (max-width: 800px) {
+  .cadastro-header {
+    padding: 16px 6vw;
+    gap: 12px;
+    flex-wrap: nowrap;
+  }
+  .cadastro-header .marca {
+    font-size: 16px;
+  }
+  .cadastro-header .marca svg {
+    width: 28px;
+    height: 28px;
+  }
+  .cadastro-header .already-account {
+    font-size: 11px;
+  }
+  .cadastro-header #movimento {
+    right: 16px;
+    bottom: 14px;
+    font-size: 10px;
+    padding: 7px 12px;
+  }
+  .cadastro-page main {
+    padding: 205px 7vw 30px;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .cadastro-conteudo {
+    width: 100%;
+    max-width: 440px;
+  }
+  .cadastro-progress {
+    margin-bottom: 24px;
+    font-size: 11px;
+  }
+  .cadastro-page h1 {
+    font-size: 36px;
+    margin-bottom: 12px;
+  }
+  .cadastro-page .introducao {
+    font-size: 14px;
+    margin-bottom: 22px;
+  }
+  .role-card {
+    min-height: 76px;
+    padding: 15px 18px;
+  }
+  .role-card small {
+    font-size: 12px;
+  }
+  .role-card strong {
+    font-size: 15px;
+  }
+  .role-options {
+    gap: 13px;
+  }
+  .cadastro-page #dados-cadastro input {
+    height: 44px;
+    min-height: 44px;
+    font-size: 14px;
+  }
+  .cadastro-page .auth-reveal {
+    height: 44px;
+    min-height: 44px;
+  }
+  .cadastro-page #dados-cadastro label {
+    font-size: 12px;
+    margin-top: 10px;
+  }
+  .cadastro-footer {
+    padding: 12px 7vw 70px;
+    font-size: 10px;
+  }
+  .confirmation-note {
+    font-size: 11px;
+  }
+  .cadastro-page .auth-help,
+  .cadastro-page .auth-error,
+  .password-summary {
+    font-size: 11px;
+  }
+  .cadastro-page[data-step="dados"] .cadastro-progress {
+    margin-bottom: 18px;
+  }
+  #etapaDados h1 {
+    font-size: 32px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+/* As duas etapas partem do mesmo ponto: a troca não reposiciona o cenário. */
+@media (min-width: 801px) {
+  .cadastro-page main {
+    align-items: flex-start;
+  }
+  .cadastro-conteudo {
+    margin-top: clamp(36px, 8svh, 85px);
+  }
+}
+@media (min-width: 801px) and (max-height: 800px) {
+  .cadastro-conteudo {
+    margin-top: 22px;
+  }
+}

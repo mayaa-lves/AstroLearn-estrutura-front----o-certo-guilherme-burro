@@ -1,55 +1,82 @@
 @import url("../../fonts.css");
-/* 1. Identidade e acessibilidade */
-
 :root {
-  --ink: #382064;
-  --muted: #81739e;
-  --purple: #7c42dd;
-  --amber: #ffbe26;
-  --paper: #fffaf4;
-  --menu-width: 225px;
-  --menu-left: 20px;
-  --app-left: 275px;
+  --ink: #302047;
+  --muted: #67566f;
+  --purple: #7941cc;
+  --glass: #fff9f177;
+  --nav-width: 220px;
+  --gutter: 28px;
+  --main-left: 280px;
 }
 * {
   box-sizing: border-box;
 }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 28px;
+}
 body {
   margin: 0;
-  background: var(--paper);
+  min-height: 100svh;
   color: var(--ink);
   font:
-    16px Astro,
+    15px Astro,
     Arial,
     sans-serif;
+  background: #eac9c2;
+  isolation: isolate;
+}
+body.menu-collapsed,
+body.collapsed {
+  --nav-width: 82px;
+  --main-left: 164px;
 }
 button,
 input,
-a {
+select {
   font: inherit;
 }
 button {
   cursor: pointer;
   border: 0;
 }
-button:active {
-  transform: translateY(2px);
+button,
+a {
+  touch-action: manipulation;
 }
-button:focus-visible,
-a:focus-visible,
-input:focus-visible {
-  outline: 3px solid #a36a0c;
-  outline-offset: 5px;
+button:disabled {
+  opacity: 0.6;
+  cursor: wait;
 }
 a {
   color: inherit;
 }
+button,
+a,
+input {
+  -webkit-tap-highlight-color: transparent;
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 3px solid #7340ad;
+  outline-offset: 5px;
+}
+button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+button,
+a {
+  transition:
+    background 0.2s,
+    box-shadow 0.2s;
+}
 svg {
-  width: 22px;
-  height: 22px;
+  width: 23px;
+  height: 23px;
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.8;
+  stroke-width: 1.7;
   stroke-linecap: round;
   stroke-linejoin: round;
   flex-shrink: 0;
@@ -63,3420 +90,1659 @@ svg {
   height: 1px;
   overflow: hidden;
   clip-path: inset(50%);
+  white-space: nowrap;
 }
 .skip {
   position: fixed;
-  top: -80px;
+  top: 0;
   left: 20px;
-  z-index: 30;
-  padding: 15px;
+  transform: translateY(-150%);
   background: white;
+  padding: 12px 18px;
+  border-radius: 8px;
+  z-index: 60;
 }
 .skip:focus {
-  top: 10px;
+  transform: translateY(8px);
 }
-p {
-  line-height: 1.6;
-}
-/* 2. Fundo com movimento lento, sem elementos sobre o conteúdo */
 .space-background {
   position: fixed;
   inset: 0;
-  z-index: -1;
-  overflow: hidden;
+  z-index: -3;
+  background: url("../../../assets/imagens/aluno/inicial/horizonte-suave-aprovado.png")
+    center/cover no-repeat;
   pointer-events: none;
-  background:
-    radial-gradient(ellipse at 1% 8%, #eadcf350, transparent 40%),
-    radial-gradient(ellipse at 98% 90%, #eee2f655, transparent 32%),
-    radial-gradient(ellipse at 50% 80%, #fff1d855, transparent 55%), #fffaf4;
 }
-.sky-orbit {
-  position: absolute;
-  width: 100vw;
-  height: 65vh;
-  border: 1px solid #cbb9e840;
-  border-radius: 50%;
-  transform: rotate(-20deg);
-  left: 13vw;
-  top: 11vh;
+.space-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
 }
-.orbit-two {
-  width: 95vw;
-  height: 120vh;
-  left: 2vw;
-  top: -25vh;
-  transform: rotate(23deg);
-}
-.orbit-three {
-  width: 115vw;
-  height: 75vh;
-  left: -2vw;
-  top: 45vh;
-  transform: rotate(18deg);
-}
-.sky-star {
-  position: absolute;
-  color: #e1b9636b;
-  font-size: 22px;
-}
-.star-one {
-  left: 29%;
-  top: 42%;
-}
-.star-two {
-  right: 4%;
-  top: 18%;
-}
-.star-three {
-  left: 70%;
-  top: 82%;
-}
-.asteroid {
-  position: absolute;
-  width: 28px;
-  opacity: 0.48;
-  filter: blur(1.8px);
-  animation: drift 80s ease-in-out infinite;
-}
-.asteroid svg {
-  width: 100%;
-  height: auto;
-  stroke: none;
-}
-.asteroid-one {
-  left: 19%;
-  top: 74%;
-}
-.asteroid-two {
-  right: 3%;
-  top: 18%;
-  width: 23px;
-  animation-delay: -30s;
-  animation-duration: 100s;
-}
-.satellite {
-  position: absolute;
-  left: 26%;
-  top: 4%;
-  width: 48px;
-  opacity: 0.4;
-  animation: drift 110s ease-in-out infinite -25s;
-}
-.satellite svg {
-  width: 100%;
-  height: auto;
-  stroke: none;
-}
-@keyframes drift {
-  0%,
-  100% {
-    transform: translate(0, 0) rotate(-10deg);
-  }
-  50% {
-    transform: translate(50px, 20px) rotate(15deg);
-  }
-}
-/* 3. Menu flutuante e recolhível */
 .sidebar {
   position: fixed;
-  inset: 20px auto 20px var(--menu-left);
-  width: var(--menu-width);
+  left: 22px;
+  top: 22px;
+  bottom: 22px;
+  width: var(--nav-width);
+  z-index: 15;
+  border-radius: 25px;
+  border: 1px solid #fff9;
+  padding: 20px 12px 14px;
   display: flex;
   flex-direction: column;
-  background: #fffdfce8;
-  border: 1px solid #ffffff;
-  border-radius: 23px;
-  padding: 34px 18px 23px;
-  box-shadow: 0 12px 35px #5d407c0b;
-  backdrop-filter: blur(14px);
-  z-index: 5;
-  transition:
-    width 0.3s,
-    padding 0.3s;
+  background: linear-gradient(140deg, #fffcf8c4, #fff8f094);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 10px 35px #60435a09;
+  transition: width 0.28s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .brand {
   display: flex;
   align-items: center;
-  text-decoration: none;
-  font-size: 25px;
+  gap: 9px;
+  font-size: 20px;
   font-weight: 700;
-  letter-spacing: -1px;
-}
-.brand > span:last-child {
-  color: #8244df;
-  font-weight: 400;
+  text-decoration: none;
+  min-height: 42px;
+  white-space: nowrap;
+  overflow: hidden;
 }
 .brand-orbit {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  margin-right: 8px;
-  border: 2px solid #c193e754;
-  border-radius: 50%;
-  font-size: 27px;
-  color: #7042b0;
+  font-size: 25px;
+  width: 42px;
+  min-width: 42px;
+  text-align: center;
+  color: #7d47c4;
 }
-.sidebar nav {
-  display: grid;
-  gap: 10px;
-  margin-top: 47px;
-}
-.nav-item {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  background: none;
-  padding: 14px 15px;
-  min-height: 49px;
-  border-radius: 14px;
-  text-align: left;
-  color: #49316f;
-  font-size: 14px;
-  transition: background 0.2s;
-}
-.nav-item:hover {
-  background: #f0e7fa80;
-}
-.nav-item.active {
-  background: #eee4fa;
-  color: #753be0;
-  font-weight: 700;
-}
-.side-footer {
-  margin-top: auto;
-  padding: 20px 12px 0;
-  color: #9b8da8;
-  font-size: 9px;
-  line-height: 1.8;
-}
-.side-footer a {
-  display: block;
-  font-size: 10px;
-  margin-top: 10px;
-  text-underline-offset: 4px;
+.brand-word > span {
+  color: #8550b3;
 }
 .menu-toggle {
   position: absolute;
-  right: -18px;
-  top: 115px;
+  right: -12px;
+  top: 65px;
+  width: 30px;
+  height: 30px;
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
-  background: #fffdfa;
-  border-radius: 50%;
-  box-shadow: 0 4px 14px #53396713;
-  color: #7740d0;
-  border: 1px solid #f3ebf7;
+  background: #fff9f3e6;
+  color: #79568d;
+  border: 1px solid #e1cde3;
+  border-radius: 11px;
+  padding: 6px;
+  box-shadow: 0 3px 12px #67456408;
 }
 .menu-toggle svg {
-  width: 17px;
-  transition: transform 0.3s;
+  width: 18px;
+  height: 18px;
 }
-.menu-collapsed {
-  --menu-width: 80px;
-  --app-left: 130px;
-}
-.menu-collapsed .sidebar {
-  padding-inline: 10px;
-}
-.menu-collapsed .brand {
-  font-size: 0;
-  justify-content: center;
-}
-.menu-collapsed .brand-orbit {
-  font-size: 27px;
-  margin: 0;
-}
-.menu-collapsed .nav-item {
-  justify-content: center;
-  padding: 14px;
-}
-.menu-collapsed .nav-item span,
-.menu-collapsed .side-footer {
-  display: none;
-}
-.menu-collapsed .menu-toggle svg {
-  transform: rotate(180deg);
-}
-.menu-collapsed .nav-item:hover:after,
-.menu-collapsed .nav-item:focus-visible:after {
-  content: attr(aria-label);
-  position: absolute;
-  left: calc(100% + 17px);
-  top: 50%;
-  transform: translateY(-50%);
-  padding: 9px 12px;
-  border: 1px solid #e1d3ef;
-  border-radius: 9px;
-  background: #fffaf5;
-  color: #634880;
-  font-size: 12px;
-  white-space: nowrap;
-  pointer-events: none;
-  box-shadow: 0 5px 15px #54326612;
-}
-/* 4. Conteúdo com trilha espaçada e avatar separado */
-.app {
-  margin-left: var(--app-left);
-  padding: 0 30px;
-  transition: margin-left 0.3s;
-}
-.topbar {
+.sidebar nav {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 85px;
-  gap: 20px;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 27px;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  scrollbar-width: thin;
 }
-.demo-label {
-  color: #b0a0b6;
-  font-size: 8px;
-  letter-spacing: 1.2px;
-}
-.top-actions {
+.nav-item {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 10px 15px;
-  border: 1px solid #ffffff;
-  border-radius: 30px;
-  background: #fffdfbea;
-  box-shadow: 0 5px 20px #60417e08;
+  min-height: 46px;
+  padding: 11px 14px;
+  border-radius: 13px;
+  text-decoration: none;
+  color: #412952;
+  font-size: 14px;
+  white-space: nowrap;
+  background: transparent;
+  text-align: left;
 }
-.fuel {
-  background: none;
-  color: #dfa329;
+.nav-item:hover {
+  background: #fff7;
+}
+.nav-item.active {
+  background: #e0c7faad;
+  color: #5e269e;
+}
+.nav-item .label {
+  overflow: hidden;
+}
+.side-exit {
   display: flex;
+  gap: 12px;
   align-items: center;
-  gap: 6px;
-  font-size: 24px;
-}
-.fuel strong {
-  color: #58318a;
+  padding: 11px 14px;
   font-size: 12px;
+  min-height: 42px;
+  text-decoration: none;
+  white-space: nowrap;
+  margin-top: 8px;
+}
+.side-exit svg {
+  width: 19px;
+  height: 19px;
+}
+.menu-collapsed .sidebar .label,
+.collapsed .sidebar .label,
+.menu-collapsed .brand-word,
+.collapsed .brand-word {
+  display: none;
+}
+.menu-collapsed .nav-item,
+.collapsed .nav-item {
+  justify-content: center;
+  padding: 12px 8px;
+}
+.menu-collapsed .side-exit,
+.collapsed .side-exit {
+  justify-content: center;
+  padding: 10px;
+}
+.mobile-more {
+  display: none !important;
+}
+.app {
+  margin-left: var(--main-left);
+  padding: 0 28px 24px 0;
+  transition: margin-left 0.28s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.topbar {
+  position: absolute;
+  right: 28px;
+  top: 22px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 10px;
+  border: 1px solid #fff9;
+  border-radius: 24px;
+  background: #fff9f084;
+  backdrop-filter: blur(12px);
+  z-index: 8;
 }
 .icon-button {
-  position: relative;
-  color: #76509b;
+  width: 34px;
+  height: 34px;
   display: grid;
   place-items: center;
-  width: 31px;
-  height: 31px;
-  background: none;
+  border-radius: 12px;
+  color: #573775;
+  background: #ffffff55;
+  padding: 7px;
 }
-.icon-button i {
-  position: absolute;
-  top: 4px;
-  right: 3px;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #d76f85;
+.icon-button:hover {
+  background: #fff9;
 }
-.profile-button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: none;
-  color: #624281;
-  font-size: 11px;
+.account-button {
+  text-decoration: none;
 }
-.avatar {
+.account-button span {
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  background: #e5d8f2;
-  color: #72469f;
+  background: #dac5f5;
+  color: #653592;
   font-weight: 700;
+  font-size: 14px;
+  border: 1px solid #fff9;
 }
-.page-heading {
-  margin: 25px 0 14px;
-  max-width: calc(100% - 10px);
+main {
+  max-width: 1600px;
+  margin: auto;
+  padding-top: 68px;
 }
-.eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 8px;
-  letter-spacing: 1.4px;
-  color: #a294b1;
-  font-weight: 700;
+.welcome {
+  padding: 0;
+  max-width: calc(100% - 240px);
   margin: 0 0 20px;
 }
-.eyebrow > span {
-  width: 38px;
-  height: 3px;
-  background: #efb437;
-  border-radius: 3px;
-}
-.page-heading h1 {
-  font-size: clamp(25px, 2.7vw, 39px);
-  letter-spacing: -1.3px;
-  line-height: 1.2;
-  margin: 0;
-}
-.page-heading > p:last-child {
-  color: #9688af;
-  font-size: 13px;
-  margin: 9px 0;
-}
-.learning-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 290px;
-  gap: 28px;
-  align-items: start;
-}
-.journey {
-  min-width: 0;
-  position: relative;
-}
-.guide-button {
-  background: transparent;
-  color: #9a85ae;
-  font-size: 9px;
-  padding: 8px 0;
-  margin-bottom: 2px;
-}
-.guide-button span {
-  margin-left: 8px;
-}
-.path-wrap {
-  position: relative;
-  max-width: 780px;
-}
-.path-line {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: visible;
-}
-.path-line path {
-  fill: none;
-  stroke: #b390e0;
-  stroke-width: 2.2;
-  stroke-dasharray: 5 9;
-  stroke-linecap: round;
-  opacity: 0.6;
-}
-.steps {
-  position: relative;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 45px;
-}
-.step {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  min-height: 230px;
-  padding-left: 6%;
-}
-.step-1,
-.step-3 {
-  padding-left: 24%;
-}
-.step-2 {
-  padding-left: 2%;
-}
-.step-4 {
-  padding-left: 9%;
-}
-.planet {
-  position: relative;
-  flex-shrink: 0;
-  width: 184px;
-  height: 230px;
-  padding: 0;
-  background: transparent;
-  isolation: isolate;
-  transition: transform 0.3s;
-}
-.planet:hover {
-  transform: translateY(-5px);
-}
-.planet-surface {
-  position: absolute;
-  inset: 0;
-  background: url("../../../assets/imagens/aluno/inicial/planetas-v3.png") 0%
-    50%/500% auto no-repeat;
-  filter: drop-shadow(0 10px 8px #59457528);
-}
-.world-1 {
-  background-position-x: 25%;
-}
-.world-2 {
-  background-position-x: 50%;
-}
-.world-3 {
-  background-position-x: 75%;
-}
-.world-4 {
-  background-position-x: 100%;
-}
-.planet-status {
-  position: absolute;
-  top: 32px;
-  right: 2px;
-  width: 29px;
-  height: 29px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: #fffdf9;
-  color: #816593;
-  border: 3px solid #fffaf4;
-  box-shadow: 0 4px 12px #53336918;
-  font-size: 13px;
-  z-index: 3;
-}
-.planet-status svg {
-  width: 14px;
-  height: 14px;
-}
-.done .planet-status {
-  background: #77b848;
-  color: white;
-  font-size: 18px;
-}
-.current .planet-status {
-  background: #8450cb;
-  color: #fff;
-}
-.locked .planet-status {
-  background: #9b8ba9;
-  color: #fff;
-}
-.locked .planet-surface {
-  filter: drop-shadow(0 10px 8px #59457524);
-}
-.active-orbit {
-  position: absolute;
-  inset: 42% -12% 28%;
-  border: 2px solid #fff6c7;
-  border-top-color: #fbc351;
-  border-bottom-color: #ffc455;
-  box-shadow:
-    0 0 10px #ffd2737d,
-    inset 0 0 7px #ffd2737d;
-  border-radius: 50%;
-  transform: rotate(-10deg);
-  z-index: 2;
-  pointer-events: none;
-}
-.active-orbit:after {
-  content: "";
-  position: absolute;
-  inset: -6px;
-  border: 1px solid #eeb76638;
-  border-radius: 50%;
-}
-.orbit-ship {
-  position: absolute;
-  right: -14px;
-  top: 49%;
-  width: 38px;
-  height: 43px;
-  z-index: 3;
-  transform: rotate(40deg);
-  animation: ship-hover 6s ease-in-out infinite;
-}
-.orbit-ship img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-@keyframes ship-hover {
-  50% {
-    transform: translateY(-5px) rotate(48deg);
-  }
-}
-.step-copy {
-  max-width: 240px;
-  min-width: 0;
-}
-.step-title {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.step-number {
-  flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  width: 31px;
-  height: 31px;
-  border: 3px solid #fff;
-  border-radius: 50%;
-  background: #ece7f2;
-  color: #795997;
-  font-size: 13px;
+.welcome h1 {
+  font-size: clamp(30px, 3.5vw, 52px);
+  line-height: 1.12;
+  letter-spacing: -0.04em;
+  margin: 0 0 7px;
   font-weight: 700;
-  box-shadow: 0 3px 8px #50327715;
+  color: #2a1241;
+  text-wrap: balance;
 }
-.step h2 {
-  font-size: 15px;
-  line-height: 1.35;
-  letter-spacing: -0.3px;
-  margin: 0;
+.welcome > p:first-of-type {
+  font-size: clamp(16px, 1.8vw, 26px);
+  margin: 0 0 21px;
+  line-height: 1.4;
+  color: #3d214f;
 }
-.step p {
-  font-size: 12px;
-  color: #9685ac;
-  margin: 8px 0 0 43px;
-  line-height: 1.5;
-}
-.here {
-  display: inline-block;
-  margin: 0 0 13px 43px;
-  padding: 6px 10px;
-  border-radius: 14px;
-  background: #ffcb54;
-  color: #613275;
-  font-size: 7px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  box-shadow: 0 3px 10px #edb74620;
-}
-.current .step-number {
-  background: #8952df;
-  color: white;
-}
-.floating-star {
-  position: absolute;
-  right: 0;
-  top: 605px;
-  color: #d2a14c;
-  border: 0;
-  background: none;
-  font-size: 23px;
-  width: 44px;
-  height: 44px;
-}
-.journey-note {
-  font-size: 10px;
-  color: #af98b1;
-  text-align: center;
-  margin: 32px 0 40px;
-}
-.avatar-viewer {
-  position: sticky;
-  top: 105px;
-  align-self: start;
+.welcome-actions {
   display: flex;
-  flex-direction: column;
+  gap: 24px;
   align-items: center;
-  padding-top: 15px;
-}
-.avatar-stage {
-  position: relative;
-  width: 260px;
-  height: 365px;
-  touch-action: pan-y;
-}
-.avatar-stage:after {
-  content: "";
-  position: absolute;
-  left: 18%;
-  right: 18%;
-  bottom: 11px;
-  height: 12px;
-  border-radius: 50%;
-  background: #765b7220;
-  filter: blur(7px);
-  z-index: -1;
-}
-.avatar-render {
-  position: absolute;
-  inset: 0;
-  background: url("../../../assets/imagens/aluno/inicial/avatar-vistas-v4.png")
-    0% 0%/400% 200% no-repeat;
-}
-.rotation-control {
-  width: 100%;
-  padding: 8px 0 0;
-  text-align: center;
-}
-.rotation-control label {
-  font-size: 11px;
-  color: #9b88af;
-}
-.slider-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 12px 0 0;
-  font-size: 9px;
-  color: #ad97c0;
-}
-.slider-row input {
-  min-width: 0;
-  flex: 1;
-  accent-color: #8c56df;
-  cursor: ew-resize;
-  height: 20px;
+  flex-wrap: wrap;
 }
 .primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 15px;
-  min-height: 45px;
-  padding: 12px 22px;
-  border-radius: 24px;
-  background: linear-gradient(110deg, #ffd862, #ffb914);
-  color: #593375;
-  font-size: 12px;
+  gap: 12px;
+  min-height: 46px;
+  padding: 12px 23px;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #7b32d4, #9647ed);
+  color: white;
   font-weight: 700;
-  box-shadow: 0 5px 18px #e8b62d14;
-  transition: filter 0.2s;
+  font-size: 14px;
+  text-decoration: none;
+  box-shadow: 0 5px 18px #763ac019;
 }
 .primary:hover {
-  filter: brightness(1.04);
+  background: linear-gradient(135deg, #6f28c7, #8640d9);
+  box-shadow: 0 8px 20px #7434b72b;
 }
-.primary svg {
-  width: 17px;
+.journey-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  width: 220px;
+  text-align: left;
+  padding: 0;
+  background: none;
+  font-size: 12px;
+  color: #452b5e;
 }
-.continue-button {
-  margin-top: 24px;
+.progress-track {
+  display: block;
   width: 100%;
+  height: 8px;
+  background: #ffffff58;
+  border: 1px solid #fff9;
+  border-radius: 20px;
+  overflow: hidden;
 }
-footer {
-  font-size: 8px;
-  color: #b09aae;
-  padding: 10px 0 35px;
+.progress-track > span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: #8a40d8;
+  border-radius: 20px;
+  transition: width 0.5s ease;
 }
-/* 5. Assistente: poses e movimento controlados separadamente. */
-.chat-launcher {
+.room-label {
+  font-size: 11px;
+  color: #69526e;
+  margin: 10px 0 0;
+  min-height: 15px;
+}
+.mobile-avatar-open {
+  display: none;
+}
+.learning-layout {
+  display: block;
+  position: relative;
+}
+.journey {
+  width: calc(100% - 400px);
+  max-width: 760px;
+  min-width: 520px;
+}
+.journey-message {
+  margin: 12px 0 0;
+  line-height: 1.6;
+  color: #5e456b;
+  font-size: 14px;
+  max-width: 520px;
+  white-space: pre-wrap;
+}
+.journey-message:empty {
+  display: none;
+}
+.steps {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  position: relative;
+}
+.step {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-height: 220px;
+  padding-left: 6px;
+}
+.step:nth-child(2n) {
+  padding-left: 95px;
+}
+.step:after {
+  content: "";
+  position: absolute;
+  width: 80px;
+  height: 90px;
+  left: 150px;
+  bottom: -60px;
+  border-left: 2px dashed #9762c7aa;
+  transform: rotate(-18deg);
+  z-index: -1;
+}
+.step:nth-child(2n):after {
+  left: 165px;
+  transform: rotate(20deg);
+}
+.step:last-child:after {
+  display: none;
+}
+.planet {
+  position: relative;
+  display: block;
+  flex: 0 0 198px;
+  width: 198px;
+  height: 198px;
+  padding: 0;
+  background: none;
+  overflow: visible;
+  isolation: isolate;
+  transition:
+    filter 0.2s,
+    scale 0.25s;
+}
+.planet:hover {
+  scale: 1.035;
+}
+.planet-art {
+  display: block;
+  position: absolute;
+  inset: 0;
+  background-image: url("../../../assets/imagens/aluno/inicial/mondes-v7.png");
+  background-size: 500% auto;
+  background-repeat: no-repeat;
+  background-position: var(--world-x, 0%) 50%;
+  filter: drop-shadow(0 9px 8px #583b6420);
+  z-index: 2;
+  animation: planet-drift 15s ease-in-out infinite;
+}
+.planet-status {
+  position: absolute;
+  right: 5px;
+  bottom: 25px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #8343c9;
+  border: 3px solid #fff8;
+  color: white;
+  box-shadow: 0 3px 9px #49326418;
+  z-index: 5;
+}
+.planet-status svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2.5;
+}
+.done .planet-status {
+  background: #258354;
+}
+.step-copy {
+  background: linear-gradient(140deg, #fffaf2b8, #fff7ed91);
+  border: 1px solid #fff9;
+  border-radius: 18px;
+  padding: 15px 18px;
+  max-width: 280px;
+  box-shadow: 0 4px 18px #73506c08;
+  backdrop-filter: blur(9px);
+  min-width: 0;
+}
+.step-copy h2 {
+  font-size: 18px;
+  line-height: 1.25;
+  margin: 0 0 7px;
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
+}
+.step-copy p {
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 0;
+  color: #69516e;
+}
+.step-copy .primary {
+  margin-top: 12px;
+  min-height: 39px;
+  font-size: 12px;
+  padding: 9px 16px;
+  border-radius: 11px;
+}
+.status-label {
+  color: #286849 !important;
+}
+.status-label.pending {
+  color: #76532f !important;
+}
+.mission-badge {
+  display: inline-block;
+  background: #e4caf9a3;
+  color: #6e3da2;
+  border-radius: 12px;
+  padding: 3px 8px;
+  font-size: 10px;
+  line-height: 1.4;
+  margin: 0 0 6px;
+}
+.step.locked .planet-art {
+  visibility: hidden;
+}
+.mystery-world {
+  position: absolute;
+  inset: 16px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 25%, #c7bdd3, #82768f 65%, #63566f);
+  box-shadow:
+    inset -12px -8px 18px #54405e35,
+    0 8px 20px #48375112;
+  display: grid;
+  place-items: center;
+  color: white;
+  opacity: 0.8;
+  z-index: 2;
+}
+.mystery-world:before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  background: radial-gradient(ellipse at 20% 70%, #fff8 0, transparent 50%);
+  filter: blur(8px);
+  border-radius: 50%;
+  animation: cloud-mist 12s ease-in-out infinite;
+}
+.mystery-world svg {
+  position: relative;
+  width: 27px;
+  height: 27px;
+  z-index: 1;
+}
+.locked .planet-status {
+  display: none;
+}
+.locked .step-copy {
+  opacity: 0.85;
+}
+.locked .cloud,
+.locked .mission-ship {
+  display: none;
+}
+.cloud {
+  position: absolute;
+  width: 52px;
+  height: 25px;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 25% 60%, #fff 0 25%, transparent 55%),
+    radial-gradient(ellipse at 54% 35%, #fff 0 25%, transparent 55%),
+    radial-gradient(ellipse at 75% 65%, #eee9ff 0 25%, transparent 58%);
+  filter: drop-shadow(0 2px 2px #9380ac20);
+  opacity: 0.9;
+  pointer-events: none;
+  animation: cloud-orbit 28s linear infinite;
+  z-index: 1;
+}
+.cloud.second {
+  animation-delay: -14s;
+  width: 43px;
+  height: 22px;
+}
+.mission-ship {
+  position: absolute;
+  width: 25px;
+  height: 40px;
+  background: url("../../../assets/imagens/login/cenarios-e-personagens/rocket.png")
+    center/contain no-repeat;
+  z-index: 4;
+  right: 5%;
+  top: 12%;
+  pointer-events: none;
+  animation: rover-flight 120s ease-in-out infinite;
+}
+@keyframes planet-drift {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(1deg);
+  }
+}
+@keyframes cloud-orbit {
+  0%,
+  100% {
+    left: 0%;
+    top: 40%;
+    z-index: 1;
+  }
+  25% {
+    left: 45%;
+    top: 12%;
+    z-index: 1;
+  }
+  49% {
+    z-index: 1;
+  }
+  50% {
+    left: 76%;
+    top: 42%;
+    z-index: 4;
+  }
+  75% {
+    left: 40%;
+    top: 74%;
+    z-index: 4;
+  }
+  99% {
+    z-index: 4;
+  }
+}
+@keyframes cloud-mist {
+  0%,
+  100% {
+    transform: translateX(-5px);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateX(5px);
+    opacity: 1;
+  }
+}
+@keyframes rover-flight {
+  0%,
+  4%,
+  100% {
+    transform: translate(0, 0) rotate(10deg);
+    opacity: 1;
+  }
+  8% {
+    transform: translate(20vw, -40vh) rotate(25deg);
+    opacity: 0;
+  }
+  90% {
+    transform: translate(-15vw, -35vh) rotate(-25deg);
+    opacity: 0;
+  }
+  96% {
+    transform: translate(-5px, -8px) rotate(-5deg);
+    opacity: 1;
+  }
+}
+.avatar-viewer {
   position: fixed;
-  right: 22px;
-  bottom: 22px;
-  z-index: 8;
+  right: 34px;
+  top: 185px;
+  width: 214px;
+  padding: 12px 10px 14px;
+  border-radius: 23px;
+  border: 1px solid #fffaf4c9;
+  background: linear-gradient(145deg, #fff9f02e, #fff7f022);
+  backdrop-filter: blur(7px);
+  box-shadow: 0 6px 24px #593b5e09;
+  z-index: 4;
+}
+.avatar-stage {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  padding: 0;
+  background: transparent;
+  display: block;
+  isolation: isolate;
+  transform-origin: 50% 95%;
+  animation: avatar-breathe 6s ease-in-out infinite;
+}
+.avatar-render {
+  position: absolute;
+  inset: 0;
+  background: url("../../../assets/imagens/aluno/inicial/avatar-realista-vistas.png") 0
+    0/400% 200% no-repeat;
+  filter: drop-shadow(0 5px 3px #53384a24);
+  pointer-events: none;
+  z-index: 2;
+}
+.avatar-ghost {
+  opacity: 0;
+  z-index: 3;
+}
+.avatar-shadow {
+  position: absolute;
+  width: 64%;
+  height: 7%;
+  bottom: 3%;
+  left: 18%;
+  border-radius: 50%;
+  background: #68465b22;
+  filter: blur(5px);
+  z-index: 1;
+}
+.rotation-control {
+  padding: 7px 0 0;
+}
+.rotation-control label {
+  display: block;
+  text-align: center;
+  font-size: 11px;
+  color: #4a2c5b;
+  margin-bottom: 8px;
+}
+.slider-row {
   display: flex;
   align-items: center;
   gap: 9px;
 }
-.chat-pill {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 13px 17px;
-  min-height: 44px;
-  border-radius: 24px;
-  background: #fffdfb;
-  color: #78529c;
-  font-size: 10px;
-  border: 1px solid #f5edf9;
-  box-shadow: 0 5px 25px #613c7b0b;
+.slider-row input {
+  width: 100%;
+  min-width: 0;
+  height: 4px;
+  accent-color: #8943d1;
+  cursor: ew-resize;
 }
-.chat-pill svg {
-  width: 16px;
-  height: 16px;
-}
-.helper-mascot {
-  position: relative;
-  display: block;
-  background: none;
-  padding: 0;
-  width: 57px;
-  height: 80px;
-  transform-origin: 50% 70%;
-  pointer-events: auto;
-}
-.helper-sprite {
-  position: absolute;
-  inset: 0;
-  background: url("../../../assets/imagens/aluno/inicial/assistente-poses-v4.png")
-    0% 100%/300% 200% no-repeat;
-  animation: helper-hover 5s ease-in-out infinite;
-  filter: drop-shadow(0 4px 4px #604c6618);
-}
-.jet-flame {
-  position: absolute;
-  left: 42%;
-  top: 78%;
-  width: 5px;
-  height: 15px;
-  background: linear-gradient(#fff4ce, #f5af449c, transparent);
+.turn-button {
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  min-width: 28px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  transform: rotate(15deg);
-  z-index: -1;
-  animation: jet-flicker 1.2s ease-in-out infinite;
+  color: #6d4387;
+  background: #fff8f0a3;
+  box-shadow: 0 2px 6px #5f396e0a;
+  padding: 0;
 }
-.helper-mascot[data-pose="walk"] .jet-flame,
-.helper-mascot[data-pose="wave"] .jet-flame,
-.helper-mascot[data-pose="fall"] .jet-flame {
-  display: none;
+.avatar-reaction {
+  position: absolute;
+  right: 8px;
+  top: -43px;
+  font-size: 11px;
+  background: #fffbf2df;
+  border: 1px solid #f3dfed;
+  border-radius: 10px;
+  padding: 8px 10px;
+  margin: 0;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+  max-width: 220px;
 }
-.helper-mascot[data-pose="walk"] .helper-sprite {
-  animation: none;
+.avatar-reaction.visible {
+  opacity: 1;
 }
-.helper-mascot[data-pose="wave"] .helper-sprite {
-  animation: none;
+.avatar-dialog {
+  width: 260px;
 }
-.helper-mascot[data-pose="fall"] .helper-sprite {
-  animation: none;
+.avatar-dialog .avatar-viewer {
+  position: relative;
+  right: auto;
+  top: auto;
+  width: 100%;
+  margin-top: 15px;
+  box-shadow: none;
 }
-@keyframes helper-hover {
+.avatar-dialog .avatar-stage {
+  height: 285px;
+}
+@keyframes avatar-breathe {
+  0%,
+  100% {
+    scale: 1;
+  }
   50% {
-    transform: translateY(-4px) rotate(3deg);
+    scale: 1.008 1.014;
   }
 }
-@keyframes jet-flicker {
-  50% {
-    opacity: 0.55;
-    transform: scaleY(0.8) rotate(15deg);
-  }
+footer {
+  font-size: 10px;
+  margin: 32px 0 0;
+  color: #78657c;
+  padding-bottom: 15px;
+}
+.chat-launcher {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 25;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #d2b8f799;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #9148e8, #7227c5);
+  color: white;
+  box-shadow: 0 5px 18px #6e36ad27;
+}
+.chat-launcher:hover {
+  box-shadow: 0 7px 23px #6e36ad3b;
+}
+.chat-launcher svg {
+  width: 22px;
+  height: 22px;
+}
+.chat-tooltip {
+  position: absolute;
+  right: 58px;
+  bottom: 7px;
+  white-space: nowrap;
+  background: #fff8f1ef;
+  color: #684982;
+  font-size: 11px;
+  border: 1px solid #e8d4ed;
+  padding: 8px 11px;
+  border-radius: 10px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.18s;
+  pointer-events: none;
+}
+.chat-launcher:hover .chat-tooltip,
+.chat-launcher:focus-visible .chat-tooltip {
+  opacity: 1;
+  visibility: visible;
 }
 .chat-panel {
   position: fixed;
-  bottom: 85px;
   right: 22px;
+  bottom: 84px;
   width: 340px;
-  max-height: min(560px, 75vh);
-  z-index: 10;
-  border: 1px solid #dfd0e8;
-  background: #fffaf7;
-  border-radius: 20px;
-  box-shadow: 0 18px 60px #51356722;
-  overflow: hidden;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100svh - 125px);
   display: flex;
   flex-direction: column;
+  border: 1px solid #fff;
+  border-radius: 21px;
+  background: #fffbf6f0;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 20px 60px #49335424;
+  z-index: 24;
+  overflow: hidden;
 }
-.chat-panel > header {
+.chat-panel header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  background: #eee4f6;
-  padding: 17px 18px;
+  padding: 15px 16px;
+  border-bottom: 1px solid #e8ddea;
 }
 .chat-panel header strong {
-  font-size: 13px;
+  font-size: 15px;
 }
-.chat-panel header span {
+.chat-panel header small {
   display: block;
-  font-size: 8px;
-  margin-top: 5px;
-  color: #9780a3;
-}
-.chat-panel header button {
-  background: none;
-  color: #6a487f;
-  font-size: 24px;
-  width: 32px;
-  height: 32px;
+  font-size: 9px;
+  color: #7a6786;
+  margin-top: 4px;
 }
 .chat-log {
-  padding: 17px;
+  max-height: 260px;
+  min-height: 130px;
   overflow: auto;
-  min-height: 100px;
-  max-height: 310px;
-  overscroll-behavior: contain;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
 }
 .chat-message {
-  padding: 11px 13px;
-  border-radius: 13px;
   font-size: 12px;
-  line-height: 1.6;
-  margin: 0 0 11px;
+  line-height: 1.65;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid #eadff0;
+  border-radius: 13px;
+  background: #fff9;
+  max-width: 95%;
   overflow-wrap: anywhere;
 }
-.chat-message.bot {
-  background: #f0e8f7;
-  color: #705780;
-  margin-right: 14px;
-}
 .chat-message.user {
-  background: #fff0cd;
-  color: #825a4c;
-  margin-left: 22px;
+  background: #eadbf5;
+  align-self: flex-end;
 }
-.chat-prompts {
-  padding: 0 16px 12px;
+.chat-topics {
+  padding: 0 14px 12px;
   display: flex;
-  gap: 6px;
+  gap: 7px;
   flex-wrap: wrap;
 }
-.chat-prompts button {
-  padding: 7px 9px;
-  border: 1px solid #d9c7e5;
-  border-radius: 14px;
-  background: #fffaf8;
-  color: #846795;
-  font-size: 9px;
+.chat-topics button {
+  font-size: 10px;
+  padding: 7px 10px;
+  border-radius: 20px;
+  background: #f1e5fa;
+  color: #77538c;
 }
 .chat-panel form {
-  padding: 12px 14px;
-  border-top: 1px solid #e9ddec;
+  padding: 12px;
   display: flex;
   gap: 8px;
-  background: #fffdfa;
+  border-top: 1px solid #e8ddea;
 }
 .chat-panel input {
+  width: 100%;
   min-width: 0;
-  flex: 1;
-  background: #fff8f3;
-  border: 1px solid #e6d7e7;
-  padding: 11px;
-  border-radius: 11px;
+  padding: 9px 12px;
+  border: 1px solid #dac9e4;
+  border-radius: 10px;
+  background: #fffcfa;
   font-size: 12px;
-  color: #69467e;
+  color: #4b2d5f;
 }
-.chat-panel form button {
-  width: 40px;
-  border-radius: 11px;
-  background: #e8d7f3;
-  color: #805699;
+.chat-panel form .primary {
+  font-size: 11px;
+  padding: 8px 13px;
+  min-height: 38px;
+  border-radius: 10px;
 }
-.chat-panel form svg {
-  width: 17px;
-}
-/* 6. Diálogos e atividade demonstrativa */
 dialog {
-  border: 1px solid #ddc8e4;
-  background: #fffaf4;
-  color: var(--ink);
-  padding: 34px;
-  border-radius: 20px;
-  width: min(480px, calc(100% - 32px));
-  box-shadow: 0 25px 100px #2c164a33;
+  width: min(450px, calc(100vw - 30px));
+  max-height: 85svh;
+  overflow: auto;
+  background: #fffaf5;
+  color: #3b244d;
+  border: 1px solid #fff;
+  border-radius: 23px;
+  padding: 29px;
+  box-shadow: 0 22px 70px #42255122;
 }
 dialog::backdrop {
-  background: #24133466;
+  background: #33203f55;
   backdrop-filter: blur(5px);
+}
+.dialog-close {
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #f3e6f8;
+  color: #70468b;
+  font-size: 24px;
 }
 dialog h2 {
   font-size: 25px;
-  padding-right: 20px;
-  margin: 12px 0;
+  line-height: 1.2;
+  margin: 14px 0;
 }
 dialog p,
 dialog li {
   font-size: 14px;
-  line-height: 1.8;
-  color: #715c7b;
-}
-dialog li {
-  margin-bottom: 8px;
-}
-.dialog-close {
-  position: absolute;
-  right: 16px;
-  top: 13px;
-  font-size: 27px;
-  background: transparent;
-  color: #6c5d80;
-  width: 36px;
-  height: 36px;
+  line-height: 1.65;
 }
 .dialog-kicker {
   font-size: 10px;
-  letter-spacing: 1.5px;
-  color: #7450a6;
+  letter-spacing: 1.2px;
+  margin: 0;
+  color: #896297;
+}
+dialog input {
+  display: block;
+  margin: 9px 0;
+  width: 100%;
+  border: 1px solid #d6c0e2;
+  border-radius: 11px;
+  padding: 12px;
+  background: white;
+  color: #462950;
 }
 dialog .primary {
   margin-top: 12px;
 }
-.answer {
-  display: block;
-  width: 100%;
-  border: 1px solid #d9c8e5;
-  background: #f6edf8;
-  padding: 12px;
-  text-align: left;
-  border-radius: 9px;
-  margin: 9px 0;
-  color: #5c417c;
+.mobile-navigation nav {
+  display: grid;
+  gap: 4px;
 }
-.answer:hover {
-  background: #ede1fb;
+.mobile-navigation a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px;
+  border-radius: 10px;
+  text-decoration: none;
 }
-.answer:disabled {
-  cursor: default;
+.mobile-navigation a:hover {
+  background: #eadcf5;
 }
-.feedback {
-  padding: 12px;
-  background: #eef3e8;
-  border-radius: 9px;
-  color: #3a684d !important;
+.mobile-navigation-close {
+  position: absolute;
+  right: 12px;
+  top: 10px;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  background: #eee0f7;
+  color: #6c4983;
+  font-size: 23px;
 }
-.motion-reduced *,
-.motion-reduced *:before,
-.motion-reduced *:after {
-  animation: none !important;
-  transition: none !important;
-  scroll-behavior: auto !important;
+@media (min-width: 1700px) {
+  .avatar-viewer {
+    right: max(34px, calc((100vw - 1700px) / 2));
+    width: 230px;
+  }
+  .avatar-stage {
+    height: 305px;
+  }
+  .journey {
+    width: 760px;
+  }
+}
+@media (max-width: 1250px) and (min-width: 801px) {
+  :root {
+    --main-left: 260px;
+  }
+  .menu-collapsed,
+  .collapsed {
+    --main-left: 132px !important;
+  }
+  .app {
+    padding-right: 22px;
+  }
+  .welcome {
+    max-width: calc(100% - 190px);
+  }
+  .welcome h1 {
+    font-size: 36px;
+  }
+  .welcome > p:first-of-type {
+    font-size: 21px;
+  }
+  .welcome-actions {
+    gap: 12px;
+  }
+  .journey-progress {
+    width: 165px;
+  }
+  .journey {
+    min-width: 0;
+    width: calc(100% - 285px);
+  }
+  .step {
+    min-height: 190px;
+    gap: 10px;
+    padding-left: 0;
+  }
+  .step:nth-child(2n) {
+    padding-left: 40px;
+  }
+  .planet {
+    width: 155px;
+    height: 155px;
+    flex-basis: 155px;
+  }
+  .step-copy {
+    padding: 13px;
+    max-width: 225px;
+  }
+  .step-copy h2 {
+    font-size: 16px;
+  }
+  .avatar-viewer {
+    right: 22px;
+    top: 200px;
+    width: 180px;
+  }
+  .avatar-stage {
+    height: 235px;
+  }
+  .step:after {
+    left: 110px;
+  }
+  .step:nth-child(2n):after {
+    left: 125px;
+  }
+  .step-copy .primary {
+    font-size: 11px;
+    padding: 9px 12px;
+  }
+  .room-label {
+    max-width: 400px;
+  }
+}
+@media (max-height: 780px) and (min-width: 801px) {
+  main {
+    padding-top: 67px;
+  }
+  .welcome {
+    margin-bottom: 8px;
+  }
+  .welcome h1 {
+    font-size: 39px;
+  }
+  .welcome > p:first-of-type {
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+  .step {
+    min-height: 194px;
+  }
+  .steps {
+    gap: 25px;
+  }
+  .planet {
+    width: 180px;
+    height: 180px;
+    flex-basis: 180px;
+  }
+  .step-copy h2 {
+    font-size: 17px;
+  }
+  .avatar-viewer {
+    top: 155px;
+    width: 195px;
+  }
+  .avatar-stage {
+    height: 250px;
+  }
+  .sidebar {
+    top: 16px;
+    bottom: 16px;
+    padding-top: 15px;
+  }
+  .sidebar nav {
+    gap: 3px;
+    margin-top: 20px;
+  }
+  .nav-item {
+    height: 42px;
+    min-height: 42px;
+    padding: 9px 13px;
+  }
+  .brand {
+    min-height: 36px;
+  }
+  .side-exit {
+    min-height: 35px;
+    padding: 7px 14px;
+  }
+}
+@media (max-width: 800px) {
+  :root,
+  .menu-collapsed,
+  .collapsed {
+    --main-left: 0 !important;
+  }
+  .app {
+    margin: 0;
+    padding: 0 20px 90px;
+  }
+  .topbar {
+    top: 12px;
+    right: 18px;
+    padding: 6px 9px;
+    gap: 7px;
+  }
+  .topbar .icon-button {
+    width: 29px;
+    height: 29px;
+  }
+  .account-button span {
+    width: 29px;
+    height: 29px;
+    font-size: 12px;
+  }
+  main {
+    padding-top: 82px;
+  }
+  .welcome {
+    max-width: 100%;
+    margin-bottom: 14px;
+  }
+  .welcome h1 {
+    font-size: 31px;
+    line-height: 1.15;
+  }
+  .welcome > p:first-of-type {
+    font-size: 17px;
+    margin: 9px 0 18px;
+  }
+  .welcome-actions {
+    gap: 15px;
+  }
+  .welcome .primary {
+    font-size: 13px;
+    min-height: 43px;
+    padding: 11px 18px;
+  }
+  .journey-progress {
+    width: 130px;
+    font-size: 10px;
+    gap: 7px;
+  }
+  .room-label {
+    font-size: 10px;
+    line-height: 1.5;
+    max-width: 100%;
+  }
+  .mobile-avatar-open {
+    display: inline-flex;
+    margin-top: 8px;
+    align-items: center;
+    border: 1px solid #dbc3e5;
+    background: #fff8ee94;
+    color: #6b4384;
+    border-radius: 20px;
+    padding: 8px 12px;
+    font-size: 11px;
+    min-height: 36px;
+  }
+  .sidebar,
+  .menu-collapsed .sidebar,
+  .collapsed .sidebar {
+    left: 12px;
+    right: 12px;
+    top: auto;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    width: auto;
+    height: 66px;
+    padding: 6px;
+    display: block;
+    border-radius: 21px;
+    overflow: visible;
+    background: #fffaf2d9;
+    backdrop-filter: blur(18px);
+  }
+  .sidebar .brand,
+  .sidebar .menu-toggle,
+  .sidebar .side-exit {
+    display: none;
+  }
+  .sidebar nav {
+    display: flex;
+    flex-direction: row;
+    gap: 0;
+    align-items: center;
+    justify-content: space-around;
+    margin: 0;
+    height: 100%;
+    overflow: visible;
+  }
+  .sidebar nav > .nav-item {
+    display: none;
+    height: 54px;
+    min-height: 54px;
+    width: 20%;
+    padding: 6px 2px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-size: 9px;
+    border-radius: 15px;
+  }
+  .sidebar nav > .nav-item:nth-of-type(-n + 4) {
+    display: flex;
+  }
+  .sidebar .nav-item .label,
+  .menu-collapsed .sidebar .nav-item .label,
+  .collapsed .sidebar .nav-item .label {
+    display: block;
+    font-size: 9px;
+    max-width: 100%;
+    white-space: nowrap;
+  }
+  .sidebar .nav-item svg {
+    width: 21px;
+    height: 21px;
+  }
+  .mobile-more {
+    display: flex !important;
+  }
+  .journey {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+  }
+  .steps {
+    gap: 26px;
+    margin-top: 5px;
+  }
+  .step {
+    min-height: 174px;
+    gap: 12px;
+    padding-left: 0;
+  }
+  .step:nth-child(2n) {
+    padding-left: 20px;
+  }
+  .planet {
+    width: 135px;
+    height: 135px;
+    flex-basis: 135px;
+  }
+  .planet-status {
+    width: 28px;
+    height: 28px;
+    right: 0;
+    bottom: 14px;
+  }
+  .step-copy {
+    padding: 13px;
+    max-width: calc(100% - 130px);
+    border-radius: 15px;
+  }
+  .step-copy h2 {
+    font-size: 15px;
+    line-height: 1.3;
+  }
+  .step-copy p {
+    font-size: 10px;
+  }
+  .mission-badge {
+    font-size: 9px;
+    padding: 3px 6px;
+  }
+  .step-copy .primary {
+    font-size: 10px;
+    padding: 8px 10px;
+    min-height: 34px;
+    border-radius: 10px;
+    margin-top: 8px;
+  }
+  .step:after {
+    left: 90px;
+    bottom: -53px;
+    height: 76px;
+  }
+  .step:nth-child(2n):after {
+    left: 103px;
+  }
+  .avatar-viewer {
+    position: relative;
+    inset: auto;
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+  }
+  .avatar-stage {
+    height: 280px;
+  }
+  .avatar-dialog {
+    padding: 20px 18px 16px;
+  }
+  .chat-launcher {
+    right: 17px;
+    bottom: calc(93px + env(safe-area-inset-bottom));
+    width: 43px;
+    height: 43px;
+  }
+  .chat-panel {
+    right: 16px;
+    bottom: calc(146px + env(safe-area-inset-bottom));
+    width: 330px;
+    max-height: calc(100svh - 190px);
+  }
+  .chat-tooltip {
+    display: none;
+  }
+  .cloud {
+    width: 38px;
+    height: 21px;
+  }
+  .cloud.second {
+    width: 33px;
+    height: 18px;
+  }
+  .mission-ship {
+    width: 19px;
+    height: 30px;
+  }
+  .mystery-world {
+    inset: 12px;
+  }
+  .mystery-world svg {
+    width: 23px;
+    height: 23px;
+  }
+  footer {
+    font-size: 9px;
+    margin-top: 20px;
+  }
+  .space-background {
+    background-position: 58% center;
+  }
+  .chat-log {
+    max-height: 230px;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   *,
-  *:before,
-  *:after {
+  *::before,
+  *::after {
     animation: none !important;
     transition: none !important;
     scroll-behavior: auto !important;
   }
 }
-/* 7. Responsividade: desktop primeiro, navegação inferior no celular. */
-@media (min-width: 1700px) {
-  .app {
-    max-width: 1600px;
-    padding-inline: 55px;
-  }
-  .learning-layout {
-    grid-template-columns: 1fr 350px;
-    gap: 45px;
-  }
-  .avatar-stage {
-    width: 300px;
-    height: 420px;
-  }
-  .planet {
-    width: 225px;
-    height: 280px;
-  }
-  .step {
-    min-height: 280px;
-    gap: 25px;
-  }
-  .steps {
-    gap: 50px;
-  }
-  .step h2 {
-    font-size: 18px;
-  }
-  .step p {
-    font-size: 14px;
-  }
-  .here {
-    font-size: 9px;
-  }
-  .avatar-viewer {
-    padding-top: 10px;
-  }
-  .page-heading {
-    margin-bottom: 22px;
-  }
+.motion-reduced *,
+.motion-reduced *::before,
+.motion-reduced *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
 }
-@media (max-width: 1250px) {
-  :root {
-    --menu-width: 195px;
-    --app-left: 240px;
-  }
-  .sidebar {
-    padding-inline: 14px;
-  }
-  .brand {
-    font-size: 22px;
-  }
-  .brand-orbit {
-    width: 31px;
-    height: 31px;
-  }
-  .nav-item {
-    font-size: 12px;
-    gap: 12px;
-  }
-  .app {
-    padding-inline: 24px;
-  }
-  .learning-layout {
-    grid-template-columns: 1fr 235px;
-    gap: 20px;
-  }
-  .planet {
-    width: 155px;
-    height: 198px;
-  }
-  .step {
-    min-height: 205px;
-    gap: 12px;
-  }
-  .steps {
-    gap: 45px;
-  }
-  .step-1,
-  .step-3 {
-    padding-left: 16%;
-  }
-  .step-copy {
-    max-width: 185px;
-  }
-  .step h2 {
-    font-size: 14px;
-  }
-  .step p {
-    font-size: 11px;
-    margin-left: 36px;
-  }
-  .step-title {
-    gap: 7px;
-  }
-  .here {
-    margin-left: 36px;
-  }
-  .step-number {
-    width: 29px;
-    height: 29px;
-  }
-  .avatar-stage {
-    width: 220px;
-    height: 305px;
-  }
-  .avatar-viewer {
-    top: 90px;
-  }
-  .page-heading > p:last-child {
-    font-size: 12px;
-  }
-  .chat-pill {
-    font-size: 9px;
-  }
-  .menu-collapsed {
-    --app-left: 125px;
-  }
+body.astro-high-contrast .step-copy,
+body.astro-high-contrast .sidebar,
+body.astro-high-contrast .welcome,
+body.astro-high-contrast .avatar-viewer {
+  background: #fffcf5ef;
+  color: #261333;
 }
-@media (max-width: 1000px) and (min-width: 761px) {
-  :root {
-    --menu-width: 170px;
-    --app-left: 213px;
-  }
-  .brand {
-    font-size: 19px;
-  }
-  .brand-orbit {
-    width: 28px;
-    height: 28px;
-    font-size: 22px;
-  }
-  .nav-item {
-    font-size: 11px;
-    padding: 13px 10px;
-    gap: 9px;
-  }
-  .sidebar nav {
-    gap: 7px;
-  }
-  .app {
-    padding-inline: 18px;
-  }
-  .learning-layout {
-    grid-template-columns: 1fr 180px;
-    gap: 14px;
-  }
-  .planet {
-    width: 125px;
-    height: 164px;
-  }
-  .step {
-    min-height: 190px;
-    gap: 8px;
-    padding-left: 1%;
-  }
-  .step-1,
-  .step-3 {
-    padding-left: 10%;
-  }
-  .step-2 {
-    padding-left: 0;
-  }
-  .step-copy {
-    max-width: 155px;
-  }
-  .step h2 {
-    font-size: 12px;
-  }
-  .step p {
-    font-size: 10px;
-    margin-left: 30px;
-  }
-  .step-number {
-    width: 24px;
-    height: 24px;
-    font-size: 11px;
-  }
-  .step-title {
-    gap: 6px;
-  }
-  .here {
-    font-size: 6px;
-    margin-left: 30px;
-    padding: 6px 8px;
-  }
-  .avatar-stage {
-    width: 175px;
-    height: 245px;
-  }
-  .top-actions {
-    gap: 7px;
-    padding: 8px;
-  }
-  .profile-button > span:nth-child(2) {
-    display: none;
-  }
-  .page-heading h1 {
-    font-size: 28px;
-  }
-  .eyebrow {
-    font-size: 7px;
-    letter-spacing: 1px;
-  }
-  .primary {
-    font-size: 11px;
-    padding: 12px 16px;
-  }
-  .slider-row {
-    gap: 7px;
-  }
-  .chat-launcher {
-    right: 14px;
-    bottom: 16px;
-  }
-  .helper-mascot {
-    width: 48px;
-    height: 68px;
-  }
+body.astro-high-contrast .welcome {
+  padding: 15px;
+  border-radius: 18px;
 }
-@media (max-width: 760px) {
-  :root {
-    --app-left: 0px;
-  }
-  .sidebar,
-  .menu-collapsed .sidebar {
-    inset: auto 12px calc(12px + env(safe-area-inset-bottom)) 12px;
-    width: calc(100% - 24px);
-    height: 68px;
-    padding: 0 7px;
-    border: 1px solid #ddd0e8;
-    border-radius: 19px;
-    background: #fffaf5f2;
-  }
-  .sidebar .brand,
-  .sidebar .side-footer,
-  .menu-toggle {
-    display: none;
-  }
-  .sidebar nav,
-  .menu-collapsed .sidebar nav {
-    display: flex;
-    justify-content: space-around;
-    margin: 0;
-    height: 100%;
-    gap: 0;
-  }
-  .nav-item,
-  .menu-collapsed .nav-item {
-    flex-direction: column;
-    justify-content: center;
-    gap: 4px;
-    width: auto;
-    flex: 1;
-    min-width: 0;
-    padding: 10px 1px;
-    border-radius: 12px;
-    font-size: 8px;
-  }
-  .nav-item span,
-  .menu-collapsed .nav-item span {
-    display: block;
-    font-size: 8px;
-    white-space: nowrap;
-  }
-  .nav-item svg {
-    width: 19px;
-    height: 19px;
-  }
-  .nav-item[data-nav="shop"],
-  .nav-item[data-nav="star"] {
-    display: none;
-  }
-  .menu-collapsed .nav-item:hover:after,
-  .menu-collapsed .nav-item:focus-visible:after {
-    display: none;
-  }
-  .app,
-  .menu-collapsed .app {
-    margin-left: 0;
-    padding: 0 19px 95px;
-  }
-  .topbar {
-    min-height: 72px;
-  }
-  .demo-label {
-    font-size: 6px;
-    letter-spacing: 0.7px;
-  }
-  .top-actions {
-    gap: 7px;
-    padding: 8px 10px;
-  }
-  .fuel {
-    font-size: 20px;
-  }
-  .fuel strong {
-    font-size: 10px;
-  }
-  .profile-button > span:not(:first-child) {
-    display: none;
-  }
-  .avatar {
-    width: 26px;
-    height: 26px;
-  }
-  .icon-button {
-    width: 26px;
-    height: 26px;
-  }
-  .icon-button svg {
-    width: 18px;
-  }
-  .page-heading {
-    margin-top: 24px;
-  }
-  .eyebrow {
-    font-size: 6px;
-    letter-spacing: 0.8px;
-    gap: 8px;
-    margin-bottom: 15px;
-  }
-  .eyebrow > span {
-    width: 23px;
-  }
-  .page-heading h1 {
-    font-size: 29px;
-    max-width: 420px;
-    letter-spacing: -1px;
-  }
-  .page-heading > p:last-child {
-    font-size: 11px;
-    max-width: 360px;
-  }
-  .learning-layout {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
+body.astro-high-contrast .step-copy p,
+body.astro-high-contrast .room-label {
+  color: #432a52;
+}
+body.astro-high-contrast .nav-item.active {
+  background: #dac1ee;
+  color: #411466;
+}
+@media (min-width: 801px) and (max-width: 1000px) {
   .journey {
     width: 100%;
+    max-width: 620px;
   }
-  .planet {
-    width: 145px;
-    height: 185px;
+  .welcome {
+    max-width: 100%;
   }
-  .step {
-    min-height: 205px;
-    gap: 13px;
-    padding-left: 2%;
-  }
-  .step-1,
-  .step-3 {
-    padding-left: 14%;
-  }
-  .step-2 {
-    padding-left: 0;
-  }
-  .step-4 {
-    padding-left: 4%;
-  }
-  .steps {
-    gap: 45px;
-  }
-  .step-copy {
-    max-width: 175px;
-  }
-  .step h2 {
-    font-size: 13px;
-  }
-  .step p {
+  .mobile-avatar-open {
+    display: inline-flex;
+    margin-top: 10px;
+    border: 1px solid #e5cfe5;
+    background: #fff8ef9c;
+    color: #6c4984;
+    border-radius: 20px;
+    padding: 8px 13px;
     font-size: 11px;
-    margin-left: 32px;
+    min-height: 36px;
   }
-  .step-title {
-    gap: 7px;
-  }
-  .step-number {
-    width: 25px;
-    height: 25px;
-    font-size: 11px;
-  }
-  .here {
-    font-size: 6px;
-    margin-left: 32px;
-  }
-  .active-orbit {
-    inset-inline: -9%;
-  }
-  .orbit-ship {
-    width: 29px;
-    right: -8px;
-  }
-  .avatar-viewer {
-    position: relative;
-    top: auto;
-    width: 100%;
-    max-width: 290px;
-    align-self: center;
-    margin: 10px auto 35px;
-    padding: 0;
-  }
-  .avatar-stage {
-    width: 210px;
-    height: 292px;
-  }
-  .avatar-viewer:before {
-    content: "SEU EXPLORADOR";
-    font-size: 8px;
-    letter-spacing: 1.5px;
-    color: #a992b2;
-    margin-bottom: 8px;
-  }
-  .continue-button {
-    margin-top: 18px;
-  }
-  .floating-star {
-    right: 1%;
-    top: 570px;
-  }
-  .chat-launcher {
-    bottom: calc(90px + env(safe-area-inset-bottom));
-    right: 17px;
-    gap: 3px;
-  }
-  .chat-pill {
-    font-size: 0;
-    width: 39px;
-    height: 39px;
-    min-height: 39px;
-    padding: 0;
-    justify-content: center;
-    background: #fffcf8;
-  }
-  .chat-pill svg {
-    width: 18px;
-    height: 18px;
-  }
-  .helper-mascot {
-    width: 42px;
-    height: 59px;
-  }
-  .chat-panel {
-    right: 14px;
-    bottom: calc(145px + env(safe-area-inset-bottom));
-    width: calc(100% - 28px);
-    max-height: calc(100dvh - 190px);
-  }
-  .chat-log {
-    max-height: 240px;
-  }
-  .satellite {
-    left: 72%;
-    top: 2%;
-    width: 32px;
-  }
-  .asteroid-one {
-    left: 5%;
-  }
-  .asteroid-two {
-    right: 2%;
-  }
-  .sky-orbit {
-    opacity: 0.6;
-  }
-  footer {
-    text-align: center;
-  }
-}
-@media (max-width: 380px) {
-  .app {
-    padding-inline: 15px;
-  }
-  .top-actions {
-    gap: 4px;
-    padding: 7px;
-  }
-  .planet {
-    width: 128px;
-    height: 165px;
-  }
-  .step {
-    gap: 8px;
-    min-height: 190px;
-  }
-  .step-1,
-  .step-3 {
-    padding-left: 9%;
-  }
-  .step-copy {
-    max-width: 153px;
-  }
-  .step h2 {
-    font-size: 12px;
-  }
-  .step p {
-    font-size: 10px;
-  }
-  .here {
-    margin-left: 0;
-  }
-  .page-heading h1 {
-    font-size: 27px;
-  }
-}
-.page-paused *,
-.page-paused *:before,
-.page-paused *:after {
-  animation-play-state: paused !important;
-}
-/* As células das imagens conservam a proporção original. */
-.avatar-stage {
-  height: 390px;
-}
-.helper-mascot {
-  width: 62px;
-  height: 62px;
-}
-@media (min-width: 1700px) {
-  .avatar-stage {
-    height: 450px;
-  }
-}
-@media (max-width: 1250px) {
-  .avatar-stage {
-    height: 330px;
-  }
-}
-@media (max-width: 1000px) and (min-width: 761px) {
-  .avatar-stage {
-    height: 263px;
-  }
-  .helper-mascot {
-    width: 52px;
-    height: 52px;
-  }
-}
-@media (max-width: 760px) {
-  .avatar-stage {
-    height: 315px;
-  }
-  .helper-mascot {
-    width: 48px;
-    height: 48px;
-  }
-}
-/* Mundos vivos: movimento suave, concentrado nos detalhes. */
-.planet {
-  transform: rotate(var(--tilt, 0deg));
-  transition:
-    transform 0.35s,
-    filter 0.35s;
-  isolation: isolate;
-}
-.planet:hover,
-.planet:focus-visible {
-  transform: translateY(-5px) rotate(var(--tilt, 0deg));
-  filter: drop-shadow(0 0 12px #a287dc50);
-}
-.cloud-layer {
-  position: absolute;
-  left: 20%;
-  top: 31%;
-  width: 45%;
-  height: 8%;
-  border-radius: 50%;
-  background: radial-gradient(ellipse, #ffffff90, transparent 70%);
-  filter: blur(3px);
-  animation: clouds-drift 18s ease-in-out infinite;
-  pointer-events: none;
-}
-.world-glint {
-  position: absolute;
-  left: 62%;
-  top: 45%;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #fff2bd;
-  box-shadow: 0 0 12px #ffe792;
-  animation: world-shimmer 7s ease-in-out infinite;
-  pointer-events: none;
-}
-.waterfall {
-  position: absolute;
-  left: 38%;
-  top: 49%;
-  width: 3%;
-  height: 11%;
-  border-radius: 50%;
-  opacity: 0.45;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent 0 4px,
-    #ccfcff 5px 8px
-  );
-  background-size: 100% 18px;
-  animation: water-flow 1.8s linear infinite;
-  pointer-events: none;
-}
-@keyframes clouds-drift {
-  50% {
-    transform: translateX(16px);
-    opacity: 0.5;
-  }
-}
-@keyframes world-shimmer {
-  0%,
-  100% {
-    opacity: 0.2;
-    transform: scale(0.7);
-  }
-  50% {
-    opacity: 0.9;
-    transform: scale(1.4);
-  }
-}
-@keyframes water-flow {
-  to {
-    background-position: 0 18px;
-  }
-}
-.step {
-  position: relative;
-}
-.locked .planet-surface {
-  filter: grayscale(0.8) brightness(0.65) blur(5px);
-  opacity: 0.35;
-}
-.locked .planet:after {
-  content: "?";
-  position: absolute;
-  inset: 24% 10% 19%;
-  display: grid;
-  place-items: center;
-  font-size: 38px;
-  font-weight: 600;
-  color: #7a679c;
-  background: radial-gradient(
-    ellipse,
-    #ece7f3dc 10%,
-    #ded3ed99 45%,
-    transparent 72%
-  );
-  border-radius: 50%;
-  pointer-events: none;
-  animation: mist-breathe 9s ease-in-out infinite;
-}
-.locked .cloud-layer,
-.locked .world-glint,
-.locked .waterfall {
-  visibility: hidden;
-}
-.locked .planet-status {
-  z-index: 2;
-}
-.revealing .planet-surface {
-  animation: world-reveal 2.2s ease-out;
-}
-.discovery {
-  position: absolute;
-  left: calc(6% + 155px);
-  top: 69%;
-  border: 1px solid #d8c9ec;
-  background: #fffcf3;
-  color: #68419c;
-  border-radius: 50%;
-  width: 44px;
-  height: 44px;
-  box-shadow: 0 4px 15px #8b66c61a;
-  cursor: pointer;
-  z-index: 3;
-}
-.step-1 .discovery,
-.step-3 .discovery {
-  left: calc(24% + 155px);
-}
-.discovery:hover,
-.discovery:focus-visible {
-  background: #eee5ff;
-  transform: scale(1.08);
-}
-.locked .discovery {
-  visibility: hidden;
-}
-@keyframes mist-breathe {
-  50% {
-    opacity: 0.65;
-    transform: scale(1.05);
-  }
-}
-@keyframes world-reveal {
-  from {
-    filter: blur(12px) brightness(1.5);
-    opacity: 0.2;
-  }
-  to {
-    filter: none;
-    opacity: 1;
-  }
-}
-.chat-pill {
-  position: relative;
-  width: 44px;
-  height: 44px;
-  min-height: 44px;
-  padding: 11px;
-  font-size: 0;
-}
-.chat-pill svg {
-  width: 22px;
-  height: 22px;
-}
-.helper-tip {
-  position: absolute;
-  right: 0;
-  bottom: calc(100% + 12px);
-  white-space: nowrap;
-  padding: 11px 15px;
-  border: 1px solid #e1d6ef;
-  border-radius: 15px;
-  background: #fffdf8;
-  color: #4b356b;
-  font-size: 12px;
-  box-shadow: 0 6px 24px #54317418;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(5px);
-  transition: 0.2s;
-  pointer-events: none;
-}
-.chat-launcher:hover .helper-tip,
-.chat-launcher:focus-within .helper-tip {
-  opacity: 1;
-  visibility: visible;
-  transform: none;
-}
-.helper-mascot[data-pose="walk"] .helper-sprite {
-  transform: scaleX(-1);
-}
-.activity-open .planet *,
-.activity-open .space-background *,
-.chat-open .planet *,
-.chat-open .space-background * {
-  animation-play-state: paused !important;
-}
-.activity-open .helper-mascot,
-.chat-open .helper-mascot {
-  animation-play-state: paused !important;
-}
-@media (max-width: 1250px) {
-  .discovery {
-    left: calc(6% + 130px);
-  }
-  .step-1 .discovery,
-  .step-3 .discovery {
-    left: calc(24% + 130px);
-  }
-}
-@media (max-width: 1000px) {
-  .discovery {
-    left: calc(6% + 105px);
-  }
-  .step-1 .discovery,
-  .step-3 .discovery {
-    left: calc(24% + 105px);
-  }
-}
-@media (max-width: 760px) {
-  .discovery {
-    left: calc(6% + 120px);
-  }
-  .step-1 .discovery,
-  .step-3 .discovery {
-    left: calc(24% + 120px);
-  }
-  .helper-tip {
-    max-width: 230px;
-  }
-  .chat-pill {
-    width: 44px;
-    height: 44px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .cloud-layer,
-  .world-glint,
-  .waterfall,
-  .locked .planet:after,
-  .revealing .planet-surface {
-    animation: none !important;
-  }
-}
-.discovery svg {
-  width: 22px;
-  height: 22px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.mission-preview {
-  position: absolute;
-  left: 8%;
-  top: calc(100% - 20px);
-  max-width: 290px;
-  background: #fffdf9;
-  border: 1px solid #e3d7ef;
-  border-radius: 14px;
-  box-shadow: 0 8px 24px #66419c12;
-  padding: 11px 14px;
-  font-size: 12px;
-  line-height: 1.5;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  z-index: 4;
-  transition: opacity 0.2s;
-}
-.current:hover .mission-preview,
-.current:focus-within .mission-preview {
-  opacity: 1;
-  visibility: visible;
-}
-.step-1 .mission-preview,
-.step-3 .mission-preview {
-  left: 25%;
-}
-
-/* Expedição v6: cenário com horizonte, apresentação curta e companheiro compacto. */
-:root {
-  --ink: #352647;
-  --muted: #62546e;
-  --paper: #eee3d7;
-}
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 24px;
-}
-body {
-  background: #eee3d7;
-  isolation: isolate;
-}
-.space-background {
-  background:
-    linear-gradient(90deg, #fff5e68c, #f4eaf339 70%, #e4d9ec15),
-    url("../../../assets/imagens/aluno/inicial/superficie-v6.png") center
-      center/cover no-repeat;
-  z-index: -2;
-}
-.space-background:after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, #f8f1e224, transparent 40%, #eadbc31f);
-  pointer-events: none;
-}
-.sky-orbit {
-  display: none;
-}
-.sky-star {
-  opacity: 0.6;
-}
-.asteroid {
-  opacity: 0.25;
-}
-.satellite {
-  top: 8%;
-  left: 76%;
-  opacity: 0.28;
-  width: 38px;
-}
-.sidebar {
-  background: #fffaf1d9;
-  border-color: #fff8;
-  box-shadow: 0 12px 40px #4f345b12;
-}
-.sidebar nav {
-  margin-top: 34px;
-}
-.side-footer {
-  color: #6e5c73;
-}
-.topbar {
-  min-height: 90px;
-}
-.demo-label {
-  color: #574765;
-}
-.top-actions {
-  background: #fffaf0d9;
-  border: 1px solid #fff9;
-  backdrop-filter: blur(12px);
-}
-.app {
-  padding-right: 205px;
-  max-width: 1600px;
-  margin-inline-start: var(--app-left);
-}
-.landing-intro {
-  position: relative;
-  min-height: 380px;
-  padding: 36px 0 42px;
-  margin: 0;
-  max-width: 760px;
-}
-.eyebrow {
-  color: #675671;
-  font-size: 9px;
-  letter-spacing: 1.5px;
-  margin-bottom: 23px;
-}
-.eyebrow > span {
-  background: #b78039;
-}
-.landing-intro h1 {
-  font-size: clamp(40px, 4.7vw, 66px);
-  line-height: 1.08;
-  letter-spacing: -2.5px;
-  color: #332442;
-  font-weight: 700;
-}
-.landing-intro .intro-copy {
-  max-width: 465px;
-  font-size: 15px;
-  color: #5c4d66;
-  line-height: 1.7;
-  margin: 20px 0 22px;
-}
-.intro-actions {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  flex-wrap: wrap;
-}
-.primary {
-  background: #42275f;
-  color: #fffaf1;
-  box-shadow: 0 7px 20px #42275f22;
-  font-size: 13px;
-  border-radius: 16px;
-  min-height: 49px;
-}
-.primary:hover {
-  background: #5d3582;
-}
-.text-action {
-  background: none;
-  color: #493552;
-  font-size: 12px;
-  padding: 13px 0;
-  min-height: 44px;
-}
-.text-action span {
-  display: inline-block;
-  margin-left: 10px;
-}
-.landing-intro .intro-detail {
-  font-size: 11px;
-  color: #66546b;
-  margin: 18px 0 0;
-}
-.intro-detail strong {
-  font-weight: 700;
-}
-.intro-detail span {
-  margin-left: 12px;
-}
-.learning-layout {
-  display: block;
-}
-.journey {
-  max-width: 800px;
-  margin: 0 auto;
-}
-.trail-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 24px 0 28px;
-  border-top: 1px solid #74577730;
-}
-.trail-kicker {
-  font-size: 9px;
-  letter-spacing: 1.6px;
-  color: #6e556f;
-  margin: 0 0 8px;
-}
-.trail-heading h2 {
-  font-size: 23px;
-  letter-spacing: -0.6px;
-  margin: 0;
-}
-.guide-button {
-  color: #60426c;
-  font-size: 11px;
-  min-height: 44px;
-  white-space: nowrap;
-}
-.path-wrap {
-  max-width: 800px;
-}
-.steps {
-  gap: 80px;
-}
-.step {
-  min-height: 225px;
-  gap: 24px;
-  padding-left: 4%;
-}
-.step-1,
-.step-3 {
-  padding-left: 19%;
-}
-.step-2 {
-  padding-left: 3%;
-}
-.step-4 {
-  padding-left: 8%;
-}
-.planet {
-  width: 190px;
-  height: 190px;
-}
-.planet-surface {
-  background-image: url("../../../assets/imagens/aluno/inicial/planetas-naturais-v6.png");
-  inset: 0;
-  filter: drop-shadow(6px 16px 14px #33244938);
-  background-size: 500% auto;
-  background-position-y: 50%;
-}
-.planet-status {
-  top: 18px;
-  right: 4px;
-  width: 30px;
-  height: 30px;
-}
-.active-orbit {
-  inset: 35% -12% 32%;
-  border-color: #f1ca86;
-  border-top-color: #c68b3a;
-  border-bottom-color: #c68b3a;
-  box-shadow: 0 0 16px #ffd17b55;
-  transform: rotate(-15deg);
-}
-.orbit-ship {
-  top: 48%;
-  right: -20px;
-  width: 31px;
-}
-.path-line path {
-  stroke: #795894;
-  opacity: 0.52;
-  stroke-width: 2;
-  stroke-dasharray: 4 10;
-}
-.step-copy {
-  max-width: 270px;
-  padding: 16px 18px;
-  background: #fff9efb8;
-  border: 1px solid #fff9;
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 30px #4d34520a;
-}
-.step h2 {
-  font-size: 17px;
-  color: #3d2854;
-}
-.step p {
-  font-size: 12px;
-  color: #66506c;
-  margin-left: 0;
-  line-height: 1.7;
-}
-.step-title {
-  gap: 10px;
-}
-.step-number {
-  width: 29px;
-  height: 29px;
-  box-shadow: none;
-  background: #efe5ee;
-  border-color: #fff8;
-}
-.here {
-  margin: 0 0 11px;
-  font-size: 8px;
-  background: #f2d39a;
-  color: #4d345c;
-  box-shadow: none;
-}
-.current .step-copy {
-  background: #fff9eef0;
-  border-color: #edcea0;
-  box-shadow: 0 9px 25px #875b2817;
-}
-.done .step-copy {
-  background: #fff9efa6;
-}
-.locked .step-copy {
-  background: #f4eee9a1;
-}
-.locked .planet:after {
-  inset: 12%;
-  font-size: 36px;
-  background: radial-gradient(
-    ellipse,
-    #d0c4d9d9,
-    #d0c4d94a 60%,
-    transparent 72%
-  );
-  color: #695272;
-}
-.locked .planet-surface {
-  opacity: 0.3;
-  filter: grayscale(0.6) brightness(0.72) blur(3px);
-}
-.cloud-layer {
-  top: 27%;
-  opacity: 0.35;
-}
-.world-glint {
-  display: none;
-}
-.waterfall {
-  display: none;
-}
-.discovery {
-  left: calc(4% + 146px);
-  top: 73%;
-  background: #fff8e9;
-  color: #684474;
-  box-shadow: 0 5px 18px #50345818;
-}
-.step-1 .discovery,
-.step-3 .discovery {
-  left: calc(19% + 146px);
-}
-.mission-preview {
-  top: calc(100% - 5px);
-  background: #fff8ed;
-  left: 30%;
-  color: #624a6b;
-}
-.step-1 .mission-preview,
-.step-3 .mission-preview {
-  left: 40%;
-}
-.journey-note {
-  color: #644d66;
-  font-size: 11px;
-}
-.floating-star {
-  right: 3%;
-  color: #a2702f;
-  top: 575px;
-}
-footer {
-  color: #5d4a60;
-}
-/* Avatar sem painel: sombra no chão, controle acessível e espaço compacto. */
-.avatar-viewer {
-  position: fixed;
-  right: 28px;
-  bottom: 128px;
-  top: auto;
-  width: 145px;
-  z-index: 6;
-  margin: 0;
-  padding: 0;
-  align-self: auto;
-  gap: 0;
-}
-.avatar-stage {
-  background: none;
-  border: 0;
-  display: block;
-  width: 145px;
-  height: 217px;
-  padding: 0;
-  cursor: pointer;
-  overflow: visible;
-  transform-origin: 55% 94%;
-  transition: transform 0.3s;
-  will-change: transform;
-}
-.avatar-stage:after {
-  bottom: 1px;
-  left: 27%;
-  right: 5%;
-  height: 8px;
-  background: #45313b42;
-  filter: blur(6px);
-  z-index: -1;
-}
-.avatar-render {
-  filter: drop-shadow(2px 4px 2px #2b243729);
-  animation: explorer-breath 6s ease-in-out infinite;
-  transform-origin: 55% 90%;
-  will-change: transform;
-}
-.avatar-eye {
-  position: absolute;
-  inset: 0;
-  background: url("../../../assets/imagens/aluno/inicial/avatar-vistas-v4.png")
-    0 0/400% 200% no-repeat;
-  pointer-events: none;
-  display: none;
-  transform: translate(var(--eye-x, 0px), var(--eye-y, 0px));
-  animation: explorer-breath 6s ease-in-out infinite;
-  transform-origin: 55% 90%;
-}
-.avatar-front .avatar-eye {
-  display: block;
-}
-.eye-left {
-  clip-path: ellipse(3.3% 3.5% at 49% 33%);
-}
-.eye-right {
-  clip-path: ellipse(3.3% 3.5% at 72% 33%);
-}
-@keyframes explorer-breath {
-  0%,
-  100% {
-    scale: 1 1;
-  }
-  50% {
-    scale: 1.009 1.014;
-  }
-}
-.rotation-control {
-  width: 135px;
-  padding-top: 6px;
-}
-.rotation-control label {
-  font-size: 10px;
-  color: #50375d;
-}
-.slider-row {
-  margin: 0;
-  gap: 5px;
-  color: #5b4567;
-  font-size: 8px;
-}
-.slider-row input {
-  height: 32px;
-  accent-color: #644282;
-}
-.avatar-viewer:before {
-  display: none;
-}
-.avatar-reaction {
-  position: absolute;
-  right: 4px;
-  bottom: calc(100% + 8px);
-  width: 180px;
-  background: #fff9eeeb;
-  border: 1px solid #e4cdb9;
-  border-radius: 16px 16px 2px 16px;
-  padding: 10px 13px;
-  font-size: 11px;
-  color: #4c365c;
-  line-height: 1.5;
-  box-shadow: 0 6px 22px #48305a17;
-  opacity: 0;
-  transform: translateY(5px);
-  transition: 0.2s;
-  pointer-events: none;
-  margin: 0;
-}
-.avatar-reaction:empty {
-  display: none;
-}
-.avatar-reaction.visible {
-  opacity: 1;
-  transform: none;
-}
-.chat-launcher {
-  right: 58px;
-  bottom: 22px;
-  gap: 0;
-}
-.helper-mascot {
-  width: 64px;
-  height: 64px;
-}
-.helper-tip {
-  right: 0;
-  bottom: 100%;
-  font-size: 11px;
-}
-.chat-panel {
-  bottom: 105px;
-  right: 22px;
-}
-.chat-panel > header {
-  background: #e9deee;
-}
-.chat-open .avatar-viewer {
-  visibility: hidden;
-}
-@media (min-width: 1700px) {
-  .app {
-    padding-right: 220px;
-    padding-left: 50px;
-  }
-  .landing-intro {
-    min-height: 420px;
-  }
-  .avatar-viewer {
-    width: 160px;
-    right: 40px;
-  }
-  .avatar-stage {
-    width: 160px;
-    height: 240px;
-  }
-  .steps {
-    gap: 90px;
-  }
-  .planet {
-    width: 210px;
-    height: 210px;
-  }
-  .step {
-    min-height: 245px;
-  }
-}
-@media (max-width: 1100px) {
-  .app {
-    padding-right: 155px;
-    padding-left: 22px;
-  }
-  .landing-intro h1 {
-    font-size: 48px;
-  }
-  .landing-intro {
-    min-height: 370px;
-  }
-  .avatar-viewer {
-    right: 17px;
-    width: 115px;
-    bottom: 128px;
-  }
-  .avatar-stage {
-    width: 115px;
-    height: 172px;
-  }
-  .rotation-control {
-    width: 113px;
-  }
-  .step {
-    gap: 16px;
-  }
-  .planet {
-    width: 160px;
-    height: 160px;
-  }
-  .step-copy {
-    max-width: 230px;
-    padding: 14px;
-  }
-  .step-1,
-  .step-3 {
-    padding-left: 10%;
-  }
-  .discovery {
-    left: calc(4% + 130px);
-  }
-  .step-1 .discovery,
-  .step-3 .discovery {
-    left: calc(10% + 130px);
-  }
-  .chat-launcher {
-    right: 42px;
-  }
-}
-@media (max-width: 760px) {
-  .app,
-  .menu-collapsed .app {
-    padding: 0 20px 115px;
-    margin-left: 0;
-  }
-  .topbar {
-    min-height: 78px;
-  }
-  .sidebar,
-  .menu-collapsed .sidebar {
-    background: #fff8eceb;
-  }
-  .landing-intro {
-    padding-top: 32px;
-    min-height: 375px;
-  }
-  .landing-intro h1 {
-    font-size: 44px;
-    max-width: 330px;
-  }
-  .eyebrow {
-    font-size: 7px;
-    letter-spacing: 0.8px;
-    max-width: 320px;
-    line-height: 1.7;
-  }
-  .landing-intro .intro-copy {
-    max-width: 310px;
-    font-size: 13px;
-  }
-  .intro-actions {
-    gap: 12px;
-  }
-  .intro-detail span {
-    display: block;
-    margin: 4px 0;
-  }
-  .landing-intro .intro-detail {
-    max-width: 245px;
-    font-size: 10px;
-  }
-  .trail-heading {
-    padding-top: 20px;
-  }
-  .trail-heading h2 {
-    font-size: 20px;
-  }
-  .trail-kicker {
-    font-size: 8px;
-  }
-  .guide-button {
-    font-size: 10px;
-  }
-  .journey {
-    width: 100%;
-  }
-  .planet {
-    width: 135px;
-    height: 135px;
-  }
-  .step {
-    min-height: 180px;
-    gap: 13px;
-    padding-left: 0;
-  }
-  .step-1,
-  .step-3 {
-    padding-left: 7%;
-  }
-  .step-2,
-  .step-4 {
-    padding-left: 0;
-  }
-  .steps {
-    gap: 72px;
-  }
-  .step-copy {
-    padding: 12px;
-    max-width: 210px;
-  }
-  .step h2 {
-    font-size: 14px;
-  }
-  .step p {
-    font-size: 11px;
-  }
-  .step-number {
-    width: 25px;
-    height: 25px;
-    font-size: 11px;
-  }
-  .here {
-    font-size: 7px;
-  }
-  .discovery {
-    left: 105px;
-    top: 74%;
-  }
-  .step-1 .discovery,
-  .step-3 .discovery {
-    left: calc(7% + 105px);
-  }
-  .avatar-viewer {
-    right: 12px;
-    bottom: calc(156px + env(safe-area-inset-bottom));
-    width: 83px;
-    max-width: none;
-    margin: 0;
-    opacity: 0.97;
-  }
-  .avatar-stage {
-    width: 83px;
-    height: 124px;
-  }
-  .rotation-control {
-    width: 83px;
-  }
-  .rotation-control label {
-    font-size: 8px;
-  }
-  .slider-row > span {
-    display: none;
-  }
-  .slider-row input {
-    height: 34px;
-    width: 100%;
-  }
-  .chat-launcher {
-    right: 24px;
-    bottom: calc(92px + env(safe-area-inset-bottom));
-  }
-  .helper-mascot {
-    width: 52px;
-    height: 52px;
-  }
-  .chat-panel {
-    bottom: calc(155px + env(safe-area-inset-bottom));
-  }
-  .avatar-reaction {
-    width: 160px;
-    font-size: 10px;
-  }
-  .mission-preview {
-    display: none;
-  }
-  .space-background {
-    background-position: 58% center;
-  }
-  .avatar-viewer.reading-trail {
-    opacity: 0.3;
-    pointer-events: none;
-  }
-  .avatar-viewer.reading-trail:focus-within {
-    opacity: 1;
-    pointer-events: auto;
-  }
-}
-@media (max-width: 390px) {
-  .landing-intro h1 {
-    font-size: 39px;
-  }
-  .intro-actions {
-    gap: 8px;
-  }
-  .intro-actions .primary {
-    padding-inline: 15px;
-    font-size: 12px;
-  }
-  .text-action {
-    font-size: 11px;
-  }
-  .planet {
-    width: 117px;
-    height: 117px;
-  }
-  .step {
-    gap: 10px;
-  }
-  .step-copy {
-    padding: 10px;
-  }
-  .step-title {
-    gap: 6px;
-  }
-  .step h2 {
-    font-size: 13px;
-  }
-  .step-1,
-  .step-3 {
-    padding-left: 3%;
-  }
-  .discovery {
-    left: 88px;
-  }
-  .step-1 .discovery,
-  .step-3 .discovery {
-    left: calc(3% + 88px);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  .avatar-render,
-  .avatar-eye {
-    animation: none;
-  }
-  .avatar-stage {
-    transition: none;
-  }
-}
-
-/* As vistas se dissolvem suavemente; não são uma malha 3D contínua. */
-.avatar-transition {
-  opacity: 0;
-  pointer-events: none;
-  z-index: 1;
-  animation: none;
-}
-.avatar-eye {
-  z-index: 2;
-}
-.planet-surface {
-  animation: planet-turn 55s ease-in-out infinite;
-  transform-origin: 50% 50%;
-}
-@keyframes planet-turn {
-  0%,
-  100% {
-    transform: rotate(-4deg);
-  }
-  50% {
-    transform: rotate(5deg);
-  }
-}
-.locked .planet-surface {
-  animation: none;
-}
-@media (prefers-reduced-motion: reduce) {
-  .planet-surface {
-    animation: none !important;
-  }
-}
-
-/* v7 — composição aprovada: boas-vindas, trilha à esquerda e vidro delicado. */
-:root {
-  --ink: #302044;
-  --muted: #655675;
-  --app-left: 270px;
-}
-.space-background {
-  background: url("../../../assets/imagens/aluno/inicial/horizonte-v7.png")
-    center center/cover no-repeat;
-}
-.space-background:after {
-  background: linear-gradient(90deg, #fff2df24, transparent 70%);
-}
-.sidebar,
-.avatar-viewer {
-  background:
-    radial-gradient(
-      circle at var(--glass-x, 40%) var(--glass-y, 20%),
-      #ffffff24,
-      transparent 65%
-    ),
-    #f9effb26;
-  border: 1px solid #fff9;
-  backdrop-filter: blur(14px) saturate(1.08);
-  -webkit-backdrop-filter: blur(14px) saturate(1.08);
-  box-shadow:
-    inset 0 1px 0 #ffffff60,
-    0 10px 36px #55345612;
-}
-.sidebar {
-  padding: 25px 15px;
-  transition:
-    width 0.38s ease,
-    padding 0.38s ease;
-}
-.sidebar nav {
-  margin-top: 28px;
-  gap: 8px;
-}
-.nav-item {
-  color: #3b205d;
-  transition:
-    background 0.25s,
-    transform 0.25s,
-    color 0.25s;
-}
-.nav-item.active {
-  background: #ffbf4236;
-  color: #9b5000;
-}
-.nav-item:hover {
-  background: #fff8;
-  transform: translateY(-2px);
-}
-.nav-item:active {
-  transform: translateY(1px);
-}
-.menu-toggle {
-  top: 35px;
-  background: #fff5;
-  backdrop-filter: blur(12px);
-}
-.app {
-  padding-right: 350px;
-  padding-left: 25px;
-  margin-inline-start: var(--app-left);
-}
-.topbar {
-  min-height: 75px;
-  position: relative;
-}
-.top-actions {
-  position: fixed;
-  right: 25px;
-  top: 20px;
-  z-index: 7;
-  background: #fff5;
-  backdrop-filter: blur(15px);
-  border-color: #fff8;
-}
-.demo-label {
-  font-size: 8px;
-  color: #63506d;
-}
-.landing-intro {
-  min-height: 0;
-  padding: 14px 0 18px;
-  max-width: 700px;
-}
-.landing-intro h1 {
-  font-size: clamp(32px, 3.4vw, 52px);
-  letter-spacing: -1.5px;
-  line-height: 1.15;
-}
-.landing-intro .intro-copy {
-  font-size: 20px;
-  margin: 8px 0 18px;
-  line-height: 1.4;
-}
-.landing-intro .intro-detail {
-  font-size: 12px;
-  margin: 15px 0 0;
-}
-.intro-detail span {
-  margin-left: 8px;
-}
-.intro-actions {
-  gap: 16px;
-}
-.primary {
-  background: linear-gradient(120deg, #ffcf62, #ffae14);
-  color: #352045;
-  border-radius: 28px;
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
-  box-shadow: 0 5px 20px #df98251a;
-}
-.primary:hover {
-  background: linear-gradient(120deg, #ffd77a, #ffb626);
-  transform: translateY(-3px);
-  box-shadow: 0 9px 22px #ac70212b;
-}
-.primary:active {
-  transform: translateY(1px) scale(0.98);
-}
-.text-action {
-  font-size: 11px;
-}
-.journey {
-  max-width: 760px;
-  margin: 0;
-}
-.trail-heading {
-  border: 0;
-  padding: 0;
-  justify-content: flex-end;
-  height: 32px;
-}
-.trail-heading > div {
-  display: none;
-}
-.guide-button {
-  font-size: 10px;
-}
-.steps {
-  gap: 65px;
-}
-.step {
-  min-height: 220px;
-  padding-left: 0;
-  gap: 24px;
-}
-.step-1,
-.step-3 {
-  padding-left: 8%;
-}
-.step-2,
-.step-4 {
-  padding-left: 2%;
-}
-.planet {
-  width: 210px;
-  height: 210px;
-}
-.planet-surface {
-  background-image: url("../../../assets/imagens/aluno/inicial/mondes-v7.png");
-  background-size: 500% auto;
-  background-position-y: center;
-  filter: drop-shadow(5px 12px 12px #60405a30);
-  animation: planet-turn 65s ease-in-out infinite;
-}
-.step-copy,
-.current .step-copy,
-.done .step-copy,
-.locked .step-copy {
-  background: none;
-  border: 0;
-  backdrop-filter: none;
-  box-shadow: none;
-  padding: 0;
-  max-width: 290px;
-}
-.step h2 {
-  font-size: 21px;
-  color: #302044;
-}
-.step p {
-  font-size: 14px;
-  color: #65536d;
-  line-height: 1.5;
-}
-.step-number {
-  display: none;
-}
-.here {
-  background: #ffd06d;
-  color: #49304d;
-  font-size: 9px;
-  padding: 7px 12px;
-}
-.planet-status {
-  top: auto;
-  bottom: 22px;
-  right: 10px;
-  width: 34px;
-  height: 34px;
-}
-.current .planet-status {
-  background: #bb7514;
-}
-.planet:hover,
-.planet:focus-visible {
-  filter: drop-shadow(0 0 10px #ffdb9199);
-  transform: translateY(-5px);
-}
-.path-line path {
-  stroke: #7950aa;
-  opacity: 0.8;
-  stroke-width: 3;
-  stroke-dasharray: 5 10;
-}
-.path-celebrating path {
-  animation: trail-pulse 2s ease-out;
-}
-.discovery {
-  top: 78%;
-  left: 175px;
-  width: 34px;
-  height: 34px;
-  background: #fff5;
-  border-color: #fff9;
-}
-.step-1 .discovery,
-.step-3 .discovery {
-  left: calc(8% + 175px);
-}
-.discovery svg {
-  width: 17px;
-}
-.mission-preview {
-  display: none !important;
-}
-.cloud-layer {
-  opacity: 0.2;
-}
-.world-glint,
-.waterfall {
-  display: none;
-}
-.floating-star {
-  right: 0;
-  top: 580px;
-}
-.journey-note {
-  text-align: left;
-}
-.locked .planet-surface {
-  filter: grayscale(0.5) blur(2px);
-  opacity: 0.45;
-}
-/* Avatar por vistas: acabamento e iluminação coerentes com o cenário. */
-.avatar-viewer {
-  position: fixed;
-  top: 145px;
-  right: 5%;
-  bottom: auto;
-  width: 260px;
-  padding: 18px 18px 14px;
-  border-radius: 28px;
-  gap: 0;
-  z-index: 4;
-}
-.avatar-stage {
-  width: 205px;
-  height: 307px;
-  transform-origin: 55% 94%;
-}
-.avatar-render {
-  filter: drop-shadow(3px 7px 5px #62494c35) saturate(0.9) contrast(0.97);
-  animation: explorer-breath 6s ease-in-out infinite;
-}
-.avatar-eye {
-  filter: saturate(0.9) contrast(0.97);
-}
-.rotation-control {
-  width: 205px;
-  padding-top: 4px;
-}
-.rotation-control label {
-  font-size: 13px;
-  color: #37224c;
-}
-.slider-row > span {
-  display: none;
-}
-.slider-row input {
-  height: 36px;
-  width: 100%;
-  accent-color: #7843b0;
-}
-.avatar-reaction {
-  bottom: calc(100% + 10px);
-  right: 0;
-}
-.chat-launcher {
-  right: 34px;
-  bottom: 25px;
-}
-.helper-mascot {
-  width: 78px;
-  height: 78px;
-}
-.helper-sprite {
-  filter: drop-shadow(2px 5px 4px #58375435) saturate(0.9);
-}
-.helper-tip {
-  background: #fffaf3f0;
-  border-color: #fff9;
-}
-.chat-panel {
-  bottom: 118px;
-}
-.chat-open .avatar-viewer {
-  visibility: visible;
-}
-.satellite {
-  animation: sky-crossing 100s linear infinite;
-  top: 12%;
-  opacity: 0.5;
-}
-.asteroid {
-  opacity: 0.18;
-}
-.sky-star {
-  animation: quiet-twinkle 7s ease-in-out infinite;
-}
-.star-two {
-  animation-delay: 3s;
-}
-@keyframes trail-pulse {
-  50% {
-    stroke: #ffbf44;
-    filter: drop-shadow(0 0 6px #ffd26b);
-    stroke-dashoffset: -40;
-  }
-}
-@keyframes quiet-twinkle {
-  50% {
-    opacity: 0.25;
-    scale: 0.85;
-  }
-}
-@keyframes sky-crossing {
-  0% {
-    translate: 35vw 0;
-    opacity: 0;
-  }
-  10%,
-  80% {
-    opacity: 0.4;
-  }
-  100% {
-    translate: -110vw 8vh;
-    opacity: 0;
-  }
-}
-@media (max-width: 1200px) {
-  :root {
-    --app-left: 245px;
-  }
-  .app {
-    padding-right: 255px;
-    padding-left: 20px;
-  }
-  .avatar-viewer {
-    right: 24px;
-    width: 215px;
-    top: 150px;
-    padding: 15px;
-  }
-  .avatar-stage {
-    width: 175px;
-    height: 262px;
-  }
-  .rotation-control {
-    width: 175px;
-  }
-  .planet {
-    width: 175px;
-    height: 175px;
-  }
-  .step {
-    gap: 15px;
-    min-height: 190px;
-  }
-  .step h2 {
-    font-size: 17px;
-  }
-  .step p {
-    font-size: 12px;
-  }
-  .landing-intro .intro-copy {
-    font-size: 17px;
-  }
-  .discovery {
-    left: 145px;
-  }
-  .step-1 .discovery,
-  .step-3 .discovery {
-    left: calc(8% + 145px);
-  }
-}
-@media (max-width: 960px) and (min-width: 761px) {
-  .sidebar {
-    width: 80px;
-    padding-inline: 10px;
-  }
-  .brand {
-    font-size: 0;
-    justify-content: center;
-  }
-  .brand-orbit {
-    font-size: 27px;
-    margin: 0;
-  }
-  .nav-item {
-    justify-content: center;
-    padding: 14px;
-  }
-  .nav-item span,
-  .side-footer {
-    display: none;
-  }
-  .app {
-    margin-left: 130px;
-    margin-inline-start: 130px;
-    padding-right: 245px;
-  }
-  .menu-toggle {
-    display: none;
-  }
-  .planet {
-    width: 155px;
-    height: 155px;
-  }
-  .step {
-    gap: 12px;
-  }
-  .steps {
-    gap: 60px;
-  }
-  .step h2 {
-    font-size: 16px;
-  }
-}
-@media (max-width: 760px) {
-  .app,
-  .menu-collapsed .app {
-    margin: 0;
-    padding: 0 20px 105px;
-  }
-  .topbar {
-    min-height: 75px;
-  }
-  .top-actions {
-    position: static;
-    padding: 8px;
-    gap: 6px;
-  }
-  .demo-label {
-    display: none;
-  }
-  .topbar {
-    justify-content: flex-end;
-  }
-  .landing-intro {
-    padding: 12px 0 20px;
-    min-height: 0;
-    max-width: none;
-  }
-  .landing-intro h1 {
-    font-size: 34px;
-    max-width: none;
-  }
-  .landing-intro .intro-copy {
-    font-size: 17px;
-    max-width: none;
-  }
-  .intro-actions {
-    gap: 10px;
-  }
-  .landing-intro .intro-detail {
-    font-size: 11px;
-    max-width: none;
-  }
-  .intro-detail span {
-    display: inline;
-    margin-left: 4px;
-  }
-  .avatar-viewer {
+  .avatar-dialog .avatar-viewer {
     position: relative;
     inset: auto;
-    width: 150px;
-    padding: 9px;
-    margin: 0 0 25px auto;
-    border-radius: 20px;
-    align-self: flex-end;
-  }
-  .avatar-stage {
-    width: 120px;
-    height: 180px;
-  }
-  .rotation-control {
-    width: 120px;
-  }
-  .rotation-control label {
-    font-size: 10px;
-  }
-  .learning-layout {
-    display: flex;
-    flex-direction: column;
-  }
-  .journey {
-    order: 2;
     width: 100%;
   }
-  .avatar-viewer {
-    order: 1;
-  }
-  .trail-heading {
-    height: 25px;
-  }
-  .steps {
-    gap: 55px;
-  }
-  .step {
-    min-height: 160px;
-    gap: 13px;
-  }
-  .planet {
-    width: 140px;
-    height: 140px;
-  }
-  .step h2 {
-    font-size: 16px;
-  }
-  .step p {
-    font-size: 12px;
-  }
-  .step-copy {
-    max-width: 200px;
-  }
-  .step-1,
-  .step-3 {
-    padding-left: 5%;
-  }
-  .discovery {
-    left: 112px;
-    top: 78%;
-  }
-  .step-1 .discovery,
-  .step-3 .discovery {
-    left: calc(5% + 112px);
-  }
-  .sidebar,
-  .menu-collapsed .sidebar {
-    background: #f9effb70;
-    backdrop-filter: blur(16px);
-    padding: 0 7px;
-  }
-  .sidebar nav {
-    margin: 0;
-    gap: 0;
-  }
-  .nav-item[data-nav="shop"],
-  .nav-item[data-nav="star"] {
-    display: flex;
-  }
-  .nav-item span {
-    font-size: 7px;
-  }
-  .chat-launcher {
-    right: 20px;
-    bottom: calc(92px + env(safe-area-inset-bottom));
-  }
-  .helper-mascot {
-    width: 57px;
-    height: 57px;
-  }
-  .chat-panel {
-    bottom: calc(155px + env(safe-area-inset-bottom));
-  }
-  .space-background {
-    background-position: 58% center;
-  }
-  .avatar-reaction {
-    width: 180px;
-  }
-  .sky-star {
-    opacity: 0.35;
+  .avatar-dialog .avatar-stage {
+    height: 285px;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *:before,
-  *:after {
-    animation: none !important;
-    transition: none !important;
-  }
-  html {
-    scroll-behavior: auto;
-  }
-}
-.motion-reduced *,
-.page-paused * {
-  animation-play-state: paused !important;
-}
-.motion-reduced * {
-  transition: none !important;
-}
-/* Piscada sincronizada nas duas pálpebras, apenas na vista frontal. */
-.eyelid {
-  position: absolute;
-  display: none;
-  z-index: 3;
-  width: 8%;
-  height: 8%;
-  top: 29%;
-  border-radius: 50%;
-  background: linear-gradient(#add64b, #89b833);
-  transform: scaleY(0);
-  transform-origin: center;
-  pointer-events: none;
-  animation: explorer-blink 8s infinite;
-}
-.avatar-front .eyelid {
-  display: block;
-}
-.lid-left {
-  left: 45%;
-}
-.lid-right {
-  left: 68%;
-}
-@keyframes explorer-blink {
-  0%,
-  43%,
-  47%,
-  100% {
-    transform: scaleY(0);
-  }
-  45% {
-    transform: scaleY(1);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .eyelid {
-    animation: none !important;
-  }
-}
-/* v8 — rosto original intacto, chão e luz para integrar o explorador. */
-.avatar-eye,
-.avatar-front .avatar-eye,
-.eyelid,
-.avatar-front .eyelid {
-  display: none !important;
-}
+/* O atlas novo tem células quadradas; preservar a proporção evita deformar o mascote. */
 .avatar-viewer {
-  background:
-    radial-gradient(ellipse at 20% 18%, #ffe2b12b, transparent 60%), #f9effb13;
-  backdrop-filter: blur(5px) saturate(1.05);
-  -webkit-backdrop-filter: blur(5px) saturate(1.05);
+  --avatar-size: 280px;
 }
-.avatar-stage:before {
-  content: "";
-  position: absolute;
-  left: 9%;
-  right: 4%;
-  bottom: -1px;
-  height: 32px;
-  border-radius: 50%;
-  background:
-    linear-gradient(#fff0d138, #70544c20),
-    url("../../../assets/imagens/aluno/inicial/horizonte-v7.png") 87% 90%/650%
-      auto;
-  box-shadow: 0 5px 7px #5437431a;
-  z-index: -2;
-  pointer-events: none;
-}
-.avatar-stage:after {
-  height: 10px;
-  bottom: 4px;
-  left: 25%;
-  right: 10%;
-  background: #62443b66;
-  filter: blur(4px);
+.avatar-stage {
+  height: var(--avatar-size);
 }
 .avatar-render {
-  filter: drop-shadow(-2px -1px 1px #ffdfb334)
-    drop-shadow(3px 6px 3px #51394838) saturate(0.87) contrast(0.98);
+  inset: auto;
+  left: 50%;
+  top: 0;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  transform: translateX(-50%);
 }
-.scene-discovery {
-  position: fixed;
-  right: 24%;
-  top: 72%;
-  width: 78px;
-  height: 67px;
-  z-index: 3;
-  padding: 8px;
-  background: none;
-  color: #52376c;
-  transition:
-    transform 0.25s,
-    filter 0.25s;
-  animation: signal-float 8s ease-in-out infinite;
-}
-.scene-discovery > svg {
-  width: 100%;
-  height: 100%;
-  filter: drop-shadow(1px 4px 3px #4c345b25);
-}
-.scene-discovery:hover,
-.scene-discovery:focus-visible {
-  filter: drop-shadow(0 0 9px #ffe3a9);
-  transform: scale(1.08);
-}
-.scene-tip {
-  position: absolute;
-  right: 0;
-  bottom: 100%;
-  white-space: nowrap;
-  font-size: 11px;
-  border: 1px solid #fff9;
-  border-radius: 13px;
-  padding: 8px 12px;
-  background: #fff4eccc;
-  backdrop-filter: blur(12px);
-  opacity: 0;
-  transition: opacity 0.2s;
-  pointer-events: none;
-}
-.scene-discovery:hover .scene-tip,
-.scene-discovery:focus-visible .scene-tip {
-  opacity: 1;
-}
-.scene-discovery.discovered:after {
-  content: "✓";
-  position: absolute;
-  right: 0;
-  bottom: 8px;
-  border-radius: 50%;
-  background: #689743;
-  color: white;
-  width: 20px;
-  height: 20px;
-  font-size: 12px;
-  line-height: 20px;
-}
-@keyframes signal-float {
-  50% {
-    translate: 0 -8px;
-    rotate: 3deg;
+@media (min-width: 1700px) {
+  .avatar-viewer {
+    --avatar-size: 305px;
   }
 }
-@media (max-width: 1200px) {
-  .scene-discovery {
-    right: 22%;
-    width: 65px;
+@media (max-width: 1250px) and (min-width: 1001px) {
+  .avatar-viewer {
+    --avatar-size: 235px;
   }
 }
-@media (max-width: 760px) {
-  .scene-discovery {
-    position: absolute;
-    right: auto;
-    left: 35px;
-    top: 355px;
-    width: 65px;
-    height: 60px;
-  }
-  .avatar-stage:before {
-    height: 20px;
-  }
-  .scene-tip {
-    left: 0;
-    right: auto;
+@media (max-height: 780px) and (min-width: 1001px) {
+  .avatar-viewer {
+    --avatar-size: 250px;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .scene-discovery {
-    animation: none !important;
-  }
+.avatar-dialog .avatar-viewer {
+  --avatar-size: 280px;
+}
+.avatar-dialog .avatar-stage {
+  height: var(--avatar-size);
+}
+.avatar-render {
+  transform: translateX(-50%) perspective(600px) rotateY(var(--avatar-lean, 0deg));
+  transition: transform 0.18s ease-out;
+}
+/* A respiração anima só o desenho; a área clicável permanece estável. */
+.avatar-stage {
+  animation: none;
+}
+.avatar-render {
+  animation: avatar-breathe 6s ease-in-out infinite;
+  transform-origin: 50% 95%;
+}
+.mission-badge {
+  display: table;
+}
+.step-copy .primary {
+  display: flex;
+  width: max-content;
+  max-width: 100%;
+}
+.cloud {
+  opacity: 0.78;
+  filter: blur(0.4px) drop-shadow(0 2px 2px #9380ac20);
 }
 
-/* Não antecipar a imagem dos mundos ainda bloqueados. */
-.locked .planet-surface {
-  visibility: hidden;
+/* Revisão fiel à composição aprovada: escala, trilha e avatar alinhado. */
+:root { --ink:#170b40; --purple:#6714fa; }
+.primary { background:linear-gradient(110deg,#5900f4,#8527ff); font-weight:400; }
+.primary:hover { background:linear-gradient(110deg,#4c00df,#731aee); }
+.planet-art { animation:world-buoyancy 12s cubic-bezier(.45,0,.55,1) infinite; will-change:translate; }
+@keyframes world-buoyancy { 0%,100% {translate:0 0} 50% {translate:0 -4px} }
+.cloud { width:27%; height:13%; left:36%; top:46%; animation:cloud-orbit-smooth 36s linear infinite; will-change:transform; }
+.cloud.second { width:23%; height:12%; animation-delay:-18s; }
+@keyframes cloud-orbit-smooth {
+  0% {transform:translate(-145%,15%) scale(.85);z-index:1;opacity:.45}
+  25% {transform:translate(0,-140%) scale(.65);z-index:1;opacity:.55}
+  49% {z-index:1}
+  50% {transform:translate(145%,15%) scale(.85);z-index:4;opacity:.8}
+  75% {transform:translate(0,150%) scale(1);z-index:4;opacity:.9}
+  99% {z-index:4}
+  100% {transform:translate(-145%,15%) scale(.85);z-index:1;opacity:.45}
 }
-.step.locked .planet:after {
-  opacity: 0.85;
+.avatar-render { transform:translateX(calc(-50% + var(--frame-shift, -8.3%))); animation:explorer-breath 5s ease-in-out infinite; }
+.avatar-ghost {display:none}
+@keyframes explorer-breath {0%,100% {scale:1 1;translate:0 0}50% {scale:1 1.004;translate:0 -1px}}
+.avatar-stage {overflow:hidden; border-radius:18px;}
+.avatar-viewer {overflow:hidden;}
+.mission-link {display:inline-block; margin-top:10px; font-size:13px; color:#5b17b7; text-underline-offset:4px;}
+.trail-connector {position:absolute; left:calc(var(--planet-size,198px) * .65); top:75%;width:140px;height:120px;pointer-events:none;overflow:visible;z-index:-1;}
+.trail-connector path {stroke:#8438fb;stroke-width:2.5;stroke-dasharray:4 6;fill:none;}
+.trail-connector circle {fill:#9e54ff;stroke:#fff;stroke-width:3;}
+.step:nth-child(even) .trail-connector {transform:scaleX(-1);left:calc(var(--planet-size,198px) * .25);}
+.step:after {display:none}
+.steps {isolation:isolate}
+footer {margin-top:60px}
+@media (min-width:1001px) {
+  body.menu-collapsed,body.collapsed {--nav-width:108px;--main-left:clamp(172px,12.8vw,216px)}
+  .sidebar {left:28px;top:28px;bottom:22px;padding:20px 12px 12px;}
+  .sidebar nav {gap:5px;margin-top:24px;justify-content:space-evenly;}
+  .menu-collapsed .sidebar .label,.collapsed .sidebar .label {display:block; font-size:12px;line-height:1.2;}
+  .menu-collapsed .nav-item,.collapsed .nav-item {flex-direction:column;gap:7px;padding:9px 3px;min-height:57px;}
+  .menu-collapsed .nav-item svg,.collapsed .nav-item svg {width:27px;height:27px}
+  .menu-collapsed .side-exit,.collapsed .side-exit {gap:5px;padding:9px 0}
+  .menu-toggle {top:66px;right:calc(50% - 15px);border-radius:50%}
+  .brand {justify-content:center}
+  .brand-orbit {font-size:31px}
+  main {padding-top:clamp(68px,9.5vh,94px);max-width:none;}
+  .welcome {max-width:calc(100% - 340px);margin-bottom:10px}
+  .welcome h1 {font-size:clamp(40px,3.7vw,62px);letter-spacing:-.045em;line-height:1.1}
+  .welcome > p:first-of-type {font-size:clamp(23px,2.1vw,35px);margin-bottom:23px;letter-spacing:-.04em}
+  .welcome-actions {gap:28px}
+  .welcome .primary {font-size:clamp(17px,1.5vw,24px);padding:14px 28px;min-height:55px;border-radius:19px}
+  .journey-progress {font-size:14px;width:270px}
+  .progress-track {height:12px;background:repeating-linear-gradient(90deg,#ffffff55 0 calc(20% - 2px),#fff9 calc(20% - 2px) 20%)}
+  .room-label {font-size:11px;min-height:0;margin-top:7px}
+  .journey {width:780px;max-width:calc(100% - 310px);min-width:0}
+  .steps {gap:22px;margin-top:12px}
+  .step {--planet-size:clamp(220px,16vw,275px);min-height:var(--planet-size);padding-left:12px;gap:18px;}
+  .step:nth-child(2n) {padding-left:clamp(110px,10.5vw,180px)}
+  .planet {width:var(--planet-size);height:var(--planet-size);flex:0 0 var(--planet-size)}
+  .planet-status {width:42px;height:42px;right:5px;bottom:24%;}
+  .planet-status svg {width:22px;height:22px}
+  .step-copy {padding:15px 18px;max-width:300px;flex-shrink:1;border-radius:20px;background:linear-gradient(140deg,#fffaf3c4,#fff7ed9c);}
+  .step-copy h2 {font-size:clamp(18px,1.5vw,25px);letter-spacing:-.045em;line-height:1.15}
+  .step-copy p {font-size:15px}
+  .mission-badge {font-size:13px;border-radius:8px}
+  .step-copy .primary {font-size:18px;min-height:43px;padding:10px 16px;border-radius:14px}
+  .avatar-viewer {right:clamp(45px,3.7vw,68px);top:24vh;width:clamp(235px,16.3vw,275px);--avatar-size:clamp(300px,20.7vw,347px);padding:12px 12px 16px;border-radius:27px;background:linear-gradient(145deg,#fff8f126,#fff4ed3b);}
+  .rotation-control {border-top:1px solid #fff9;margin:0 -12px;padding:10px 15px 0;background:#fff8ee2c}
+  .rotation-control label {font-size:13px}
+  .turn-button {width:32px;height:32px;min-width:32px}
+  .avatar-stage {height:var(--avatar-size)}
+  .avatar-shadow {bottom:1%;height:3%;width:55%;left:22.5%}
+  .topbar {top:20px;right:38px;padding:5px 8px;opacity:.85}
+  .locked .step-copy {background:#fff8f080}
+}
+@media (min-width:1001px) and (max-width:1300px) {
+ .welcome {max-width:calc(100% - 245px)}
+ .welcome h1 {font-size:40px}
+ .welcome > p:first-of-type {font-size:23px}
+ .journey-progress {width:180px;font-size:11px}
+ .welcome-actions {gap:15px}
+ .journey {max-width:calc(100% - 245px)}
+ .step {--planet-size:205px;gap:10px}
+ .step:nth-child(2n) {padding-left:75px}
+ .step-copy {padding:13px;max-width:225px}
+ .step-copy h2 {font-size:18px}
+ .step-copy .primary {font-size:14px}
+ .avatar-viewer {right:30px;width:210px;--avatar-size:280px;top:27vh}
+ .trail-connector {width:95px}
+}
+@media (max-width:1000px) { .trail-connector {display:none} }
+@media (max-height:800px) and (min-width:1001px) {
+ .sidebar nav {gap:1px;margin-top:24px}
+ .menu-collapsed .nav-item,.collapsed .nav-item {min-height:45px;padding:5px 3px;gap:4px}
+ .menu-collapsed .nav-item svg,.collapsed .nav-item svg {width:23px;height:23px}
+ main {padding-top:65px}
+ .welcome h1 {font-size:43px}
+ .welcome > p:first-of-type {font-size:26px;margin-bottom:17px}
+ .welcome .primary {font-size:19px;min-height:48px;padding:12px 24px}
+ .step {--planet-size:220px}
+ .avatar-viewer {--avatar-size:285px;top:25vh}
+}
+@media (min-width:1001px) {
+ .sidebar .nav-item {height:auto;flex-shrink:0;}
+ .sidebar .nav-item .label {overflow:visible;}
+ .welcome h1 {line-height:1.02;margin-bottom:3px;}
+ .welcome > p:first-of-type {margin-bottom:20px;}
+ .room-label {position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);}
+ .steps {margin-top:7px;}
+ .sidebar nav {scrollbar-width:none;}
+}
+/* Céu e globos separados do cenário: proporção circular independente da tela. */
+.space-background {background-image:url("../../../assets/imagens/aluno/inicial/horizonte-sem-planeta.png");}
+.planet-system {position:fixed;inset:0;width:100%;height:100%;z-index:-2;pointer-events:none;}
+.planets-ready .planet-art {clip-path:inset(0 0 65% 0);animation:none;}
+.planets-ready .planet[data-world="4"] .planet-art {visibility:hidden;}
+.planets-ready .cloud {display:none;}
+.planets-ready .planet:hover {scale:1;}
+/* Transição orgânica das construções aprovadas para a superfície em rotação. */
+.planets-ready .planet-art {clip-path:none;mask-image:linear-gradient(to bottom,#000 0 22%,#000b 26%,transparent 35%);-webkit-mask-image:linear-gradient(to bottom,#000 0 22%,#000b 26%,transparent 35%);}
+.planets-ready .planet[data-world="1"] .planet-art,
+.planets-ready .planet[data-world="3"] .planet-art {mask-image:linear-gradient(to bottom,#000 0 17%,#000a 23%,transparent 32%);-webkit-mask-image:linear-gradient(to bottom,#000 0 17%,#000a 23%,transparent 32%);}
+body:not(.planets-ready) .space-background::after {content:"";position:absolute;right:3vw;top:35px;width:clamp(180px,18vw,285px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 30% 25%,#ffdfc9aa,transparent 65%),repeating-linear-gradient(168deg,#c7b1c9 0px,#e6c4ba 12px,#ad9fbd 22px,#d8b6b0 35px);box-shadow:inset -35px -10px 55px #685e8266,0 0 30px #f8e7e333;opacity:.6;}
+.mission-ship {background-image:url("../../../assets/imagens/aluno/inicial/objetos-realistas.png");background-size:300% 100%;background-position:100% center;width:38px;height:38px;}
+
+/* Construção acompanha a órbita do globo; nuvens são renderizadas em casca própria. */
+.planets-ready .planet-art {transform-origin:50% 35%;will-change:transform,opacity;mask-image:linear-gradient(to bottom,#000 0 20%,#0009 24%,transparent 30%);-webkit-mask-image:linear-gradient(to bottom,#000 0 20%,#0009 24%,transparent 30%);}
+.planets-ready .planet[data-world="1"] .planet-art,
+.planets-ready .planet[data-world="3"] .planet-art {mask-image:linear-gradient(to bottom,#000 0 17%,#0008 22%,transparent 29%);-webkit-mask-image:linear-gradient(to bottom,#000 0 17%,#0008 22%,transparent 29%);}
+
+/* Observatório com recorte próprio e base opaca: fica fixo no topo do globo. */
+.planets-ready .planet[data-world="0"] .planet-art {
+ background-image:url("../../../assets/imagens/aluno/inicial/observatorio-base-fixa.png");
+ background-size:contain;background-position:center bottom;
+ left:18%;top:-2%;right:auto;bottom:auto;width:64%;height:38%;
+ mask-image:none;-webkit-mask-image:none;clip-path:none;
+ transform:none;opacity:1;will-change:auto;
+ filter:drop-shadow(0 3px 2px #33272338);
+}
+.planets-ready .planet[data-world="0"]::before {
+ content:"";position:absolute;left:25%;top:25%;width:50%;height:6%;
+ border-radius:50%;background:radial-gradient(ellipse,#25392955,transparent 72%);
+ filter:blur(2px);z-index:1;pointer-events:none;
 }
 
-/* Camada de estrelas responde ao cursor atrás de todo o conteúdo. */
-.home-sky {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
+.planets-ready .planet[data-world="0"]::after {
+ content:"";position:absolute;left:64%;top:3%;width:3px;height:3px;
+ border-radius:50%;background:#ffcf73;box-shadow:0 0 5px #ffc061;
+ z-index:4;pointer-events:none;animation:observatory-beacon 6s ease-in-out infinite;
 }
-@media (max-width: 760px) {
-  .space-background:after {
-    background: linear-gradient(180deg, #fff7eeb0, #fff5e770 58%, #fff2df55);
-  }
-  .landing-intro .intro-detail {
-    color: #52385f;
-  }
-  .step-copy,
-  .current .step-copy,
-  .done .step-copy,
-  .locked .step-copy {
-    background: #fffaf1d9;
-    border: 1px solid #fff9;
-    border-radius: 16px;
-    padding: 10px;
-  }
-  .step p {
-    color: #543b62;
-    font-size: 13px;
-  }
+@keyframes observatory-beacon {0%,70%,100%{opacity:.25}80%,88%{opacity:.9}}
+
+/* Ações da conta: dois círculos com a mesma área de toque e o mesmo centro. */
+.topbar {display:flex;align-items:center;justify-content:center;gap:8px;padding:7px;opacity:1;border-radius:999px;}
+.topbar .icon-button,.topbar .account-button {position:relative;display:grid;place-items:center;width:40px;height:40px;min-width:40px;padding:0;border-radius:50%;border:1px solid #fff9;background:#fff7;}
+.topbar .icon-button svg {width:23px;height:23px;}
+.topbar .account-button span {width:100%;height:100%;border-radius:50%;border:0;}
+.topbar .icon-button:hover,.topbar .account-button:hover {background:#f4e5ff;box-shadow:0 3px 12px #51316a16;}
+.header-tooltip {position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);background:#332044ed;color:#fff;font-size:12px;font-weight:400;line-height:1.3;white-space:nowrap;padding:7px 10px;border-radius:8px;box-shadow:0 4px 12px #38203c15;opacity:0;visibility:hidden;transition:opacity .15s;pointer-events:none;z-index:30;}
+#notifications:hover .header-tooltip,#notifications:focus-visible .header-tooltip {visibility:visible;opacity:1;}
+.profile-popover {position:absolute;right:0;top:calc(100% + 12px);width:320px;max-width:calc(100vw - 36px);padding:16px;border:1px solid #fff;border-radius:22px;background:#fffaf4f7;backdrop-filter:blur(20px);box-shadow:0 12px 40px #39254524;z-index:35;color:#302047;}
+.profile-popover-heading {display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:15px;font-size:10px;letter-spacing:.1em;color:#725a80;}
+.profile-popover-heading button {display:grid;place-items:center;width:30px;height:30px;border-radius:50%;font-size:23px;line-height:1;color:#684478;background:#eee1f3;}
+.profile-popover-person {display:flex;align-items:center;gap:13px;padding-bottom:16px;border-bottom:1px solid #e5d7e7;margin-bottom:7px;}
+.profile-popover-person>div {min-width:0;flex:1;}
+.profile-popover-avatar {display:grid;place-items:center;width:52px;height:52px;flex:0 0 52px;border:1px solid #fff;border-radius:50%;background:linear-gradient(140deg,#e5d1fb,#cdb2e8);color:#623b87;font-size:24px;}
+.profile-popover h2 {font-size:16px;line-height:1.25;margin:0 0 5px;overflow-wrap:anywhere;letter-spacing:-.02em;}
+.profile-popover p {font-size:12px;line-height:1.4;margin:0 0 5px;color:#685071;overflow-wrap:anywhere;}
+.profile-role {font-size:11px;color:#7b6088;}
+.profile-popover-link {display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 9px;border-radius:10px;text-decoration:none;font-size:13px;color:#5e3094;line-height:1.4;}
+.profile-popover-link:hover {background:#eee0fa;}
+.profile-popover-logout {margin-top:10px;padding:11px;width:100%;font-size:13px;border-radius:11px;border:1px solid #dfcee5;background:transparent;color:#684674;}
+.profile-popover-logout:hover {background:#f1e4ef;}
+@media(max-width:800px){.topbar {padding:6px;gap:7px}.topbar .icon-button,.topbar .account-button {width:38px;height:38px;min-width:38px}}
+
+/* Centro de notificações: painel lateral, estado vazio e filtros acessíveis. */
+body.notifications-open {overflow:hidden;}
+dialog.notification-drawer {
+ position:fixed;inset:18px 18px 18px auto;margin:0;
+ width:390px;max-width:calc(100vw - 36px);height:calc(100svh - 36px);max-height:calc(100svh - 36px);
+ padding:25px 22px 20px;border:1px solid #fff;border-radius:25px;
+ background:#fffaf7f7;color:#302047;box-shadow:-12px 8px 50px #3a25452b;
+ overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;
 }
+dialog.notification-drawer[open] {display:flex;flex-direction:column;animation:notification-enter .22s ease-out;}
+dialog.notification-drawer::backdrop {background:#2e1b4229;backdrop-filter:blur(2px);}
+@keyframes notification-enter {from {translate:18px 0;opacity:0}to {translate:0 0;opacity:1}}
+.notification-heading {display:flex;justify-content:space-between;align-items:center;gap:10px;flex-shrink:0;}
+.notification-eyebrow {margin:0 0 5px;font-size:9px;letter-spacing:.13em;line-height:1.4;color:#846b94;}
+.notification-heading h2 {margin:0;font-size:25px;letter-spacing:-.04em;line-height:1.2;}
+.notification-tools {display:flex;align-items:center;gap:5px;}
+.notification-tool {display:grid;place-items:center;width:36px;height:36px;border-radius:50%;padding:0;background:#f0e5f5;color:#705181;text-decoration:none;flex:0 0 36px;}
+.notification-tool svg {width:20px;height:20px;}
+.notification-tool:hover {background:#e6d4f3;}
+.notification-intro {font-size:12px;line-height:1.6;color:#775e83;margin:15px 0 22px;}
+.notification-filters {display:flex;gap:7px;padding:5px;background:#efe4f3;border-radius:13px;flex-shrink:0;}
+.notification-filters button {flex:1;padding:10px 12px;min-height:40px;border-radius:9px;color:#765a87;background:transparent;font-size:13px;line-height:1.3;}
+.notification-filters button[aria-pressed="true"] {background:#fffaf8;color:#5c2d8c;font-weight:700;box-shadow:0 2px 8px #50305c0c;}
+.notification-feed {flex:1;display:flex;align-items:flex-start;min-height:270px;padding:35px 0 30px;}
+.notification-empty {width:100%;text-align:center;padding:0 12px;}
+svg.notification-illustration {display:block;width:150px;height:150px;margin:0 auto 15px;stroke:none;fill:none;}
+.notification-empty h3 {font-size:17px;margin:0 0 9px;line-height:1.35;letter-spacing:-.025em;}
+.notification-empty p {font-size:13px;color:#775f83;margin:0;line-height:1.7;}
+footer.notification-availability {margin:0;padding:17px 3px 0;border-top:1px solid #e9dcea;flex-shrink:0;}
+.notification-preview {font-size:9px;letter-spacing:.1em;color:#82678f;}
+.notification-availability p {margin:7px 0 0;font-size:11px;line-height:1.6;color:#846d8e;}
+body.astro-high-contrast dialog.notification-drawer {background:#fffaf5;color:#231331;}
+body.astro-high-contrast .notification-intro,body.astro-high-contrast .notification-empty p,body.astro-high-contrast .notification-availability p {color:#493351;}
+@media(max-width:500px){dialog.notification-drawer {inset:10px 10px 10px auto;width:calc(100vw - 20px);max-width:calc(100vw - 20px);height:calc(100svh - 20px);max-height:calc(100svh - 20px);border-radius:22px;padding:22px 19px;}.notification-feed {padding-top:26px;}.notification-heading h2 {font-size:24px;}}
+.notification-heading {flex-wrap:wrap;}
+.notification-heading>div:first-child {flex:1 1 160px;min-width:0;}
+.notification-tools {flex:0 0 auto;}
