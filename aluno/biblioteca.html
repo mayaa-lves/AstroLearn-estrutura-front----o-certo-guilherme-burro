@@ -1,21 +1,12 @@
 <!doctype html>
-
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width,initial-scale=1" name="viewport" />
-    <title>Biblioteca · AstroLearn</title>
-    <meta
-      content="Explore leituras e atividades sobre espaço, robótica, ciência e arte."
-      name="description"
-    />
-    <link href="../public/css/aluno-pdf.css" rel="stylesheet" />
-    <link href="../public/css/pages/aluno/biblioteca.css" rel="stylesheet" />
-    <link href="../public/css/menu-pdf.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../public/css/preferencias.css" />
-  </head>
-  <body class="collapsed">
-    <a class="skip" href="#main">Pular para a biblioteca</a>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Biblioteca · AstroLearn</title>
+<link rel="stylesheet" href="../public/css/aluno-pdf.css"><link rel="stylesheet" href="../public/css/menu-pdf.css">
+<link rel="stylesheet" href="../public/css/pages/aluno/biblioteca.css"><link rel="stylesheet" href="../public/css/preferencias.css">
+</head><body class="library-page">
+<div class="library-scene" aria-hidden="true"><div class="window-sky"><img class="library-moon" src="../public/assets/imagens/aluno/biblioteca/lua-biblioteca.png" alt=""><span class="satellite"><svg viewBox="0 0 120 70"><defs><linearGradient id="metal"><stop stop-color="#dce2eb"/><stop offset=".5" stop-color="#7c899b"/><stop offset="1" stop-color="#e5e9ee"/></linearGradient><pattern id="cells" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M0 0H8V8H0Z" fill="#25446a" stroke="#7391ad" stroke-width=".7"/></pattern></defs><path d="M5 21h36v30H5zm74 0h36v30H79z" fill="url(#cells)" stroke="#b0bbc6"/><path d="M39 34h43" stroke="#aab7c8" stroke-width="4"/><path d="M48 19h25v33H48z" fill="url(#metal)"/><path d="M60 19V9m-8 4 8-7 8 7M72 25q20-15 22 0z" fill="#c6cfdb" stroke="#8091a5"/></svg></span></div></div>
+<canvas id="libraryDust" aria-hidden="true"></canvas>
+<a class="skip" href="#main">Pular para a biblioteca</a>
     <aside class="sidebar">
       <a class="brand" href="home.html"
         ><svg aria-hidden="true" viewBox="0 0 40 40">
@@ -27,7 +18,7 @@
             ry="6"
             transform="rotate(-28 20 20)"
           ></ellipse></svg
-        >Astro<span>Learn</span></a
+        ><span class="brand-name">AstroLearn</span></a
       >
       <button
         aria-controls="mainNav"
@@ -51,7 +42,7 @@
               d="M6 3a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm12 12a3 3 0 1 0 0 6 3 3 0 0 0 0-6ZM6 9v3h12v3"
             ></path>
           </svg>
-          <span class="label">Minha trilha</span>
+          <span class="label">Trilha</span>
         </a>
         <a
           aria-current="page"
@@ -84,7 +75,7 @@
               d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM2 21v-3a7 7 0 0 1 14 0v3m1-17a4 4 0 0 1 0 8m2 2a6 6 0 0 1 3 5v2"
             ></path>
           </svg>
-          <span class="label">Minha equipe</span>
+          <span class="label">Equipe</span>
         </a>
         <a aria-label="Perfil" href="perfil.html">
           <svg aria-hidden="true" viewBox="0 0 24 24">
@@ -97,172 +88,21 @@
       </nav>
       <small>Uma descoberta de cada vez.</small>
     </aside>
-    <main id="main" tabindex="-1">
-      <header>
-        <div>
-          <h1>Biblioteca</h1>
-          <p>Um universo de ideias para suas descobertas.</p>
-        </div>
-        <button aria-pressed="false" class="quiet" id="motion" type="button">
-          Pausar animações
-        </button>
-      </header>
-      <p class="preview-note">
-        Materiais introdutórios AstroLearn · favoritos e leitura salvos neste
-        navegador.
-      </p>
-      <p class="storage-notice" id="storageNotice" role="status"></p>
-      <div class="search">
-        <label class="sr-only" for="search">Buscar assunto ou material</label>
-        <svg aria-hidden="true" viewBox="0 0 24 24">
-          <circle cx="10" cy="10" r="6"></circle>
-          <path d="m15 15 6 6"></path>
-        </svg>
-        <input
-          id="search"
-          maxlength="150"
-          placeholder="Busque um assunto ou material"
-          type="search"
-        />
-        <button
-          aria-label="Limpar busca"
-          hidden=""
-          id="clearSearch"
-          type="button"
-        >
-          ×
-        </button>
-      </div>
-      <div class="filter-row">
-        <div aria-label="Filtrar por assunto" class="filters" hidden role="group">
-          <button aria-pressed="true" data-topic="Todos" type="button">
-            Todos
-          </button>
-          <button aria-pressed="false" data-topic="Espaço" type="button">
-            Espaço
-          </button>
-          <button aria-pressed="false" data-topic="Robótica" type="button">
-            Robótica
-          </button>
-          <button aria-pressed="false" data-topic="Ciência" type="button">
-            Ciência
-          </button>
-          <button aria-pressed="false" data-topic="Arte" type="button">
-            Arte
-          </button>
-        </div>
-        <button
-          aria-pressed="false"
-          class="favorite-filter"
-          hidden id="favorites"
-          type="button"
-        >
-          ☆ Favoritos <span id="favoriteCount">0</span>
-        </button>
-      </div>
-      <section
-        aria-labelledby="continueTitle"
-        class="continue-panel"
-        hidden=""
-        id="continuePanel"
-      >
-        <div aria-hidden="true" class="thumb" id="continueThumb"></div>
-        <div>
-          <span class="eyebrow">CONTINUE EXPLORANDO</span>
-          <h2 id="continueTitle"></h2>
-          <p>Retome o material que você abriu por último.</p>
-        </div>
-        <button class="primary" id="continueReading" type="button">
-          Continuar leitura →
-        </button>
-      </section>
-      <div class="section-title">
-        <h2>Materiais para explorar</h2>
-        <p id="resultCount" role="status"></p>
-      </div>
-      <section
-        aria-label="Materiais da biblioteca"
-        class="materials"
-        id="materials"
-      ></section>
-      <div class="empty" hidden="" id="empty">
-        <h2 id="emptyTitle"></h2>
-        <p id="emptyText"></p>
-        <button class="primary" id="reset" type="button">
-          Mostrar todos os materiais
-        </button>
-      </div>
-      <footer>AstroLearn · Aprender, investigar e criar.</footer>
-    </main>
-    <button
-      aria-label="Ajuda da biblioteca"
-      class="helper"
-      id="helper"
-      type="button"
-    >
-      <span aria-hidden="true" class="helper-image"> </span>
-      <span class="helper-tip">Encontre sua próxima descoberta.</span>
-    </button>
-    <dialog aria-labelledby="readerTitle" id="reader">
-      <button
-        aria-label="Fechar material"
-        class="close"
-        data-close=""
-        type="button"
-      >
-        ×
-      </button>
-      <span class="eyebrow" id="readerMeta"> </span>
-      <h2 id="readerTitle"></h2>
-      <div id="readerContent"></div>
-      <section class="reflection">
-        <h3>Para pensar</h3>
-        <p id="question"></p>
-        <details>
-          <summary>Ver uma pista</summary>
-          <p id="hint"></p>
-        </details>
-      </section>
-      <div id="sources"></div>
-      <div class="reader-actions">
-        <button
-          aria-pressed="false"
-          class="secondary"
-          id="saveInReader"
-          type="button"
-        >
-          Salvar nos favoritos
-        </button>
-        <button class="secondary" id="download" type="button">
-          Baixar roteiro TXT
-        </button>
-        <button class="primary" id="markRead" type="button">
-          Marcar como lido
-        </button>
-      </div>
-      <p id="readingStatus" role="status"></p>
-      <p class="demo-info">
-        Marcar como lido é uma organização pessoal e não conclui missões nem
-        concede notas.
-      </p>
-    </dialog>
-    <dialog aria-labelledby="infoTitle" id="info">
-      <button
-        aria-label="Fechar aviso"
-        class="close"
-        data-close=""
-        type="button"
-      >
-        ×
-      </button>
-      <h2 id="infoTitle"></h2>
-      <p id="infoText"></p>
-      <button class="primary" data-close="" type="button">Entendi</button>
-    </dialog>
-    <script defer="True" type="module" src="../public/js/pages/aluno/biblioteca.js"></script>
-    <script defer="True" src="../public/js/components/estrelas-pdf.js"></script>
-    <script defer="True" src="../public/js/components/menu-pdf.js"></script>
-    <script src="../public/js/components/preferencias.js"></script>
-  <script type="module" src="../public/js/components/sessao.js"></script>
-</body>
-</html>
+
+<main id="main" tabindex="-1">
+<header class="library-heading"><div><p class="eyebrow">ESTAÇÃO DO CONHECIMENTO</p><h1>Biblioteca</h1><p>Explore ideias para sua próxima descoberta.</p></div><div class="library-account-tools"><button class="notification-circle" id="libraryBell" type="button" aria-label="Abrir notificações" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M9 21h6"/></svg></button><a class="profile-circle" href="perfil.html" aria-label="Abrir meu perfil"><span id="profileInitial">M</span><span class="profile-tip">Meu perfil</span></a></div></header>
+<div class="library-content">
+<div class="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/></svg><label class="sr-only" for="search">Buscar assunto ou material</label><input id="search" type="search" maxlength="150" placeholder="Busque um assunto ou material"><button id="clearSearch" type="button" aria-label="Limpar busca" hidden>×</button></div>
+<div class="filters" role="group" aria-label="Filtrar materiais"><button id="allFilter" type="button" aria-pressed="true">Todos</button><button id="favorites" type="button" aria-pressed="false">Favoritos <span id="favoriteCount">0</span></button></div>
+<div class="section-title"><div><h2>Materiais da sua turma</h2><p id="resultCount" role="status">Carregando materiais…</p></div><button id="refresh" class="text-button" type="button">↻ Atualizar</button></div>
+<p id="storageNotice" class="storage-notice" role="status"></p><p id="error" class="error-panel" role="alert" hidden></p>
+<section class="materials" id="materials" aria-label="Materiais da biblioteca" aria-busy="true"></section>
+<div id="empty" class="empty" hidden><h2 id="emptyTitle"></h2><p id="emptyText"></p><button id="reset" type="button" class="secondary">Mostrar todos os materiais</button></div>
+<footer>AstroLearn · Aprender, investigar e criar.</footer></div>
+</main>
+<dialog id="reader" aria-labelledby="readerTitle"><button class="close" id="closeReader" type="button" aria-label="Fechar material">×</button><p class="eyebrow" id="readerMeta">MATERIAL DA TURMA</p><h2 id="readerTitle"></h2><p id="readerDescription"></p><p id="readerMission" class="hint"></p><h3>Arquivos e links</h3><div id="readerLinks"></div><p id="readerLinkHint" class="hint">Os links abrem em uma nova aba.</p><button id="saveInReader" class="secondary" type="button" aria-pressed="false">Salvar nos favoritos</button></dialog>
+<dialog id="libraryNotifications" aria-labelledby="libraryNotificationsTitle"><button type="button" class="close" id="closeNotifications" aria-label="Fechar notificações">×</button><p class="eyebrow">SUA EXPEDIÇÃO</p><h2 id="libraryNotificationsTitle">Notificações</h2><p class="hint">As notificações da turma ainda não estão conectadas nesta página.</p></dialog>
+<script src="../public/js/pages/aluno/biblioteca-menu.js"></script><script src="../public/js/components/preferencias.js"></script><script type="module" src="../public/js/components/sessao.js"></script>
+<script type="module" src="../public/js/pages/aluno/biblioteca.js"></script><script src="../public/js/pages/aluno/biblioteca-cenario.js" defer></script>
+<script src="../public/js/pages/aluno/biblioteca-lua.js" defer></script>
+</body></html>

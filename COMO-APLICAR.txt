@@ -1,9 +1,37 @@
-AstroLearn — ajuste v8 (aplicar sobre a versão v7 já instalada)
+ASTROLEARN — BIBLIOTECA E CONTA v11
+Aplicar sobre o projeto atual (v10; versões v7/v8 já instaladas).
 
 1. Extraia este ZIP.
-2. Copie as pastas aluno e public para a pasta principal do projeto.
-3. Confirme a substituição dos dois arquivos existentes.
-4. Atualize a página com Ctrl + Shift + R.
+2. Copie aluno e public para a raiz do projeto, substituindo os arquivos.
+3. Atualize as páginas com Ctrl + Shift + R.
 
-Ajustes: casinha corrigida e nuvens discretas em movimento atrás dos cartões.
-As nuvens respeitam a preferência de reduzir movimento. As demais funções permanecem como na v7.
+CORREÇÕES
+- Capas preservam a proporção. O recorte substitui o esticamento.
+- Partículas mais visíveis, repulsão ao mouse e um rastro curto em áreas livres.
+- Clique no fundo cria uma estrela exatamente onde foi clicado.
+- Lua renderizada como esfera com textura e rotação longitudinal suave de 360 graus.
+- Perfil e casinha compartilhados pelas páginas internas. A trilha conserva seu sino.
+- Perfil abre por hover, clique ou teclado, com nome, e-mail, preferências e sair.
+- A página de atividade conserva o cabeçalho equivalente já instalado na v7.
+- Botões de pausar das outras áreas ficam ocultos. O controle permanece no Perfil.
+
+O cabeçalho compartilhado é carregado pelo preferencias.js, já presente nas páginas.
+Os arquivos HTML das demais áreas não são substituídos por versões antigas.
+Na área do professor, a conta mostra os dados e a saída; links para perfil e
+preferências ficam ocultos porque essas páginas não existem no projeto recebido.
+
+ACESSIBILIDADE E DESEMPENHO
+Rotação e partículas respeitam o Perfil e a preferência de reduzir movimentos do
+sistema. Sem WebGL, a Lua mantém a imagem estática. A animação é decorativa,
+limitada e não bloqueia cliques nos materiais.
+
+DADOS
+Mantém GET /api/aluno/biblioteca, títulos, descrições e links reais.
+Favoritos continuam locais por conta/navegador. Capas são ilustrações por assunto.
+O assistente existente continua sendo um guia local sem IA.
+Não exige alterações no backend.
+
+VALIDAÇÃO
+Testes locais com API simulada: busca, favoritos, leitura e links, conta por hover,
+Escape, casinha nas áreas do aluno, Lua girando e parada pelas preferências,
+estrela na posição do clique, celular e ausência de erros na biblioteca.
