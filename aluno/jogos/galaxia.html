@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Universo de desafios · AstroLearn</title>
+  <link rel="stylesheet" href="../../public/css/menu-pdf.css">
+  <link rel="stylesheet" href="../../public/css/pages/aluno/jogos/index.css">
+  <link rel="stylesheet" href="../../public/css/preferencias.css">
+  <link rel="stylesheet" href="../../public/css/pages/aluno/jogos/universo.css">
+</head>
+
+<body class="games-portal collapsed galaxia universe-mode" data-view="galaxia">
+  <a class="skip" href="#main">Pular para o conteúdo</a>
+  <aside class="sidebar" data-base="../">
+    <a class="brand" href="../home.html"><svg aria-hidden="true" viewbox="0 0 40 40">
+        <circle cx="20" cy="20" r="9"></circle>
+        <ellipse cx="20" cy="20" rx="18" ry="6" transform="rotate(-28 20 20)"></ellipse>
+      </svg>Astro<span>Learn</span></a>
+    <button aria-controls="mainNav" aria-expanded="true" aria-label="Recolher menu" id="menuToggle" type="button">
+      ‹‹
+    </button>
+    <nav aria-label="Navegação principal" id="mainNav">
+      <a aria-label="Início" href="../home.html">
+        <svg aria-hidden="true" viewbox="0 0 24 24">
+          <path d="M3 10 12 3l9 7v10H3Zm6 10v-7h6v7"></path>
+        </svg>
+        <span class="label">Início</span>
+      </a>
+      <a aria-label="Minha trilha" href="../home.html#journey">
+        <svg aria-hidden="true" viewbox="0 0 24 24">
+          <path d="M6 3a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm12 12a3 3 0 1 0 0 6 3 3 0 0 0 0-6ZM6 9v3h12v3"></path>
+        </svg>
+        <span class="label">Minha trilha</span>
+      </a>
+      <a aria-label="Biblioteca" href="../biblioteca.html">
+        <svg aria-hidden="true" viewbox="0 0 24 24">
+          <path d="M12 5C9 3 5 3 2 4v16c4-1 7-1 10 1 3-2 6-2 10-1V4c-3-1-7-1-10 1Zm0 0v16"></path>
+        </svg>
+        <span class="label">Biblioteca</span>
+      </a>
+      <a aria-label="Conquistas" href="../conquistas.html">
+        <svg aria-hidden="true" viewbox="0 0 24 24">
+          <path d="m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1Z"></path>
+        </svg>
+        <span class="label">Conquistas</span>
+      </a>
+      <a aria-label="Loja" href="../loja.html">
+        <svg aria-hidden="true" viewbox="0 0 24 24">
+          <path d="M3 9h18v12H3ZM2 9l3-6h14l3 6M9 21v-7h6v7"></path>
+        </svg>
+        <span class="label">Loja</span>
+      </a>
+      <a aria-label="Minha equipe" href="../equipe.html">
+        <svg aria-hidden="true" viewbox="0 0 24 24">
+          <path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM2 21v-3a7 7 0 0 1 14 0v3m1-17a4 4 0 0 1 0 8m2 2a6 6 0 0 1 3 5v2">
+          </path>
+        </svg>
+        <span class="label">Minha equipe</span>
+      </a>
+      <a aria-label="Perfil" href="../perfil.html">
+        <svg aria-hidden="true" viewbox="0 0 24 24">
+          <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10ZM3 22a9 9 0 0 1 18 0"></path>
+        </svg>
+        <span class="label">Perfil</span>
+      </a>
+    </nav>
+    <small>Uma descoberta de cada vez.</small>
+  </aside>
+  <main id="main" class="universe-page" tabindex="-1">
+    <section id="universeViewport" aria-description="Cenário ilustrativo, sem escala astronômica."
+      aria-label="Universo de desafios. Arraste para explorar ou use os botões de navegação.">
+      <div class="universe-sky" aria-hidden="true"></div>
+      <canvas id="universeStars" aria-hidden="true"></canvas>
+      <canvas id="universePlanets" aria-hidden="true"></canvas>
+      <div id="universeObjects" aria-label="Destinos dos jogos">
+        <button id="planet-robo" class="planet-target planet-robo" data-game="robo" type="button"
+          aria-label="Selecionar Rota do robô" aria-pressed="false"><span class="fallback-sphere"
+            aria-hidden="true"></span><span class="planet-label"><strong>Rota do
+              robô</strong><small>ROBÓTICA</small></span></button>
+        <button id="planet-crew" class="planet-target planet-crew" data-game="crew" type="button"
+          aria-label="Selecionar Cosmo Crew" aria-pressed="false"><span class="fallback-sphere"
+            aria-hidden="true"></span><span class="planet-label"><strong>Cosmo
+              Crew</strong><small>COOPERAÇÃO</small></span></button>
+        <button id="planet-quiz" class="planet-target planet-quiz" data-game="quiz" type="button"
+          aria-label="Selecionar Quiz orbital" aria-pressed="false"><span class="fallback-sphere"
+            aria-hidden="true"></span><span class="planet-label"><strong>Quiz
+              orbital</strong><small>UNIVERSO</small></span></button>
+        <span id="universeShip" class="universe-ship sprite shuttle" aria-hidden="true"></span>
+        <span id="universeStation" class="universe-station sprite station" aria-hidden="true"></span>
+        <span id="universeRover" class="universe-rover sprite rover" aria-hidden="true"></span>
+      </div>
+      <header class="universe-header">
+        <h1>Universo de desafios</h1>
+        <p>Escolha um destino. Comece uma descoberta.</p>
+      </header>
+      <nav class="universe-top-actions" aria-label="Navegação do universo"><button type="button" data-preview>Prévia
+          local</button><a href="index.html">← Voltar</a><a href="../home.html#journey"
+          aria-label="Voltar para a trilha"><svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m3 10 9-7 9 7v11h-6v-7H9v7H3Z" />
+          </svg></a></nav>
+      <section id="destinationPanel" class="destination-panel" aria-labelledby="selectedTitle" hidden>
+        <button id="closeDestination" type="button" class="panel-close"
+          aria-label="Fechar destino selecionado">×</button>
+        <p class="eyebrow">DESTINO SELECIONADO</p>
+        <h2 id="selectedTitle"></h2>
+        <p id="selectedDescription"></p>
+        <p id="selectedProgress" class="selected-progress"></p>
+        <div class="destination-actions"><button id="showInstructions" class="secondary" type="button"
+            aria-haspopup="dialog">Como jogar</button><a id="startSelected" class="primary">Iniciar missão →</a></div>
+      </section>
+      <div class="universe-bottom">
+        <div class="universe-camera" role="group" aria-label="Controles da câmera"><button id="zoomOut" type="button"
+            aria-label="Diminuir aproximação">−</button><output id="zoomValue" aria-live="off">100%</output><button
+            id="zoomIn" type="button" aria-label="Aumentar aproximação">+</button><button id="resetUniverse"
+            type="button" aria-label="Centralizar universo" title="Centralizar universo">◎</button><button
+            id="openDestinations" type="button" aria-haspopup="dialog">Destinos</button></div>
+        <p id="universeHint">Arraste para explorar · Use + e − para aproximar</p>
+      </div>
+      <p id="universeStatus" class="universe-status" role="status" aria-live="polite"></p>
+      <section id="blockedState" class="blocked-state universe-blocked" aria-labelledby="blockedTitle" hidden><svg
+          class="lock-icon" viewBox="0 0 32 32" aria-hidden="true">
+          <rect x="6" y="14" width="20" height="15" rx="3" />
+          <path d="M10 14V9a6 6 0 0 1 12 0v5m-6 7v3" />
+        </svg>
+        <p class="preview-badge">SIMULAÇÃO LOCAL · SEM CONTROLE REAL</p>
+        <h2 id="blockedTitle">Hora de focar nas atividades</h2>
+        <p>Este é o visual previsto para quando o professor pausar os jogos. A integração ainda não está disponível.</p>
+        <a class="primary" href="../home.html#journey">Voltar para a trilha</a><button class="text-button" type="button"
+          data-preview>Encerrar simulação</button>
+      </section>
+      <span id="accessState" class="sr-only" role="status">Prévia: acesso liberado</span>
+    </section>
+  </main>
+  <dialog id="destinationsDialog" aria-labelledby="destinationsTitle"><button type="button" class="dialog-close"
+      data-close aria-label="Fechar lista">×</button>
+    <p class="eyebrow">EXPLORAÇÃO ACESSÍVEL</p>
+    <h2 id="destinationsTitle">Escolha um destino</h2>
+    <p>Os mesmos jogos, sem precisar arrastar o cenário.</p>
+    <div class="destination-list"><button type="button" data-game="robo">Rota do robô <span>Robótica · 3
+          desafios</span></button><button type="button" data-game="quiz">Quiz orbital <span>Universo · 6
+          perguntas</span></button><button type="button" data-game="crew">Cosmo Crew <span>Cooperação · turnos
+          locais</span></button></div>
+    <p class="hint">Resultados e progresso ficam apenas neste navegador.</p>
+  </dialog>
+  <dialog id="gameDialog" aria-labelledby="gameTitle" aria-describedby="gameDescription">
+    <button class="dialog-close" type="button" data-close aria-label="Fechar detalhes">×</button>
+    <div id="dialogArt" class="dialog-art" aria-hidden="true"><span class="sprite rover"></span></div>
+    <p id="gameCategory" class="eyebrow"></p>
+    <h2 id="gameTitle"></h2>
+    <p id="gameDescription"></p>
+    <div class="game-detail-meta"><span id="gameMode"></span><span>Sem cronômetro</span></div>
+    <h3>Como jogar</h3>
+    <ol id="gameInstructions"></ol>
+    <p class="hint">Progresso salvo apenas neste navegador. Nenhuma moeda ou conquista da plataforma é concedida.</p>
+    <a id="launchGame" class="primary">Começar missão →</a>
+  </dialog>
+  <dialog id="previewDialog" aria-labelledby="previewTitle">
+    <button class="dialog-close" type="button" data-close aria-label="Fechar prévia">×</button>
+    <p class="eyebrow">PRÉVIA PARA APRESENTAÇÃO</p>
+    <h2 id="previewTitle">Controle de acesso</h2>
+    <p>Simulação local. Este controle não altera permissões reais nem comunica mudanças ao professor.</p>
+    <label class="preview-control" for="previewBlocked"><span>Simular acesso bloqueado nesta aba</span><input
+        id="previewBlocked" type="checkbox" role="switch"></label>
+    <p id="previewStatus" role="status" class="hint"></p>
+    <button type="button" class="primary" data-close>Concluir prévia</button>
+  </dialog>
+  <script src="../../public/js/components/preferencias.js"></script>
+  <script src="../../public/js/components/menu-pdf.js"></script>
+  <script type="module" src="../../public/js/components/sessao.js"></script>
+  <script type="module" src="../../public/js/pages/aluno/jogos/index.js"></script>
+</body>
+
+</html>

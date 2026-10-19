@@ -1,61 +1,198 @@
-import { sessaoObrigatoria, api } from "../services/conexao.js";
+import {
+  sessaoObrigatoria,
+  api
+} from "../services/conexao.js";
+
 import { dashboard } from "../services/aluno.js";
 import { CONFIG } from "../config.js";
-const s = sessaoObrigatoria("aluno");
-document
-  .querySelectorAll(".school-details strong")
-  .forEach((e) => (e.textContent = "Carregando…"));
-const name = document.getElementById("studentName");
-name.textContent = s.usuario.nome;
-const info = document.querySelector(".identity-copy p");
-info.textContent = s.usuario.email || "Aluno";
-document.querySelector(".identity-actions small").textContent =
-  "Dados da conta";
-const edit = document.getElementById("editName");
-edit.disabled = true;
-edit.title = "Atualização de nome ainda depende do backend";
-const note = document.createElement("p");
-note.textContent =
-  "As preferências de acessibilidade e o visual escolhido ficam neste navegador. Alterações de nome e roupas ainda não são sincronizadas com sua conta.";
-document.querySelector(".identity-card").after(note);
-const input = document.createElement("input");
-input.type = "file";
-input.accept = "image/png,image/jpeg,image/webp,image/gif";
-input.id = "avatarFile";
-const label = document.createElement("label");
-label.htmlFor = input.id;
-label.textContent = "Enviar imagem de perfil";
-const status = document.createElement("p");
-status.setAttribute("role", "status");
-document.querySelector(".identity-actions").append(label, input, status);
-input.onchange = async () => {
-  const f = input.files[0];
-  if (!f) return;
-  if (f.size > 5 * 1024 * 1024) {
-    status.textContent = "Escolha uma imagem de até 5 MB.";
+
+const session = sessaoObrigatoria("aluno");
+const $ = id => document.getElementById(id);
+const user = session.usuario;
+
+const allowed = [
+  "image/png",
+  "image/jpeg",
+  "image/webp",
+  "image/gif"
+];
+
+$("studentName").textContent = user.nome || "Aluno";
+
+$("studentEmail").textContent =
+  user.email || "E-mail não informado na sessão";
+
+$("avatarInitials").textContent = (user.nome || "Aluno")
+  .trim()
+  .split(/\s+/)
+  .slice(0, 2)
+  .map(part => part[0])
+  .join("")
+  .toLocaleUpperCase("pt-BR");
+
+function imageURL(raw) {
+  try {
+    const url = new URL(raw);
+
+    return (
+      ["https:", "http:"].includes(url.protocol) &&
+      !url.username &&
+      !url.password
+    )
+      ? url.href
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+function showAvatar(raw) {
+  const url = imageURL(raw);
+  const img = $("avatarImage");
+
+  img.hidden = true;
+
+  if (!url) {
+    img.removeAttribute("src");
     return;
   }
+
+  img.onload = () => {
+    img.hidden = false;
+  };
+
+  img.onerror = () => {
+    img.hidden = true;
+  };
+
+  img.src = url;
+}
+
+showAvatar(user.avatar_url);
+
+$("changePhoto").addEventListener("click", () => {
+  $("avatarFile").click();
+});
+
+$("avatarFile").addEventListener("change", async () => {
+  const input = $("avatarFile");
+  const file = input.files?.[0];
+
+  if (!file) return;
+
+  if (
+    !allowed.includes(file.type) ||
+    !/\.(png|jpe?g|webp|gif)$/i.test(file.name)
+  ) {
+    $("avatarStatus").textContent =
+      "Use uma imagem PNG, JPG, WebP ou GIF.";
+
+    input.value = "";
+    return;
+  }
+
+  if (!file.size || file.size > 5 * 1024 * 1024) {
+    $("avatarStatus").textContent =
+      "Escolha uma imagem de até 5 MB que não esteja vazia.";
+
+    input.value = "";
+    return;
+  }
+
   input.disabled = true;
+  $("changePhoto").disabled = true;
+  $("avatarStatus").textContent = "Enviando foto…";
+
   const data = new FormData();
-  data.append("avatar", f);
+  data.append("avatar", file);
+
   try {
-    const d = await api("/api/perfil/avatar", "POST", data);
-    s.usuario.avatar_url = d.avatar_url;
-    sessionStorage.setItem(CONFIG.chaveSessao, JSON.stringify(s));
-    status.textContent = "Imagem de perfil salva na conta.";
-  } catch (e) {
-    status.textContent = e.message;
+    const result = await api(
+      "/api/perfil/avatar",
+      "POST",
+      data
+    );
+
+    const url = imageURL(result?.avatar_url);
+
+    if (!url) {
+      throw new Error(
+        "O servidor não retornou uma URL válida para a foto. " +
+        "Atualize a página para conferir o envio."
+      );
+    }
+
+    user.avatar_url = url;
+    showAvatar(url);
+
+    try {
+      const current = JSON.parse(
+        sessionStorage.getItem(CONFIG.chaveSessao) || "null"
+      );
+
+      if (
+        current?.usuario?.id !== user.id ||
+        current?.token !== session.token
+      ) {
+        throw new Error("Sessão alterada");
+      }
+
+      current.usuario.avatar_url = url;
+
+      sessionStorage.setItem(
+        CONFIG.chaveSessao,
+        JSON.stringify(current)
+      );
+
+      $("avatarStatus").textContent =
+        "Foto salva na sua conta.";
+    } catch {
+      $("avatarStatus").textContent =
+        "Foto salva na conta, mas não foi possível atualizar " +
+        "a sessão deste navegador. Faça login novamente se " +
+        "a foto antiga continuar aparecendo.";
+    }
+  } catch (error) {
+    $("avatarStatus").textContent =
+      error.message ||
+      "Não foi possível enviar a foto. Tente novamente.";
   } finally {
     input.disabled = false;
+    input.value = "";
+    $("changePhoto").disabled = false;
   }
-};
-dashboard()
-  .then((d) => {
-    const fields = [...document.querySelectorAll(".school-details strong")];
-    if (fields[0]) fields[0].textContent = d.sala?.nome || "Sem turma";
-    if (fields[1]) fields[1].textContent = d.equipe?.nome || "Sem equipe";
-    document
-      .querySelectorAll(".school-details p")
-      .forEach((e) => (e.textContent = "Dados da sua turma"));
-  })
-  .catch((e) => (status.textContent = e.message));
+});
+
+async function loadSchool() {
+  $("retrySchool").disabled = true;
+  $("retrySchool").hidden = true;
+  $("schoolError").textContent = "";
+
+  $("roomName").textContent = "Carregando…";
+  $("teamName").textContent = "Carregando…";
+
+  try {
+    const data = await dashboard();
+
+    $("roomName").textContent =
+      data.sala?.nome || "Sem turma";
+
+    $("teamName").textContent =
+      data.equipe?.nome || "Não vinculada";
+  } catch (error) {
+    $("roomName").textContent = "Não disponível";
+    $("teamName").textContent = "Não disponível";
+
+    $("schoolError").textContent =
+      error.message ||
+      "Não foi possível consultar sua turma.";
+
+    $("retrySchool").hidden = false;
+  } finally {
+    $("retrySchool").disabled = false;
+  }
+}
+
+$("retrySchool").addEventListener("click", loadSchool);
+
+loadSchool();

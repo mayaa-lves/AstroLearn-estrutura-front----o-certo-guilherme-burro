@@ -1,195 +1,127 @@
 <!doctype html>
-
 <html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width,initial-scale=1" name="viewport" />
-    <title>Jogos · AstroLearn</title>
-    <link href="../../public/css/aluno-pdf.css" rel="stylesheet" />
-    <link href="../../public/css/pages/aluno/extra.css" rel="stylesheet" />
-    <link
-      href="../../public/css/pages/aluno/jogos/index.css"
-      rel="stylesheet"
-    />
-    <link href="../../public/css/menu-pdf.css" rel="stylesheet" />
-    <link href="../../public/css/preferencias.css" rel="stylesheet" />
-  </head>
-  <body class="collapsed games-page">
-    <a class="skip" href="#main">Pular para o conteúdo</a>
-    <aside class="sidebar" data-base="../">
-      <a class="brand" href="../home.html"
-        ><svg aria-hidden="true" viewbox="0 0 40 40">
-          <circle cx="20" cy="20" r="9"></circle>
-          <ellipse
-            cx="20"
-            cy="20"
-            rx="18"
-            ry="6"
-            transform="rotate(-28 20 20)"
-          ></ellipse></svg
-        >Astro<span>Learn</span></a
-      >
-      <button
-        aria-controls="mainNav"
-        aria-expanded="true"
-        aria-label="Recolher menu"
-        id="menuToggle"
-        type="button"
-      >
-        ‹‹
-      </button>
-      <nav aria-label="Navegação principal" id="mainNav">
-        <a aria-label="Início" href="../home.html">
-          <svg aria-hidden="true" viewbox="0 0 24 24">
-            <path d="M3 10 12 3l9 7v10H3Zm6 10v-7h6v7"></path>
-          </svg>
-          <span class="label">Início</span>
-        </a>
-        <a aria-label="Minha trilha" href="../home.html#journey">
-          <svg aria-hidden="true" viewbox="0 0 24 24">
-            <path
-              d="M6 3a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm12 12a3 3 0 1 0 0 6 3 3 0 0 0 0-6ZM6 9v3h12v3"
-            ></path>
-          </svg>
-          <span class="label">Minha trilha</span>
-        </a>
-        <a aria-label="Biblioteca" href="../biblioteca.html">
-          <svg aria-hidden="true" viewbox="0 0 24 24">
-            <path
-              d="M12 5C9 3 5 3 2 4v16c4-1 7-1 10 1 3-2 6-2 10-1V4c-3-1-7-1-10 1Zm0 0v16"
-            ></path>
-          </svg>
-          <span class="label">Biblioteca</span>
-        </a>
-        <a aria-label="Conquistas" href="../conquistas.html">
-          <svg aria-hidden="true" viewbox="0 0 24 24">
-            <path d="m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1Z"></path>
-          </svg>
-          <span class="label">Conquistas</span>
-        </a>
-        <a aria-label="Loja" href="../loja.html">
-          <svg aria-hidden="true" viewbox="0 0 24 24">
-            <path d="M3 9h18v12H3ZM2 9l3-6h14l3 6M9 21v-7h6v7"></path>
-          </svg>
-          <span class="label">Loja</span>
-        </a>
-        <a aria-label="Minha equipe" href="../equipe.html">
-          <svg aria-hidden="true" viewbox="0 0 24 24">
-            <path
-              d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM2 21v-3a7 7 0 0 1 14 0v3m1-17a4 4 0 0 1 0 8m2 2a6 6 0 0 1 3 5v2"
-            ></path>
-          </svg>
-          <span class="label">Minha equipe</span>
-        </a>
-        <a aria-label="Perfil" href="../perfil.html">
-          <svg aria-hidden="true" viewbox="0 0 24 24">
-            <path
-              d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10ZM3 22a9 9 0 0 1 18 0"
-            ></path>
-          </svg>
-          <span class="label">Perfil</span>
-        </a>
-      </nav>
-      <small>Uma descoberta de cada vez.</small>
-    </aside>
-    <main id="main" tabindex="-1">
-      <header class="page-header">
-        <div>
-          <h1>Laboratório de jogos</h1>
-          <p>Pequenas missões. Grandes descobertas.</p>
-        </div>
-        <a class="soft-link" href="../home.html#journey">Voltar à trilha</a>
-      </header>
-      <section class="game-hero panel">
-        <div>
-          <span class="chip">Espaço + robótica</span>
-          <h2>Aprenda fazendo.</h2>
-          <p>
-            Planeje uma rota, investigue o universo e cuide da sua tripulação.
-            Escolha uma missão e veja como jogar antes de começar.
-          </p>
-          <p class="muted">
-            Sem cronômetro. Você pode tentar novamente quantas vezes quiser.
-          </p>
-        </div>
-        <div aria-hidden="true" class="hero-planet"></div>
-      </section>
-      <div aria-label="Filtrar jogos" class="game-filters" role="group">
-        <button aria-pressed="true" class="secondary" data-filter="todos">
-          Todos</button
-        ><button aria-pressed="false" class="secondary" data-filter="robotica">
-          Robótica</button
-        ><button aria-pressed="false" class="secondary" data-filter="universo">
-          Universo</button
-        ><button aria-pressed="false" class="secondary" data-filter="equipe">
-          Cooperação
-        </button>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Laboratório de jogos · AstroLearn</title>
+  <link rel="stylesheet" href="../../public/css/menu-pdf.css">
+  <link rel="stylesheet" href="../../public/css/pages/aluno/jogos/index.css">
+  <link rel="stylesheet" href="../../public/css/preferencias.css">
+</head>
+
+<body class="games-portal collapsed entrada" data-view="entrada">
+  <a class="skip" href="#main">Pular para o conteúdo</a>
+  <aside class="sidebar" data-base="../">
+    <a class="brand" href="../home.html"><svg aria-hidden="true" viewbox="0 0 40 40">
+        <circle cx="20" cy="20" r="9"></circle>
+        <ellipse cx="20" cy="20" rx="18" ry="6" transform="rotate(-28 20 20)"></ellipse>
+      </svg>Astro<span>Learn</span></a>
+    <button aria-controls="mainNav" aria-expanded="true" aria-label="Recolher menu" id="menuToggle" type="button">
+      ‹‹
+    </button>
+    <nav aria-label="Navegação principal" id="mainNav">
+      <a aria-label="Início" href="../home.html">
+        <svg aria-hidden="true" viewbox="0 0 24 24">
+          <path d="M3 10 12 3l9 7v10H3Zm6 10v-7h6v7"></path>
+        </svg>
+        <span class="label">Início</span>
+      </a>
+      <a aria-label="Minha trilha" href="../home.html#journey">
+        <svg aria-hidden="true" viewbox="0 0 24 24">
+          <path d="M6 3a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm12 12a3 3 0 1 0 0 6 3 3 0 0 0 0-6ZM6 9v3h12v3"></path>
+        </svg>
+        <span class="label">Minha trilha</span>
+      </a>
+      <a aria-label="Biblioteca" href="../biblioteca.html">
+        <svg aria-hidden="true" viewbox="0 0 24 24">
+          <path d="M12 5C9 3 5 3 2 4v16c4-1 7-1 10 1 3-2 6-2 10-1V4c-3-1-7-1-10 1Zm0 0v16"></path>
+        </svg>
+        <span class="label">Biblioteca</span>
+      </a>
+      <a aria-label="Conquistas" href="../conquistas.html">
+        <svg aria-hidden="true" viewbox="0 0 24 24">
+          <path d="m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1Z"></path>
+        </svg>
+        <span class="label">Conquistas</span>
+      </a>
+      <a aria-label="Loja" href="../loja.html">
+        <svg aria-hidden="true" viewbox="0 0 24 24">
+          <path d="M3 9h18v12H3ZM2 9l3-6h14l3 6M9 21v-7h6v7"></path>
+        </svg>
+        <span class="label">Loja</span>
+      </a>
+      <a aria-label="Minha equipe" href="../equipe.html">
+        <svg aria-hidden="true" viewbox="0 0 24 24">
+          <path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM2 21v-3a7 7 0 0 1 14 0v3m1-17a4 4 0 0 1 0 8m2 2a6 6 0 0 1 3 5v2">
+          </path>
+        </svg>
+        <span class="label">Minha equipe</span>
+      </a>
+      <a aria-label="Perfil" href="../perfil.html">
+        <svg aria-hidden="true" viewbox="0 0 24 24">
+          <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10ZM3 22a9 9 0 0 1 18 0"></path>
+        </svg>
+        <span class="label">Perfil</span>
+      </a>
+    </nav>
+    <small>Uma descoberta de cada vez.</small>
+  </aside>
+  <main id="main" tabindex="-1">
+    <header class="portal-header">
+      <div>
+        <p class="eyebrow">LABORATÓRIO DE JOGOS</p>
+        <h1>Pronto para explorar?</h1>
+        <p>Desafios de ciência, espaço e robótica esperam por você.</p>
       </div>
-      <section aria-label="Jogos disponíveis" class="game-grid">
-        <article class="game-card panel" data-kind="robotica">
-          <div aria-hidden="true" class="game-art art-robo">
-            <svg viewbox="0 0 120 100">
-              <path
-                d="M60 17V6m-4 0h8M25 25h70v50H25ZM15 39H9v24h6m90-24h6v24h-6M37 83v9m46-9v9"
-              ></path>
-              <circle cx="43" cy="45" r="5"></circle>
-              <circle cx="77" cy="45" r="5"></circle>
-              <path d="M43 63h34"></path>
-            </svg>
-          </div>
-          <span class="chip">Lógica + sequências</span>
-          <h2>Rota do robô</h2>
-          <p>
-            Programe seu explorador para chegar à base sem esbarrar nas rochas.
-          </p>
-          <a class="primary" href="robo-rota.html">Ver missão</a
-          ><small class="muted" id="roboProgress"
-            >3 desafios de programação</small
-          >
-        </article>
-        <article class="game-card panel" data-kind="universo">
-          <div aria-hidden="true" class="game-art art-quiz"></div>
-          <span class="chip">Ciência + curiosidade</span>
-          <h2>Quiz orbital</h2>
-          <p>
-            Investigue planetas e o movimento dos astros. Cada resposta vem com
-            uma explicação.
-          </p>
-          <a class="primary" href="quiz-orbital.html">Ver missão</a
-          ><small class="muted" id="quizProgress"
-            >6 perguntas, no seu ritmo</small
-          >
-        </article>
-        <article class="game-card panel" data-kind="equipe">
-          <div aria-hidden="true" class="game-art art-crew">
-            <span class="crew-icon"></span>
-          </div>
-          <span class="chip">Equipe + investigação</span>
-          <h2>Cosmo Crew</h2>
-          <p>
-            Quatro funções, uma nave. Distribuam as tarefas e preparem a
-            expedição.
-          </p>
-          <a class="primary" href="cosmo-crew.html">Ver missão</a
-          ><small class="muted" id="crewProgress"
-            >Demonstração por turnos no mesmo aparelho</small
-          >
-        </article>
-      </section>
-      <p class="sr-only" id="filterStatus" role="status"></p>
-      <p class="demo-note">
-        Jogos funcionam nesta prévia. Resultados ficam neste navegador e não
-        alteram a trilha, moedas ou conquistas da conta.
-      </p>
-    </main>
-    <script src="../../public/js/components/menu-pdf.js"></script>
-    <script src="../../public/js/components/preferencias.js"></script>
-    <script src="../../public/js/components/identidade.js"></script>
-    <script
-      src="../../public/js/pages/aluno/jogos/index.js"
-      type="module"
-    ></script>
+      <a class="home-fallback" href="../home.html#journey" aria-label="Voltar para a trilha"><svg viewBox="0 0 24 24"
+          aria-hidden="true">
+          <path d="m3 10 9-7 9 7v11h-6v-7H9v7H3Z" />
+        </svg></a>
+    </header>
+    <div class="portal-meta"><span id="accessState" class="access-state">Prévia: acesso liberado</span><button
+        class="text-button" type="button" data-preview>Prévia do bloqueio</button></div>
+    <section id="entryContent" class="entry-content" aria-label="Entrada da galáxia">
+      <div class="hangar-scene" id="hangarScene">
+        <div class="hangar-glow" aria-hidden="true"></div>
+        <span class="sprite shuttle entry-shuttle" aria-hidden="true"></span>
+        <div class="scene-caption"><span class="small-mark" aria-hidden="true">✦</span> Sua próxima descoberta está lá
+          fora.</div>
+      </div>
+      <div class="entry-actions"><a id="exploreGames" class="primary" href="galaxia.html">Explorar jogos <span
+            aria-hidden="true">→</span></a><a class="text-link" href="../home.html#journey">Voltar à trilha</a></div>
+      <div class="entry-features"><span>3 jogos educativos</span><span>Sem cronômetro</span><span>Teclado e toque</span>
+      </div>
+    </section>
+    <section id="blockedState" class="blocked-state" aria-labelledby="blockedTitle" hidden>
+      <svg class="lock-icon" viewBox="0 0 32 32" aria-hidden="true">
+        <rect x="6" y="14" width="20" height="15" rx="3" />
+        <path d="M10 14V9a6 6 0 0 1 12 0v5m-6 7v3" />
+      </svg>
+      <p class="preview-badge">PRÉVIA LOCAL · SEM CONTROLE REAL</p>
+      <h2 id="blockedTitle">Hora de focar nas atividades</h2>
+      <p>Quando a integração estiver disponível, este aviso aparecerá se o professor pausar os jogos da turma.</p>
+      <a class="primary" href="../home.html#journey">Voltar para a trilha</a>
+      <button class="text-button" type="button" data-preview>Encerrar simulação</button>
+    </section>
+    <p class="local-note">Jogos locais: pontuação e progresso ficam neste navegador e não são enviados ao professor. O
+      bloqueio desta prévia ainda não está conectado ao backend.</p>
+    <footer>AstroLearn · Aprender também é explorar.</footer>
+  </main>
+  <dialog id="previewDialog" aria-labelledby="previewTitle">
+    <button class="dialog-close" type="button" data-close aria-label="Fechar prévia">×</button>
+    <p class="eyebrow">PRÉVIA PARA APRESENTAÇÃO</p>
+    <h2 id="previewTitle">Controle de acesso</h2>
+    <p>Simulação local. Este controle não altera permissões reais nem comunica mudanças ao professor.</p>
+    <label class="preview-control" for="previewBlocked"><span>Simular acesso bloqueado nesta aba</span><input
+        id="previewBlocked" type="checkbox" role="switch"></label>
+    <p id="previewStatus" role="status" class="hint"></p>
+    <button type="button" class="primary" data-close>Concluir prévia</button>
+  </dialog>
+  <script src="../../public/js/components/preferencias.js"></script>
+  <script src="../../public/js/components/menu-pdf.js"></script>
   <script type="module" src="../../public/js/components/sessao.js"></script>
-<script src="../../public/js/components/recursos-locais.js"></script>
+  <script type="module" src="../../public/js/pages/aluno/jogos/index.js"></script>
 </body>
+
 </html>

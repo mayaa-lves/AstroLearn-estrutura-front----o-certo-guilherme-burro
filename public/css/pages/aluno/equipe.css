@@ -1,897 +1,1174 @@
-/* Equipe: composição da referência aprovada. */
-body:before {
-  background:
-    linear-gradient(180deg, #fff1e925, #fff4e438),
-    url("../../../assets/imagens/aluno/equipe/comando.png") center/cover no-repeat;
+@import url('../../fonts.css');
+
+body.team-page {
+  --ink: #20143c;
+  --purple: #783be0;
+  margin: 0;
+  min-height: 100svh;
+  background: #fcfaf7;
+  color: var(--ink);
+  font-family: Astro, Arial, sans-serif;
+  isolation: isolate;
 }
-.team-label {
+
+.team-page * {
+  box-sizing: border-box;
+}
+
+.team-page :is(button, input, a) {
+  font: inherit;
+}
+
+.team-page button {
+  cursor: pointer;
+}
+
+.team-page [hidden] {
+  display: none !important;
+}
+
+.team-page :is(button, a, input):focus-visible {
+  outline: 3px solid #8452cc;
+  outline-offset: 4px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+.skip {
+  position: fixed;
+  top: 0;
+  left: 20px;
+  padding: 12px;
+  background: white;
+  z-index: 80;
+  transform: translateY(-150%);
+}
+
+.skip:focus {
+  transform: none;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .13em;
+  color: #7849bb;
+}
+
+/* Menu flutuante */
+
+.team-page .sidebar {
+  position: fixed;
+  inset: 24px auto 24px 22px;
+  display: flex;
+  flex-direction: column;
+  width: 110px;
+  padding: 22px 9px 12px;
+  border: 1px solid #fff9;
+  border-radius: 25px;
+  background: #fffdf9eb;
+  backdrop-filter: blur(14px);
+  overflow: visible;
+  z-index: 20;
+}
+
+.team-page .brand {
+  display: block;
+  text-align: center;
+  margin: 0 0 15px;
+  color: #25133f;
+  text-decoration: none;
   font-size: 13px;
   font-weight: 700;
-  background: #e6d7f5;
-  display: inline-block;
-  border-radius: 30px;
-  padding: 10px 17px;
-  margin: 15px 0 8px;
 }
-.preview-note {
+
+.team-page .brand svg {
   display: block;
-  width: fit-content;
-  margin: 0 0 20px;
+  margin: 0 auto 5px;
+  width: 37px;
+  height: 37px;
+  fill: none;
+  stroke: #783be0;
+  stroke-width: 2;
 }
-.storage-notice:empty {
-  display: none;
+
+.team-page .brand span {
+  display: inline;
 }
-.storage-notice {
-  padding: 10px;
-  background: #fff2d8;
-  border-radius: 10px;
-  font-size: 12px;
-  color: #71582f;
-}
-.members {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-  margin-bottom: 20px;
-}
-.member {
-  background: #fffaf5f0;
-  border: 1px solid #fff;
-  border-radius: 20px;
-  padding: 10px;
-  text-align: center;
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
-  color: var(--ink);
-}
-.member:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 25px #4f335b1c;
-}
-.portrait {
-  background: url("../../../assets/imagens/aluno/equipe/integrantes.png") 0 0/200%
-    200% no-repeat;
-  width: 100%;
-  aspect-ratio: 1.2;
-  border-radius: 13px;
-}
-.portrait-0 {
-  background-position: 0 0;
-}
-.portrait-1 {
-  background-position: 100% 0;
-}
-.portrait-2 {
-  background-position: 0 100%;
-}
-.portrait-3 {
-  background-position: 100% 100%;
-}
-.member strong {
-  font-size: 15px;
-  display: block;
-  margin: 10px 0 5px;
-}
-.member strong span {
-  color: #7944bc;
-}
-.team-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.7fr) minmax(280px, 1fr);
-  gap: 18px;
-}
-.mission-card,
-.tasks-card,
-.wall-card {
-  background: #fffaf5f2;
-  border: 1px solid white;
-  border-radius: 20px;
-  padding: 21px;
-  box-shadow: 0 8px 25px #49333110;
-}
-.card-heading {
+
+.team-page .sidebar nav {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 17px;
-}
-h2 {
-  font-size: 22px;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 3px;
   margin: 0;
 }
-.tag,
-.local-chip {
-  font-size: 10px;
-  background: #e7dbf5;
-  color: #623d85;
-  border-radius: 20px;
-  padding: 7px 11px;
+
+.team-page .sidebar nav>a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 44px;
+  padding: 8px 3px;
+  border-radius: 14px;
+  color: #523c6c;
+  text-decoration: none;
+}
+
+.team-page .sidebar .label {
+  font-size: 11px;
+  line-height: 1.2;
   white-space: nowrap;
 }
-.mission-body {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-}
-.mission-body img {
-  width: 43%;
-  aspect-ratio: 1.45;
-  object-fit: cover;
-  border-radius: 14px;
-}
-.mission-body h3 {
-  font-size: 20px;
-  line-height: 1.4;
-  margin: 0 0 10px;
-}
-.mission-body p {
-  font-size: 13px;
-  line-height: 1.7;
-  color: #665478;
-  margin: 0 0 16px;
-}
-.agreement-title {
-  font-size: 14px;
-  padding-top: 18px;
-  border-top: 1px solid #e8ddeb;
-  margin: 20px 0 10px;
-}
-.agreements {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-.agreements p {
-  font-size: 11px;
-  line-height: 1.6;
-  margin: 0;
-  color: #665478;
-  padding: 7px 12px;
-  border-left: 2px solid #d8c5ef;
-}
-.tasks-card h2 {
-  margin-bottom: 15px;
-}
-.tasks-card ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 9px;
-}
-.task {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px;
-  background: #eee7f4;
-  border-radius: 12px;
-}
-.task .portrait {
-  width: 36px;
-  height: 36px;
-  aspect-ratio: 1;
-  flex-shrink: 0;
-  border-radius: 50%;
-}
-.task strong {
-  font-size: 11px;
-  min-width: 58px;
-}
-.task p {
-  font-size: 11px;
-  line-height: 1.5;
-  margin: 0;
-  color: #614c78;
-  overflow-wrap: anywhere;
-}
-.secondary {
-  background: #f6f0fa;
-  color: #664180;
-  border: 1px solid #dccccf;
-  padding: 11px 16px;
-  border-radius: 12px;
-  font-size: 12px;
-}
-.full {
-  width: 100%;
-  margin-top: 15px;
-  min-height: 41px;
-}
-.local-hint {
-  font-size: 10px;
-  line-height: 1.7;
-  margin: 10px 0 0;
-  color: #74617e;
-}
-.wall-card {
-  margin-top: 18px;
-}
-.wall-card form {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-}
-.wall-card textarea {
-  resize: vertical;
-  min-height: 50px;
-  max-height: 250px;
-  flex: 1;
-  border: 1px solid #dbcee9;
-  border-radius: 12px;
-  background: #fffefa;
-  padding: 12px;
-  color: var(--ink);
-  font: inherit;
-  font-size: 13px;
-  line-height: 1.6;
-  width: 100%;
-}
-.wall-card form button {
-  min-height: 49px;
-}
-.wall-meta {
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
-  font-size: 10px;
-  margin-top: 6px;
-  color: #776384;
-}
-.wall-meta p {
-  color: #a13e4d;
-  margin: 0;
-  font-size: 12px;
-}
-#wall {
-  list-style: none;
-  padding: 0;
-  margin: 14px 0 0;
-  display: grid;
-  gap: 10px;
-}
-.idea-note {
-  display: flex;
-  align-items: flex-start;
-  gap: 11px;
-  background: #f0e8f6;
-  padding: 12px;
-  border-radius: 13px;
-}
-.idea-note .portrait {
-  width: 34px;
-  height: 34px;
-  aspect-ratio: 1;
-  flex-shrink: 0;
-  border-radius: 50%;
-}
-.idea-content {
-  flex: 1;
-  min-width: 0;
-}
-.idea-content strong {
-  font-size: 11px;
-}
-.idea-content time {
-  font-size: 9px;
-  color: #7b6887;
-  margin-left: 10px;
-}
-.idea-content p {
-  margin: 7px 0 0;
-  font-size: 13px;
-  line-height: 1.7;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-}
-.remove-note {
-  min-width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #fff8;
-  color: #80586f;
-  font-size: 20px;
-}
-.example-note {
-  padding: 13px;
-  background: #faf7fc;
-  border: 1px dashed #e2d7eb;
-  border-radius: 12px;
-  margin-top: 15px;
-}
-.example-note span {
-  font-size: 9px;
-  letter-spacing: 0.8px;
-  color: #8a7896;
-}
-.example-note p {
-  font-size: 12px;
-  color: #756181;
-  margin: 6px 0 0;
-}
-.dialog-actions {
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-}
-#taskDialog {
-  max-width: 520px;
-}
-#taskFields {
-  display: grid;
-  gap: 15px;
-  margin: 23px 0;
-}
-#taskFields label {
-  display: block;
-  font-size: 12px;
-  font-weight: 700;
-  margin-bottom: 7px;
-}
-#taskFields input {
-  font: inherit;
-  width: 100%;
-  border: 1px solid #d9cbe6;
-  border-radius: 10px;
-  padding: 11px;
-  font-size: 13px;
-  color: var(--ink);
-}
-#taskError {
-  font-size: 12px;
-  color: #a03a50;
-}
-#memberPortrait {
-  width: 170px;
-  height: 170px;
-  aspect-ratio: 1;
-  margin: 8px auto 20px;
-}
-#memberDialog {
-  text-align: center;
-}
-.helper {
-  width: 65px;
-  height: 76px;
-}
-@media (max-width: 1050px) {
-  .team-grid {
-    grid-template-columns: 1fr;
-  }
-  .mission-body img {
-    width: 35%;
-    max-height: 200px;
-  }
-  .tasks-card ul {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .members {
-    gap: 10px;
-  }
-  .task strong {
-    min-width: 50px;
-  }
-  .member strong {
-    font-size: 13px;
-  }
-  .card-heading h2 {
-    font-size: 20px;
-  }
-}
-@media (max-width: 800px) {
-  .members {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .portrait {
-    aspect-ratio: 1.35;
-  }
-  .mission-card,
-  .tasks-card,
-  .wall-card {
-    padding: 16px;
-  }
-  .mission-body {
-    flex-wrap: wrap;
-  }
-  .mission-body img {
-    width: 100%;
-    aspect-ratio: 2;
-    max-height: 220px;
-  }
-  .task strong {
-    min-width: 50px;
-  }
-  .tasks-card ul {
-    grid-template-columns: 1fr;
-  }
-  .wall-card form {
-    flex-wrap: wrap;
-  }
-  .wall-card textarea {
-    flex-basis: 100%;
-  }
-  .wall-card form button {
-    min-height: 42px;
-    margin-left: auto;
-  }
-  .agreements {
-    gap: 5px;
-  }
-  .agreements p {
-    padding: 5px 7px;
-    font-size: 10px;
-  }
-  .idea-content time {
-    display: block;
-    margin: 4px 0;
-  }
-  .card-heading {
-    flex-wrap: wrap;
-  }
-}
-/* Proporções do modelo aprovado. Os retratos reutilizam a própria composição,
-   exibindo apenas a região de cada personagem, sem redesenhar seus rostos. */
-.portrait {
-  display: block;
-  background-image: url("../../../assets/imagens/aluno/equipe/composicao-aprovada.png");
-  background-size: 629.508% 533.333%;
-  aspect-ratio: 1.27;
-  background-repeat: no-repeat;
-}
-.heading-icon {
-  width: 23px;
-  height: 23px;
-  vertical-align: -4px;
-  margin-right: 8px;
+
+.team-page .sidebar nav svg {
+  width: 25px;
+  height: 25px;
   fill: none;
-  stroke: #7844cd;
-  stroke-width: 1.8;
+  stroke: currentColor;
+  stroke-width: 1.6;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.portrait-0 {
-  background-position: 26.935% 26.202%;
+
+.team-page .sidebar nav>a:hover {
+  background: #f1e7fc;
 }
-.portrait-1 {
-  background-position: 48.84% 26.202%;
+
+.team-page .sidebar .active {
+  color: #783be0;
+  background: #eee1ff;
 }
-.portrait-2 {
-  background-position: 70.279% 26.202%;
-}
-.portrait-3 {
-  background-position: 91.95% 26.202%;
-}
-main {
-  margin-left: 305px;
-  padding: 42px 78px 35px 25px;
-  max-width: none;
-}
-.sidebar {
-  width: 255px;
-  left: 18px;
-  top: 22px;
-  bottom: 22px;
-  padding: 28px 17px;
-  background: #fffdf5c9;
-  backdrop-filter: blur(15px);
-}
-header {
-  padding: 9px 0 0;
-  background: none;
-  backdrop-filter: none;
-  position: relative;
-}
-h1 {
-  font-size: clamp(32px, 3.45vw, 53px);
-  margin: 0 0 3px;
-  line-height: 1.14;
-  letter-spacing: -1.5px;
-}
-header p {
-  font-size: clamp(15px, 1.62vw, 25px);
-  line-height: 1.45;
-}
-.quiet {
-  font-size: 10px;
-  padding: 7px 10px;
-  margin-top: 8px;
-  background: #fffaf1d9;
-}
-.team-label {
-  padding: 9px 17px;
-  margin: 12px 0 16px;
-  font-size: 13px;
-}
-.preview-note {
-  display: inline-flex;
-  vertical-align: middle;
-  position: relative;
-  font-size: 9px;
-  padding: 6px 9px;
-  margin: 0 0 0 10px;
-  border-radius: 20px;
-  background: #fffcf4da;
-}
-.preview-note span {
-  display: none;
+
+.team-page #menuToggle {
   position: absolute;
-  top: 100%;
-  right: 0;
-  width: 240px;
-  background: #fffaf6;
-  border: 1px solid #e6d8ee;
-  padding: 12px;
-  z-index: 6;
-  border-radius: 12px;
-  line-height: 1.6;
+  right: -9px;
+  top: 12px;
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  min-height: 30px;
+  padding: 0;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  background: #fffaf2;
+  color: #795c91;
 }
-.preview-note:hover span {
+
+.team-page .sidebar small,
+.team-page .sidebar nav>a[aria-label='Configurações'] {
+  display: none;
+}
+
+.team-page.collapsed .sidebar {
+  width: 76px;
+}
+
+.team-page.collapsed .sidebar .label {
+  display: none;
+}
+
+.team-page.collapsed .sidebar .brand {
+  position: static;
+  font-size: 0;
+  margin: 0 0 15px;
+}
+
+.team-page.collapsed .sidebar .brand::before {
+  display: none;
+}
+
+.team-page.collapsed .sidebar .brand svg {
   display: block;
 }
-.members {
-  gap: 14px;
-  margin-bottom: 15px;
+
+/* Base orbital */
+
+.team-scene {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 330px;
+  z-index: -3;
+  pointer-events: none;
+  background:
+    #f5efeb url('../../../assets/imagens/aluno/equipe/base-orbital.png') center top / cover no-repeat;
 }
-.member {
-  padding: 10px 10px 9px;
-  min-width: 0;
+
+.team-scene::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 65%, #fcfaf7);
+}
+
+#teamStars {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.team-page main {
+  width: 84vw;
+  margin-left: 14vw;
+  padding: 7vh 0 35px;
+}
+
+.team-page .team-heading {
+  width: 75%;
+  padding: 0 !important;
+}
+
+.team-heading h1 {
+  margin: 0 0 8px;
+  font-size: clamp(40px, 4.1vw, 68px);
+  line-height: 1.1;
+  letter-spacing: -.05em;
+}
+
+.team-heading>p:last-child {
+  margin: 0;
+  color: #655b75;
+  font-size: clamp(14px, 1.3vw, 21px);
+  line-height: 1.5;
+}
+
+.team-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 17px;
+  margin: 18px 0 20px;
+}
+
+.team-label {
+  margin: 0;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.muted {
+  color: #7a6b85;
+  line-height: 1.6;
+}
+
+.team-meta .muted {
+  font-size: 12px;
+}
+
+.text-button {
+  min-height: 36px;
+  padding: 8px 11px;
+  border: 1px solid #e9dff1;
   border-radius: 20px;
-  background: #fffaf6f2;
+  background: #ffffffe8;
+  color: #74548d;
+  font-size: 11px !important;
 }
+
+.small-note {
+  margin: 12px 0 0;
+  color: #887991;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+#memberHint {
+  margin: 9px 0 17px;
+}
+
+.draft-notice {
+  margin: 0 0 18px;
+  color: #7d6c89;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.notice {
+  padding: 13px 16px;
+  margin: 12px 0;
+  border: 1px solid #e8d9ee;
+  border-radius: 14px;
+  background: #fffcf7;
+  color: #765b7e;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.notice:empty {
+  display: none;
+}
+
+.notice.error {
+  border-color: #e2b7c5;
+  background: #fff3f6;
+  color: #8a3050;
+}
+
+.no-team {
+  padding: 30px;
+  margin: 20px 0;
+  border: 1px solid #e9dff0;
+  border-radius: 22px;
+  background: #fff;
+  max-width: 750px;
+}
+
+.no-team h2 {
+  margin-top: 0;
+  font-size: 25px;
+}
+
+.no-team p {
+  color: #766981;
+  line-height: 1.8;
+}
+
+/* Integrantes */
+
+.members {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.member {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 17px;
+  min-height: 104px;
+  min-width: 0;
+  border: 1px solid #e8def0;
+  border-radius: 18px;
+  background: #fff;
+  color: var(--ink);
+  text-align: left;
+  transition: transform .2s, box-shadow .2s;
+}
+
+.member-copy {
+  min-width: 0;
+}
+
 .member strong {
-  margin: 8px 0 2px;
-  font-size: 15px;
+  display: block;
+  font-size: 17px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
 }
+
+.member-copy>span {
+  display: block;
+  color: #83728f;
+  font-size: 12px;
+  margin-top: 5px;
+  line-height: 1.5;
+}
+
+.portrait {
+  display: block;
+  width: 58px;
+  height: 58px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-image:
+    url('../../../assets/imagens/aluno/equipe/avatares-equipe.png');
+  background-repeat: no-repeat;
+  background-size: 300% 300%;
+}
+
+.portrait-0 {
+  background-position: 12% 8%;
+}
+
+.portrait-1 {
+  background-position: 88% 8%;
+}
+
+.portrait-2 {
+  background-position: 12% 83%;
+}
+
+.portrait-3 {
+  background-position: 88% 83%;
+}
+
+@media (hover: hover) {
+  .member:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px #6c4e8b12;
+  }
+}
+
+/* Atividade e planejamento */
+
 .team-grid {
-  grid-template-columns: minmax(0, 1.83fr) minmax(0, 1fr);
-  gap: 13px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 18px;
 }
+
 .mission-card,
 .tasks-card,
 .wall-card {
-  padding: 19px;
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid #e7deef;
   border-radius: 20px;
-  background: #fffaf8f5;
-  box-shadow: none;
+  background: #fff;
 }
+
 .card-heading {
-  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 17px;
 }
-.card-heading h2,
-.tasks-card h2 {
+
+.card-heading h2 {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.3;
+  letter-spacing: -.035em;
+}
+
+.tag,
+.local-chip {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 20px;
+  background: #f2eafa;
+  color: #76538f;
+  font-size: 10px;
+}
+
+.mission-body {
+  display: grid;
+  grid-template-columns: minmax(140px, .95fr) minmax(0, 1fr);
+  gap: 22px;
+  align-items: center;
+}
+
+.mission-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1.65;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.mission-body h3 {
+  margin: 0 0 10px;
   font-size: 22px;
   line-height: 1.3;
+  letter-spacing: -.035em;
+  overflow-wrap: anywhere;
 }
-.mission-body {
-  gap: 20px;
+
+.mission-body p {
+  margin: 0 0 16px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #7c6d87;
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  justify-content: center;
   align-items: center;
-  min-width: 0;
+  gap: 7px;
+  min-height: 42px;
+  padding: 10px 16px;
+  border-radius: 15px;
+  text-decoration: none;
+  font-size: 12px !important;
 }
-.mission-image {
-  width: 49%;
-  aspect-ratio: 2;
+
+.primary {
+  border: 0;
+  background: #783be0;
+  color: white;
+}
+
+.primary:hover {
+  background: #652bc1;
+}
+
+.secondary {
+  border: 1px solid #e1d3ed;
+  background: #fff;
+  color: #754e93;
+}
+
+.secondary:hover {
+  background: #f5eefb;
+}
+
+.agreement-title {
+  margin: 19px 0 9px;
+  padding-top: 13px;
+  border-top: 1px solid #eae1f0;
+  font-size: 13px;
+}
+
+.agreements {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.agreements p {
+  margin: 0;
+  padding: 5px 10px;
+  border-left: 2px solid #dfcbf6;
+  color: #7a648b;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.task-list,
+.wall-list,
+#memberTasks {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0 0;
+}
+
+.task-list {
+  display: grid;
+  gap: 6px;
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.task {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 0;
+  border-bottom: 1px solid #eee6f3;
+}
+
+.task-check {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  min-height: 44px;
   flex-shrink: 0;
-  border-radius: 13px;
-  background: url("../../../assets/imagens/aluno/equipe/composicao-aprovada.png")
-    29.022% 60.768%/465.455% 620.606% no-repeat;
 }
-.mission-body > div:not(.mission-image) {
+
+.task-check input {
+  width: 19px;
+  height: 19px;
+  accent-color: #783be0;
+  cursor: pointer;
+}
+
+.task-copy {
   flex: 1;
   min-width: 0;
 }
-.mission-body h3 {
-  font-size: 19px;
-  line-height: 1.35;
-  margin: 0 0 9px;
-}
-.mission-body p {
+
+.task-copy strong {
+  display: block;
   font-size: 13px;
-  line-height: 1.55;
-  margin: 0 0 16px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
 }
-.mission-body .primary {
-  min-width: 170px;
-  border-radius: 24px;
-  padding: 12px 18px;
-  font-size: 13px;
-  background: linear-gradient(120deg, #9b56ec, #7132d8);
-}
-.agreement-title {
-  margin: 15px 0 9px;
-  padding-top: 10px;
-}
-.agreements {
-  gap: 5px;
-}
-.agreements p {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 8px;
+
+.task-copy>span {
+  display: block;
+  margin-top: 4px;
+  color: #897592;
   font-size: 11px;
-  line-height: 1.55;
 }
-.agreements p:first-child {
-  border-left: 0;
+
+.task-state {
+  font-size: 10px;
+  border-radius: 15px;
+  padding: 5px 7px;
+  color: #766481;
+  background: #f3eff7;
 }
-.agreements span {
-  flex-shrink: 0;
+
+.task.done .task-state {
+  color: #24704e;
+  background: #e6f6ec;
+}
+
+.task.doing .task-state {
+  color: #7545b9;
+  background: #f0e5ff;
+}
+
+.task.done .task-copy strong {
+  color: #877c91;
+}
+
+.icon-button {
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: #eadcff;
-  color: #7438d2;
-  font-size: 20px;
+  flex-shrink: 0;
+  width: 32px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: #f8f3fc;
+  color: #8a6b9e;
 }
-.tasks-card ul {
-  gap: 9px;
+
+.icon-button:hover {
+  background: #eee1f8;
 }
-.task {
-  padding: 8px;
-  min-height: 45px;
+
+.icon-button svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
-.task strong {
-  min-width: 60px;
+
+.empty {
+  padding: 23px 14px;
+  text-align: center;
+  color: #8b7b95;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+/* Anotações pessoais */
+
+.wall-card {
+  margin-top: 18px;
+}
+
+#ideaForm {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+}
+
+.note-type {
+  display: grid;
+  gap: 6px;
+}
+
+.note-type label {
   font-size: 11px;
+  color: #8a7396;
 }
-.task p {
+
+.note-input {
+  flex: 1;
+  min-width: 0;
+}
+
+#idea {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  max-height: 220px;
+  resize: vertical;
+  padding: 12px;
+  border: 1px solid #e4d9ed;
+  border-radius: 13px;
+  background: #fffcff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+#noteType {
+  min-height: 48px;
+  padding: 10px;
+  border: 1px solid #e4d9ed;
+  border-radius: 13px;
+  background: #fff;
+  color: #705281;
+  font-size: 12px;
+}
+
+#saveNote {
+  min-height: 48px;
+}
+
+.wall-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 6px;
+  font-size: 10px;
+  color: #927e9e;
+}
+
+.wall-meta p {
+  margin: 0;
+  color: #a24563;
+  font-size: 12px;
+}
+
+.wall-list {
+  display: grid;
+  gap: 10px;
+}
+
+.idea-note {
+  display: flex;
+  align-items: start;
+  gap: 12px;
+  padding: 15px;
+  border: 1px solid #eee4f5;
+  border-radius: 14px;
+  background: #fcf9ff;
+}
+
+.idea-note.pinned {
+  background: #f3ecfc;
+  border-color: #e4d1f6;
+}
+
+.idea-note .portrait {
+  width: 34px;
+  height: 34px;
+}
+
+.idea-content {
+  min-width: 0;
+  flex: 1;
+}
+
+.idea-content strong {
+  font-size: 12px;
+}
+
+.idea-content time {
+  margin-left: 10px;
+  color: #907b9c;
   font-size: 10px;
 }
-.task .portrait,
-.idea-note .portrait {
-  background-size: 629.508% 533.333%;
-  aspect-ratio: 1;
+
+.idea-content p {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #70607c;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
-.tasks-card .secondary {
-  background: #fffcf8;
-  font-size: 12px;
-  border-color: #c1a3ed;
-}
-.local-hint {
+
+.note-kind {
+  display: inline-block;
+  margin-left: 9px;
   font-size: 9px;
-  line-height: 1.4;
-  margin: 7px 0 0;
+  color: #865caf;
 }
-.wall-card {
-  margin-top: 14px;
-  padding: 18px 20px;
-}
-.wall-card form {
-  align-items: center;
-}
-.wall-card textarea {
-  min-height: 42px;
-  height: 44px;
-  line-height: 1.4;
-  padding: 12px 14px;
-  border-radius: 14px;
-}
-.wall-card form button {
-  min-height: 44px;
-  border-radius: 24px;
-  padding: 10px 23px;
-  background: linear-gradient(120deg, #9b56ec, #7132d8);
-}
-.wall-meta {
-  margin-top: 4px;
-  font-size: 9px;
-}
-.example-note {
-  padding: 8px 12px;
-  background: #eee6f5;
-  border: 0;
-  margin-top: 8px;
-}
-.example-note span {
-  font-size: 8px;
-}
-.example-note p {
+
+.team-page footer {
+  margin-top: 25px;
+  text-align: center;
+  color: #93829e;
   font-size: 11px;
 }
-.wall-card .local-chip {
-  font-size: 9px;
-  padding: 5px 9px;
+
+.team-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  max-width: calc(100% - 70px);
+  margin: 0;
+  padding: 13px 20px;
+  border: 1px solid #e8daf1;
+  border-radius: 25px;
+  background: #fffdf8;
+  color: #6d4c84;
+  font-size: 12px;
+  text-align: center;
+  z-index: 70;
+  pointer-events: none;
+  box-shadow: 0 6px 24px #5b3c6c18;
 }
-footer {
-  font-size: 9px;
-  margin: 14px 0 0;
+
+/* Janelas acessíveis */
+
+.team-page dialog {
+  width: min(520px, calc(100% - 32px));
+  max-height: 85svh;
+  padding: 30px;
+  overflow: auto;
+  border: 1px solid #eee2f5;
+  border-radius: 23px;
+  background: #fffdf9;
+  color: var(--ink);
 }
-.helper {
-  width: 61px;
-  height: 71px;
-  bottom: 27px;
+
+.team-page dialog::backdrop {
+  background: #25163777;
+  backdrop-filter: blur(5px);
+}
+
+.team-page dialog h2 {
+  margin: 8px 20px 12px 0;
+  font-size: 25px;
+}
+
+.team-page dialog p {
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.close {
+  position: absolute;
   right: 12px;
+  top: 12px;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: #f3e9fc;
+  color: #815798;
+  font-size: 24px !important;
 }
-.collapsed main {
-  margin-left: 105px;
+
+#taskForm label {
+  display: block;
+  margin: 15px 0 7px;
+  font-size: 12px;
+  font-weight: 700;
 }
-@media (min-width: 1550px) {
-  main {
-    padding-right: calc(5vw + 10px);
+
+#taskForm :is(input, select) {
+  width: 100%;
+  padding: 11px;
+  min-height: 43px;
+  border: 1px solid #dfd1e8;
+  border-radius: 12px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+}
+
+.error-text {
+  color: #9a3b59;
+}
+
+#memberPortrait {
+  width: 90px;
+  height: 90px;
+  margin: 10px auto 15px;
+}
+
+#memberTasks li {
+  padding: 12px 0;
+  border-bottom: 1px solid #e9deef;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: end;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.team-page :is(button, input, textarea, select):disabled {
+  cursor: not-allowed;
+  opacity: .55;
+}
+
+.astro-high-contrast .team-scene {
+  opacity: .12;
+}
+
+.astro-high-contrast :is(.member, .mission-card, .tasks-card, .wall-card) {
+  background: #fff;
+  border-color: #6d467e;
+}
+
+.astro-high-contrast :is(.small-note,
+  .draft-notice,
+  .member-copy > span,
+  .idea-content p) {
+  color: #503b60;
+}
+
+/* Notebook */
+
+@media (min-width: 801px) and (max-height: 800px) {
+  .team-page main {
+    padding-top: 35px;
   }
-  .member .portrait {
-    max-height: 225px;
+
+  .team-heading h1 {
+    font-size: 53px;
   }
-  .mission-body h3 {
-    font-size: 22px;
+
+  .team-scene {
+    height: 280px;
   }
-  .mission-body p {
-    font-size: 15px;
-  }
-  .task p {
-    font-size: 12px;
-  }
-  .task strong {
-    font-size: 12px;
+
+  .member {
+    min-height: 90px;
+    padding: 14px;
   }
 }
-@media (min-width: 1051px) and (max-width: 1300px) {
-  .sidebar {
-    width: 220px;
+
+@media (max-width: 1250px) {
+  .team-page main {
+    width: calc(100% - 180px);
+    margin-left: 155px;
   }
-  main {
-    margin-left: 250px;
-    padding-right: 40px;
-  }
+
   .team-grid {
-    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
   }
-  .mission-body {
-    gap: 12px;
+
+  .member {
+    gap: 10px;
+    padding: 13px;
   }
-  .mission-image {
-    width: 43%;
-    aspect-ratio: 1.5;
+
+  .member .portrait {
+    width: 46px;
+    height: 46px;
   }
-  .mission-body h3 {
-    font-size: 17px;
-  }
-  .mission-body p {
-    font-size: 12px;
-  }
-  .mission-body .primary {
-    min-width: 0;
-  }
-  .agreements p {
-    font-size: 10px;
-    padding: 4px;
-    gap: 5px;
-  }
-  .agreements span {
-    width: 23px;
-    height: 23px;
+
+  .member strong {
     font-size: 15px;
   }
-  .task strong {
-    min-width: 46px;
+
+  .card-heading h2 {
+    font-size: 21px;
   }
-  .task p {
-    font-size: 9px;
+
+  .mission-body {
+    gap: 15px;
+    grid-template-columns: 1fr;
+  }
+
+  .mission-image {
+    max-height: 170px;
+  }
+
+  .task {
+    flex-wrap: wrap;
   }
 }
-@media (max-width: 1050px) {
-  main {
-    margin-left: 230px;
-    padding-right: 28px;
+
+@media (max-width: 1000px) {
+  .members {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .sidebar {
-    width: 200px;
-  }
+
   .team-grid {
     grid-template-columns: 1fr;
   }
-  .tasks-card ul {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .mission-image {
-    width: 43%;
-  }
-  .preview-note {
-    margin: 0 0 12px;
-    display: block;
-    width: fit-content;
-  }
-  .preview-note span {
-    display: inline;
-    position: static;
-    background: none;
-    border: 0;
-    padding: 0;
-    font-size: 9px;
-    margin-left: 7px;
-    width: auto;
-  }
-  .team-label {
-    margin-bottom: 9px;
-  }
-  .members {
-    gap: 9px;
-  }
-  .member strong {
-    font-size: 12px;
-  }
-  .member {
-    padding: 8px;
+
+  .mission-body {
+    grid-template-columns: minmax(130px, .8fr) minmax(0, 1fr);
   }
 }
+
+/* Celular */
+
 @media (max-width: 800px) {
-  main,
-  .collapsed main {
-    margin-left: 0;
-    padding: 24px 18px 100px;
-  }
-  .sidebar,
-  .collapsed .sidebar {
+
+  .team-page main,
+  .team-page.collapsed main {
     width: auto;
-    left: 12px;
-    right: 12px;
-    top: auto;
-    bottom: 12px;
+    margin: 0;
+    padding: 32px 20px 130px;
+  }
+
+  .team-page .team-heading {
+    width: 100%;
+    padding-right: 70px !important;
+  }
+
+  .team-heading h1 {
+    font-size: 38px;
+  }
+
+  .team-heading>p:last-child {
+    font-size: 14px;
+  }
+
+  .team-scene {
+    height: 330px;
+    background-position: 65% top;
+  }
+
+  .team-scene::after {
+    background:
+      linear-gradient(90deg, #fcfaf7c9, transparent),
+      linear-gradient(180deg, transparent 65%, #fcfaf7);
+  }
+
+  .team-page .sidebar {
+    inset: auto 12px calc(12px + env(safe-area-inset-bottom));
+    width: auto;
+    height: 68px;
     padding: 6px;
   }
-  .members {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  .team-page .sidebar nav {
+    flex-direction: row;
   }
-  .portrait {
-    aspect-ratio: 1.27;
+
+  .team-page .sidebar .label,
+  .team-page.collapsed .sidebar .label {
+    display: block;
+    font-size: 10px;
   }
+
+  .member {
+    min-height: 88px;
+    gap: 9px;
+    padding: 12px;
+  }
+
+  .member .portrait {
+    width: 43px;
+    height: 43px;
+  }
+
   .member strong {
     font-size: 14px;
   }
-  .mission-body {
+
+  .member-copy>span {
+    font-size: 10px;
+  }
+
+  .mission-card,
+  .tasks-card,
+  .wall-card {
+    padding: 18px;
+  }
+
+  .card-heading h2 {
+    font-size: 23px;
+  }
+
+  .mission-body h3 {
+    font-size: 21px;
+  }
+
+  .team-toast {
+    bottom: 98px;
+  }
+
+  #ideaForm {
     flex-wrap: wrap;
+    align-items: center;
   }
-  .mission-image {
-    width: 100%;
-    aspect-ratio: 2;
+
+  .note-input {
+    flex-basis: calc(100% - 110px);
   }
-  .mission-body > div:not(.mission-image) {
-    flex-basis: 100%;
+
+  #saveNote {
+    margin-left: auto;
+    min-height: 42px;
   }
-  .tasks-card ul {
+
+  .idea-content time {
+    display: block;
+    margin: 5px 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .members {
+    gap: 10px;
+  }
+
+  .member {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .member .portrait {
+    width: 36px;
+    height: 36px;
+  }
+
+  .member strong {
+    font-size: 13px;
+  }
+
+  .mission-body {
     grid-template-columns: 1fr;
   }
-  .agreements {
-    grid-template-columns: repeat(3, 1fr);
+
+  .mission-image {
+    max-height: none;
   }
+
+  .agreements {
+    gap: 5px;
+  }
+
   .agreements p {
     font-size: 10px;
-    display: block;
+    padding: 5px 7px;
   }
-  .agreements span {
-    margin-bottom: 6px;
+
+  .task-state {
+    margin-left: 43px;
   }
-  .wall-card form {
-    align-items: flex-start;
+
+  .idea-note {
+    padding: 12px;
+    gap: 8px;
+    flex-wrap: wrap;
   }
-  .wall-card textarea {
-    height: 70px;
+
+  .idea-content {
+    flex-basis: calc(100% - 50px);
   }
-  .helper {
-    bottom: 83px;
-    width: 57px;
-    height: 65px;
+
+  .idea-note>.icon-button {
+    margin-left: auto;
   }
-  .preview-note {
-    font-size: 9px;
-    line-height: 1.6;
+
+  .idea-note>.icon-button+.icon-button {
+    margin-left: 0;
   }
-  .preview-note span {
-    display: block;
-    margin: 0;
-  }
-  .card-heading h2,
-  .tasks-card h2 {
-    font-size: 20px;
-  }
-  .quiet {
-    margin-top: 0;
-  }
-  .collapsed nav {
-    margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .team-page *,
+  .team-page *::before,
+  .team-page *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 }

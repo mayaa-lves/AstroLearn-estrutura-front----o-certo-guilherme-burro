@@ -1,0 +1,698 @@
+/* Universo ocupa a tela; cartões e páginas dos jogos continuam independentes. */
+body.universe-mode {
+    background: #030817;
+    color: #fff;
+    min-height: 100svh;
+}
+
+.universe-mode main,
+.universe-mode.collapsed main {
+    margin: 0;
+    width: 100%;
+    max-width: none;
+    padding: 0;
+    min-height: 100svh;
+}
+
+#universeViewport {
+    position: fixed;
+    inset: 0;
+    overflow: clip;
+    isolation: isolate;
+    background: #030817;
+    touch-action: none;
+}
+
+.universe-sky {
+    position: absolute;
+    inset: -30px;
+    z-index: -3;
+    pointer-events: none;
+    background: linear-gradient(110deg, #02061122, #02061144), url('../../../../assets/imagens/aluno/jogos/galaxia-fundo.png') center/cover;
+}
+
+#universeStars,
+#universePlanets {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+#universeStars {
+    z-index: -2;
+}
+
+#universePlanets {
+    z-index: -1;
+}
+
+#universeObjects {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.planet-target {
+    position: absolute;
+    left: 0;
+    top: 0;
+    border: 0;
+    padding: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    pointer-events: auto;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.planet-target:hover {
+    background: #bba0ff07;
+}
+
+.planet-target:focus-visible {
+    outline: 2px dashed #e6d4ff;
+    outline-offset: 9px;
+}
+
+.planet-target[aria-pressed="true"] {
+    box-shadow: 0 0 0 1px #bca1ed4d, 0 0 34px #8767d329;
+}
+
+.planet-label {
+    position: absolute;
+    left: 67%;
+    top: 39%;
+    width: max-content;
+    max-width: 245px;
+    padding: 10px 15px 10px 26px;
+    text-align: left;
+    border-radius: 14px;
+    background: linear-gradient(90deg, #030817b3, #03081744);
+    text-shadow: 0 2px 7px #000;
+    pointer-events: none;
+}
+
+.planet-label::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 23px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #e0caff;
+    box-shadow: 0 0 15px #d5b3ff;
+}
+
+.planet-label strong {
+    display: block;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.planet-label small {
+    display: block;
+    font-size: 9px;
+    letter-spacing: .18em;
+    color: #d0c8e0;
+    margin-top: 6px;
+}
+
+.planet-robo .planet-label {
+    left: 46%;
+    top: 48%;
+}
+
+.planet-crew .planet-label {
+    left: 76%;
+    top: 12%;
+}
+
+.planet-quiz .planet-label {
+    left: 68%;
+    top: 17%;
+}
+
+.fallback-sphere {
+    display: none;
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle at 70% 30%, #b85f32, #5f281c 55%, #080c17 85%);
+    box-shadow: inset -30px -15px 40px #02040b;
+}
+
+.universe-fallback .fallback-sphere {
+    display: block;
+}
+
+.universe-fallback .planet-quiz .fallback-sphere {
+    background: radial-gradient(circle at 70% 30%, #77bfc7, #285d95 45%, #071322 80%);
+}
+
+.universe-fallback .planet-crew .fallback-sphere {
+    background: repeating-linear-gradient(8deg, #b8a582 0 7%, #8f7a61 9% 15%, #d6c49b 18% 20%);
+}
+
+.universe-fallback .planet-crew .fallback-sphere::before {
+    content: '';
+    position: absolute;
+    width: 210%;
+    height: 60%;
+    left: -55%;
+    top: 20%;
+    border: 12px solid #bfae8777;
+    border-radius: 50%;
+    transform: rotate(-20deg);
+}
+
+.universe-ship,
+.universe-station,
+.universe-rover {
+    position: absolute;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+    will-change: transform;
+    filter: drop-shadow(0 8px 12px #0007);
+}
+
+.universe-ship {
+    width: 100px;
+}
+
+.universe-station {
+    width: 140px;
+}
+
+.universe-rover {
+    width: 110px;
+}
+
+.universe-header {
+    position: absolute;
+    top: 30px;
+    left: 192px;
+    width: min(610px, calc(100% - 540px));
+    pointer-events: none;
+    text-shadow: 0 2px 14px #000;
+}
+
+.collapsed .universe-header {
+    left: 146px;
+}
+
+.universe-header h1 {
+    font-size: clamp(26px, 2.6vw, 38px);
+    margin-bottom: 9px;
+}
+
+.universe-header p {
+    margin: 0;
+    color: #d8d9e6;
+    font-size: 15px;
+}
+
+.universe-top-actions {
+    position: absolute;
+    right: 24px;
+    top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.universe-top-actions a,
+.universe-top-actions button {
+    color: #eee7ff;
+    font-size: 12px;
+    border: 1px solid #c1bad652;
+    border-radius: 24px;
+    background: #080e25b3;
+    padding: 9px 13px;
+    text-decoration: none;
+    min-height: 42px;
+    backdrop-filter: blur(10px);
+}
+
+.universe-top-actions a[aria-label] {
+    width: 42px;
+    display: grid;
+    place-items: center;
+    padding: 9px;
+}
+
+body:has(#astroAccountTools) .universe-top-actions {
+    right: 135px;
+}
+
+body:has(#astroAccountTools) .universe-top-actions a[aria-label] {
+    display: none;
+}
+
+.destination-panel {
+    position: absolute;
+    left: 192px;
+    bottom: 24px;
+    width: min(400px, calc(100% - 220px));
+    padding: 21px;
+    border: 1px solid #bba3e452;
+    border-radius: 20px;
+    background: #0c1529e6;
+    box-shadow: 0 12px 45px #0005;
+    backdrop-filter: blur(18px);
+    z-index: 5;
+}
+
+.collapsed .destination-panel {
+    left: 146px;
+}
+
+.destination-panel .eyebrow {
+    color: #c4b6df;
+    font-size: 9px;
+    margin: 0 22px 10px 0;
+}
+
+.destination-panel h2 {
+    font-size: 22px;
+    line-height: 1.2;
+    margin: 0 0 7px;
+}
+
+.destination-panel>p:not(.eyebrow) {
+    font-size: 13px;
+    color: #d2d5e7;
+    margin: 0 0 8px;
+}
+
+.destination-panel .selected-progress {
+    font-size: 11px !important;
+    color: #c3b1de !important;
+}
+
+.panel-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 34px;
+    height: 34px;
+    color: #d2c9e3;
+    background: transparent;
+    border: 0;
+    border-radius: 50%;
+    font-size: 24px !important;
+}
+
+.destination-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.destination-actions .primary,
+.destination-actions .secondary {
+    flex: 1;
+    padding: 10px 12px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.destination-actions .secondary {
+    background: #080f20;
+    border-color: #cbb9e57a;
+    color: #efe8ff;
+}
+
+.universe-bottom {
+    position: absolute;
+    bottom: 24px;
+    left: 64%;
+    transform: translateX(-50%);
+    z-index: 4;
+    max-width: calc(100% - 170px);
+}
+
+.universe-camera {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    width: max-content;
+    max-width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #bbb1db59;
+    border-radius: 28px;
+    background: #09132adf;
+    backdrop-filter: blur(12px);
+}
+
+.universe-camera button {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid #b7addb59;
+    background: #12213a;
+    color: #eee8ff;
+    font-size: 22px;
+}
+
+.universe-camera button:hover {
+    background: #453360;
+}
+
+.universe-camera button:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+.universe-camera button#openDestinations {
+    width: auto;
+    min-width: 80px;
+    border-radius: 20px;
+    padding-inline: 13px;
+    font-size: 12px;
+}
+
+#zoomValue {
+    font-size: 12px;
+    color: #d8d7e7;
+    min-width: 43px;
+    text-align: center;
+}
+
+#universeHint {
+    margin: 8px 0 0;
+    font-size: 10px;
+    color: #c2c8db;
+    text-align: center;
+    text-shadow: 0 1px 5px #000;
+}
+
+.universe-status {
+    position: absolute;
+    top: 110px;
+    left: 146px;
+    color: #cfc8de;
+    padding: 6px 12px;
+    border-radius: 18px;
+    font-size: 11px;
+    background: #091226a6;
+    pointer-events: none;
+    max-width: min(600px, calc(100% - 180px));
+}
+
+.universe-status:empty {
+    display: none;
+}
+
+.universe-blocked {
+    position: absolute;
+    inset: 0;
+    z-index: 8;
+    border-radius: 0;
+    background: #040b20e8;
+    padding-left: 170px;
+}
+
+.universe-mode.is-blocked :is(#universeObjects, .universe-header, .universe-bottom, .destination-panel, .universe-status) {
+    display: none;
+}
+
+.universe-mode.is-blocked .universe-top-actions {
+    z-index: 9;
+}
+
+.universe-mode .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+}
+
+.destination-list {
+    display: grid;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.destination-list button {
+    border: 1px solid #d9cbe8;
+    color: #382147;
+    background: #f8f3fc;
+    text-align: left;
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: 700;
+}
+
+.destination-list button span {
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    color: #776184;
+    margin-top: 4px;
+}
+
+.universe-mode.astro-high-contrast .universe-header {
+    padding: 12px;
+    border-radius: 12px;
+    background: #030817;
+}
+
+.universe-mode.astro-high-contrast .planet-label {
+    background: #030817;
+}
+
+.universe-mode.astro-high-contrast .planet-label small {
+    color: #fff;
+}
+
+.universe-mode.astro-high-contrast :is(.destination-panel, .universe-camera) {
+    border-color: #fff;
+    background: #030817;
+}
+
+.universe-mode.astro-high-contrast .destination-panel p {
+    color: #fff !important;
+}
+
+.universe-mode.universe-dragging {
+    cursor: grabbing;
+    user-select: none;
+}
+
+@media (max-width: 1100px) {
+
+    .universe-header,
+    .collapsed .universe-header {
+        left: 138px;
+        top: 24px;
+        width: calc(100% - 420px);
+    }
+
+    .universe-header h1 {
+        font-size: 28px;
+    }
+
+    .universe-header p {
+        font-size: 13px;
+    }
+
+    .planet-label strong {
+        font-size: 16px;
+    }
+
+    .planet-label {
+        padding-left: 20px;
+    }
+
+    .destination-panel,
+    .collapsed .destination-panel {
+        left: 135px;
+        width: 345px;
+        padding: 18px;
+    }
+
+    .universe-bottom {
+        left: 72%;
+    }
+}
+
+@media (max-width: 800px) {
+
+    .universe-mode main,
+    .universe-mode.collapsed main {
+        padding: 0;
+        width: 100%;
+    }
+
+    .universe-header,
+    .collapsed .universe-header {
+        top: 82px;
+        left: 18px;
+        width: calc(100% - 36px);
+    }
+
+    .universe-header h1 {
+        font-size: 28px;
+    }
+
+    .universe-header p {
+        font-size: 13px;
+        max-width: 280px;
+    }
+
+    .universe-top-actions,
+    body:has(#astroAccountTools) .universe-top-actions {
+        top: 18px;
+        left: 18px;
+        right: auto;
+        gap: 8px;
+    }
+
+    body:has(#astroAccountTools) .universe-top-actions {
+        max-width: calc(100% - 135px);
+    }
+
+    .universe-top-actions a,
+    .universe-top-actions button {
+        font-size: 10px;
+        padding: 9px 11px;
+    }
+
+    .universe-status {
+        top: 156px;
+        left: 18px;
+        max-width: calc(100% - 36px);
+        font-size: 10px;
+    }
+
+    .planet-label strong {
+        font-size: 13px;
+    }
+
+    .planet-label small {
+        font-size: 8px;
+        letter-spacing: .07em;
+    }
+
+    .planet-label {
+        padding: 8px 10px 8px 17px;
+        max-width: 170px;
+    }
+
+    .planet-label::before {
+        left: 3px;
+        top: 17px;
+        width: 5px;
+        height: 5px;
+    }
+
+    .planet-robo .planet-label {
+        left: 50%;
+        top: 38%;
+        transform: translateX(-50%);
+    }
+
+    .planet-crew .planet-label {
+        left: 50%;
+        top: 38%;
+        transform: translateX(-50%);
+    }
+
+    .planet-quiz .planet-label {
+        left: 50%;
+        top: 38%;
+        transform: translateX(-50%);
+    }
+
+    .universe-bottom {
+        bottom: calc(94px + env(safe-area-inset-bottom));
+        left: 50%;
+        max-width: calc(100% - 24px);
+        width: max-content;
+    }
+
+    .universe-camera {
+        padding: 6px 10px;
+        gap: 6px;
+    }
+
+    .universe-camera button {
+        width: 34px;
+        height: 34px;
+    }
+
+    #universeHint {
+        font-size: 9px;
+    }
+
+    .destination-panel,
+    .collapsed .destination-panel {
+        left: 12px;
+        right: 12px;
+        bottom: calc(175px + env(safe-area-inset-bottom));
+        width: auto;
+        max-height: 37svh;
+        overflow: auto;
+        padding: 17px;
+    }
+
+    .destination-panel h2 {
+        font-size: 19px;
+    }
+
+    .destination-panel>p:not(.eyebrow) {
+        font-size: 12px;
+    }
+
+    .destination-panel .selected-progress {
+        display: none;
+    }
+
+    .destination-panel .eyebrow {
+        font-size: 8px;
+        margin-bottom: 6px;
+    }
+
+    .destination-actions {
+        margin-top: 10px;
+    }
+
+    .universe-blocked {
+        padding: 100px 20px 180px;
+    }
+}
+
+@media (max-height: 650px) and (min-width: 801px) {
+    .universe-header {
+        top: 20px;
+    }
+
+    .universe-header h1 {
+        font-size: 27px;
+    }
+
+    .destination-panel,
+    .collapsed .destination-panel {
+        max-height: 43svh;
+        overflow: auto;
+    }
+}
+
+.universe-mode.astro-high-contrast #universeViewport :is(h1, h2, p, small, strong, span, output) {
+    color: #fff !important;
+}
+
+body.universe-mode {
+    overflow: hidden;
+}

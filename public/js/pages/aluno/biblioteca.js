@@ -1,23 +1,504 @@
-import { sessaoObrigatoria } from "../../services/conexao.js";
-import { biblioteca } from "../../services/aluno.js";
-const session = sessaoObrigatoria("aluno");
-const $ = id => document.getElementById(id);
-const key = "astrolearn-biblioteca-favoritos-v1:" + session.usuario.id;
-let rows = [], favorites = new Set(), onlyFavorites = false, busy = false, selected = null, opener = null;
-try { const saved = JSON.parse(localStorage.getItem(key) || "[]"); if(Array.isArray(saved)) favorites = new Set(saved.filter(id => typeof id === "string")); } catch { $("storageNotice").textContent="Não foi possível recuperar seus favoritos. Você ainda pode consultar os materiais."; }
-$("profileInitial").textContent = (session.usuario.nome || "Aluno").trim().charAt(0).toUpperCase();
-function node(tag,text,cls="") { const el=document.createElement(tag);el.textContent=text;el.className=cls;return el; }
-function safeLink(raw) { try { const url = new URL(typeof raw === "string" ? raw : raw?.url);return ["https:","http:"].includes(url.protocol) && !url.username && !url.password ? url.href : null; } catch { return null; } }
-function links(material) { return (Array.isArray(material.links)?material.links:[]).map(raw=>({href:safeLink(raw),title:typeof raw==="object"?String(raw?.titulo||"Abrir recurso"):"Abrir recurso"})).filter(x=>x.href); }
-function saveFavorite(id) { if(favorites.has(id)) favorites.delete(id);else favorites.add(id);try{localStorage.setItem(key,JSON.stringify([...favorites]));$("storageNotice").textContent="";}catch{$("storageNotice").textContent="Seu navegador não permitiu salvar os favoritos. A seleção será mantida só enquanto esta página estiver aberta.";}render();updateReaderFavorite(); }
-function updateReaderFavorite(){if(!selected)return;const saved=favorites.has(selected.id);$("saveInReader").setAttribute("aria-pressed",String(saved));$("saveInReader").textContent=saved?"Remover dos favoritos":"Salvar nos favoritos";}
-function coverIndex(m){const text=(m.titulo+" "+(m.descricao||"")).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();return /robot|program|circuit|arduino|tecnolog/.test(text)?1:/espac|solar|planet|univers|astro|lua|orbita/.test(text)?0:/diario|pesquisa|ciencia|descobert|anotac/.test(text)?2:Math.max(0,rows.indexOf(m))%3;}
-function format(m){const urls=links(m);if(!urls.length)return "LEITURA";return urls.some(x=>/\.pdf(?:[?#]|$)/i.test(x.href))?"PDF / LINK":"LINK";}
-function openReader(material,button){selected=material;opener=button;$("readerTitle").textContent=material.titulo||"Material da turma";$("readerDescription").textContent=material.descricao||"Seu professor compartilhou este material com a turma.";$("readerMission").textContent=material.missoes?.titulo?"Atividade: "+material.missoes.titulo:"Biblioteca geral da turma";$("readerLinks").replaceChildren();const resources=links(material);resources.forEach((item,i)=>{const a=node("a",item.title+(resources.length>1?" "+(i+1):"")+" ↗","primary");a.href=item.href;a.target="_blank";a.rel="noopener noreferrer";$("readerLinks").append(a);});if(!resources.length)$("readerLinks").append(node("p","Este material não possui arquivos ou links anexados.","hint"));$("readerLinkHint").hidden=!resources.length;updateReaderFavorite();$("reader").showModal();$("closeReader").focus();}
-function render(){const term=$("search").value.trim().toLocaleLowerCase("pt-BR");const filtered=rows.filter(m=>(!onlyFavorites||favorites.has(m.id))&&((m.titulo||"")+" "+(m.descricao||"")).toLocaleLowerCase("pt-BR").includes(term));$("materials").replaceChildren();for(const m of filtered){const card=node("article","","material");const visual=node("div","","material-visual");visual.setAttribute("aria-hidden","true");const cover=node("div","","book-cover");cover.style.setProperty("--cover-x",coverIndex(m)*50+"%");const coverTitle=node("span",m.titulo||"Material da turma","cover-title");cover.append(coverTitle);visual.append(cover);const bookmark=node("button","","bookmark");bookmark.type="button";bookmark.setAttribute("aria-label","Favoritar: "+(m.titulo||"Material"));bookmark.setAttribute("aria-pressed",String(favorites.has(m.id)));bookmark.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg>';bookmark.onclick=()=>{saveFavorite(m.id);const replacement=[...$("materials").querySelectorAll(".bookmark")].find(b=>b.dataset.id===m.id);(replacement||$("favorites")).focus();};bookmark.dataset.id=m.id;const open=node("button","Abrir material →","primary");open.type="button";open.onclick=()=>openReader(m,open);card.append(visual,bookmark,node("h3",m.titulo||"Material da turma"),node("span",format(m),"format"),node("p",m.descricao||"Material compartilhado pelo professor.","material-description"),open);$("materials").append(card);}$("favoriteCount").textContent=rows.filter(m=>favorites.has(m.id)).length;$("resultCount").textContent=filtered.length+ (filtered.length===1?" material":" materiais")+(onlyFavorites?" nos favoritos":" da sua turma");$("empty").hidden=filtered.length>0;$("emptyTitle").textContent=onlyFavorites?"Seus favoritos ficam aqui":"Nenhum material encontrado";$("emptyText").textContent=term?"Tente buscar outro título ou assunto.":onlyFavorites?"Use o marcador nos cartões para guardar os materiais que deseja consultar depois.":"Seu professor ainda não compartilhou materiais com esta turma.";$("allFilter").setAttribute("aria-pressed",String(!onlyFavorites));$("favorites").setAttribute("aria-pressed",String(onlyFavorites));$("clearSearch").hidden=!$("search").value;}
-async function load(){if(busy)return;busy=true;$("refresh").disabled=true;$("error").hidden=true;$("materials").setAttribute("aria-busy","true");if(!rows.length)$("resultCount").textContent="Carregando materiais…";try{const data=await biblioteca();rows=(Array.isArray(data?.materiais)?data.materiais:[]).filter(m=>m&&typeof m.id==="string");render();}catch(error){$("error").textContent=error.message||"Não foi possível carregar os materiais. Tente atualizar.";$("error").hidden=false;$("resultCount").textContent=rows.length?"Exibindo a última lista carregada":"Falha ao carregar materiais";$("empty").hidden=true;}finally{busy=false;$("refresh").disabled=false;$("materials").setAttribute("aria-busy","false");}}
-$("search").addEventListener("input",render);$("clearSearch").onclick=()=>{$("search").value="";render();$("search").focus();};$("allFilter").onclick=()=>{onlyFavorites=false;render();};$("favorites").onclick=()=>{onlyFavorites=true;render();};$("reset").onclick=()=>{onlyFavorites=false;$("search").value="";render();$("search").focus();};$("refresh").onclick=load;$("closeReader").onclick=()=>$("reader").close();$("reader").addEventListener("click",e=>{if(e.target!==$("reader"))return;const r=$("reader").getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)$("reader").close();});$("reader").addEventListener("close",()=>{if(opener?.isConnected)opener.focus();else $("search").focus();});$("saveInReader").onclick=()=>{if(selected)saveFavorite(selected.id);};
-window.addEventListener("storage",e=>{if(e.key!==key)return;try{const data=JSON.parse(e.newValue||"[]");if(Array.isArray(data)){favorites=new Set(data.filter(id=>typeof id==="string"));render();updateReaderFavorite();}}catch{}});
-load();
+import { sessaoObrigatoria } from '../../services/conexao.js';
+import { biblioteca } from '../../services/aluno.js';
 
-$("libraryBell").onclick=()=>$("libraryNotifications").showModal();$("closeNotifications").onclick=()=>$("libraryNotifications").close();$("libraryNotifications").addEventListener("close",()=>$("libraryBell").focus());
+const session = sessaoObrigatoria('aluno');
+const $ = id => document.getElementById(id);
+
+const storageKey =
+  'astrolearn-biblioteca-favoritos-v1:' + session.usuario.id;
+
+let materials = [];
+let favorites = new Set();
+let onlyFavorites = false;
+let loading = false;
+let selected = null;
+let readerOpener = null;
+let toastTimer;
+
+try {
+  const saved = JSON.parse(
+    localStorage.getItem(storageKey) || '[]'
+  );
+
+  if (Array.isArray(saved)) {
+    favorites = new Set(
+      saved.filter(id => typeof id === 'string')
+    );
+  }
+} catch {
+  $('storageNotice').textContent =
+    'Não foi possível recuperar os favoritos deste navegador.';
+}
+
+function element(tag, text = '', className = '') {
+  const node = document.createElement(tag);
+
+  node.textContent = text;
+  node.className = className;
+
+  return node;
+}
+
+function resources(material) {
+  const list = Array.isArray(material.links)
+    ? material.links
+    : [];
+
+  return list.flatMap(raw => {
+    try {
+      const url = new URL(
+        typeof raw === 'string' ? raw : raw?.url
+      );
+
+      if (
+        !['https:', 'http:'].includes(url.protocol) ||
+        url.username ||
+        url.password
+      ) {
+        return [];
+      }
+
+      return [{
+        url: url.href,
+        title:
+          typeof raw === 'object'
+            ? String(raw?.titulo || 'Abrir recurso')
+            : 'Abrir recurso'
+      }];
+    } catch {
+      return [];
+    }
+  });
+}
+
+function coverIndex(material) {
+  const text =
+    `${material.titulo || ''} ${material.descricao || ''}`
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+
+  if (/robot|program|circuit|arduino|tecnolog/.test(text)) {
+    return 1;
+  }
+
+  if (/espac|solar|planet|univers|astro|lua|orbita/.test(text)) {
+    return 0;
+  }
+
+  if (/diario|pesquisa|ciencia|descobert|anotac/.test(text)) {
+    return 2;
+  }
+
+  return Math.max(0, materials.indexOf(material)) % 3;
+}
+
+function materialFormat(material) {
+  const links = resources(material);
+
+  if (!links.length) return 'LEITURA';
+
+  return links.some(link => /\.pdf(?:[?#]|$)/i.test(link.url))
+    ? 'PDF / LINK'
+    : 'LINK';
+}
+
+function updateReaderFavorite() {
+  if (!selected) return;
+
+  const saved = favorites.has(selected.id);
+
+  $('saveInReader').setAttribute(
+    'aria-pressed',
+    String(saved)
+  );
+
+  $('saveInReader').textContent = saved
+    ? 'Remover dos favoritos'
+    : 'Salvar nos favoritos';
+}
+
+function toggleFavorite(id) {
+  favorites.has(id)
+    ? favorites.delete(id)
+    : favorites.add(id);
+
+  try {
+    localStorage.setItem(
+      storageKey,
+      JSON.stringify([...favorites])
+    );
+
+    $('storageNotice').textContent = '';
+  } catch {
+    $('storageNotice').textContent =
+      'O favorito ficará disponível só nesta página: o navegador não permitiu salvá-lo.';
+  }
+
+  render();
+  updateReaderFavorite();
+
+  clearTimeout(toastTimer);
+
+  $('favoriteToast').textContent = favorites.has(id)
+    ? 'Material salvo nos favoritos.'
+    : 'Material removido dos favoritos.';
+
+  $('favoriteToast').hidden = false;
+
+  toastTimer = setTimeout(() => {
+    $('favoriteToast').hidden = true;
+  }, 2600);
+}
+
+function openReader(material, opener) {
+  selected = material;
+  readerOpener = opener;
+
+  $('readerTitle').textContent =
+    material.titulo || 'Material da turma';
+
+  $('readerDescription').textContent =
+    material.descricao ||
+    'Material compartilhado pelo professor.';
+
+  $('readerMission').textContent = material.missoes?.titulo
+    ? 'Atividade: ' + material.missoes.titulo
+    : 'Biblioteca geral da turma';
+
+  $('readerLinks').replaceChildren();
+
+  const links = resources(material);
+
+  links.forEach((resource, index) => {
+    const title =
+      resource.title +
+      (links.length > 1 ? ` ${index + 1}` : '') +
+      ' ↗';
+
+    const link = element('a', title, 'primary');
+
+    link.href = resource.url;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+
+    $('readerLinks').append(link);
+  });
+
+  if (!links.length) {
+    $('readerLinks').append(
+      element(
+        'p',
+        'Este material não possui links ou arquivos anexados.',
+        'hint'
+      )
+    );
+  }
+
+  $('readerLinkHint').hidden = !links.length;
+
+  updateReaderFavorite();
+
+  $('reader').showModal();
+  $('closeReader').focus();
+}
+
+function render() {
+  const term = $('search').value
+    .trim()
+    .toLocaleLowerCase('pt-BR');
+
+  const filtered = materials.filter(material => {
+    const text =
+      `${material.titulo || ''} ${material.descricao || ''}`
+        .toLocaleLowerCase('pt-BR');
+
+    return (
+      (!onlyFavorites || favorites.has(material.id)) &&
+      text.includes(term)
+    );
+  });
+
+  $('materials').replaceChildren();
+
+  for (const material of filtered) {
+    const card = element('article', '', 'material');
+
+    const visual = element(
+      'div',
+      '',
+      'material-visual thumb-' + coverIndex(material)
+    );
+
+    visual.setAttribute('aria-hidden', 'true');
+
+    const bookmark = element('button', '', 'bookmark');
+
+    bookmark.type = 'button';
+    bookmark.dataset.id = material.id;
+
+    bookmark.setAttribute(
+      'aria-label',
+      'Favoritar: ' + (material.titulo || 'Material')
+    );
+
+    bookmark.setAttribute(
+      'aria-pressed',
+      String(favorites.has(material.id))
+    );
+
+    bookmark.innerHTML = `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6 3h12v18l-6-4-6 4z"/>
+      </svg>
+    `;
+
+    bookmark.onclick = () => {
+      toggleFavorite(material.id);
+
+      const replacement = [
+        ...$('materials').querySelectorAll('.bookmark')
+      ].find(button => button.dataset.id === material.id);
+
+      (replacement || $('favorites')).focus();
+    };
+
+    const open = element(
+      'button',
+      'Abrir material →',
+      'primary'
+    );
+
+    open.type = 'button';
+    open.onclick = () => openReader(material, open);
+
+    card.append(
+      visual,
+      bookmark,
+      element(
+        'h3',
+        material.titulo || 'Material da turma'
+      ),
+      element(
+        'span',
+        materialFormat(material),
+        'format'
+      ),
+      element(
+        'p',
+        material.descricao ||
+          'Material compartilhado pelo professor.',
+        'material-description'
+      ),
+      open
+    );
+
+    $('materials').append(card);
+  }
+
+  $('resultCount').textContent =
+    `${filtered.length} ${
+      filtered.length === 1 ? 'material' : 'materiais'
+    }`;
+
+  $('favoriteCount').textContent = materials.filter(
+    material => favorites.has(material.id)
+  ).length;
+
+  $('allFilter').setAttribute(
+    'aria-pressed',
+    String(!onlyFavorites)
+  );
+
+  $('favorites').setAttribute(
+    'aria-pressed',
+    String(onlyFavorites)
+  );
+
+  $('clearSearch').hidden = !$('search').value;
+
+  renderSaved();
+
+  $('empty').hidden = filtered.length > 0;
+
+  $('emptyTitle').textContent = onlyFavorites
+    ? 'Seus favoritos ficam aqui'
+    : 'Nenhum material encontrado';
+
+  $('emptyText').textContent = term
+    ? 'Tente buscar outro título ou assunto.'
+    : onlyFavorites
+      ? 'Use o marcador nos cartões para guardar seus materiais.'
+      : 'Seu professor ainda não compartilhou materiais com esta turma.';
+}
+
+function renderSaved() {
+  const saved = materials.filter(
+    material => favorites.has(material.id)
+  );
+
+  $('savedList').replaceChildren();
+  $('favoritesEmpty').hidden = saved.length > 0;
+
+  for (const material of saved) {
+    const button = element('button', '', 'saved-item');
+
+    button.type = 'button';
+
+    const picture = element(
+      'span',
+      '',
+      'saved-thumb thumb-' + coverIndex(material)
+    );
+
+    picture.setAttribute('aria-hidden', 'true');
+
+    const text = element('span', '', 'saved-copy');
+
+    text.append(
+      element(
+        'strong',
+        material.titulo || 'Material da turma'
+      ),
+      element('span', 'Abrir →')
+    );
+
+    button.append(picture, text);
+    button.onclick = () => openReader(material, button);
+
+    $('savedList').append(button);
+  }
+}
+
+async function load() {
+  if (loading) return;
+
+  loading = true;
+
+  $('refresh').disabled = true;
+  $('error').hidden = true;
+  $('materials').setAttribute('aria-busy', 'true');
+
+  if (!materials.length) {
+    $('resultCount').textContent = 'Carregando materiais…';
+  }
+
+  try {
+    const data = await biblioteca();
+
+    materials = (
+      Array.isArray(data?.materiais)
+        ? data.materiais
+        : []
+    ).filter(
+      material =>
+        material &&
+        typeof material.id === 'string'
+    );
+
+    render();
+  } catch (error) {
+    $('error').textContent =
+      error.message ||
+      'Não foi possível carregar. Tente atualizar.';
+
+    $('error').hidden = false;
+
+    $('resultCount').textContent = materials.length
+      ? 'Exibindo a última lista carregada'
+      : 'Falha ao carregar materiais';
+
+    $('empty').hidden = true;
+  } finally {
+    loading = false;
+
+    $('refresh').disabled = false;
+    $('materials').setAttribute('aria-busy', 'false');
+  }
+}
+
+$('search').addEventListener('input', render);
+
+$('clearSearch').onclick = () => {
+  $('search').value = '';
+
+  render();
+  $('search').focus();
+};
+
+$('allFilter').onclick = () => {
+  onlyFavorites = false;
+  render();
+};
+
+$('favorites').onclick = () => {
+  onlyFavorites = true;
+  render();
+};
+
+$('reset').onclick = () => {
+  onlyFavorites = false;
+  $('search').value = '';
+
+  render();
+  $('search').focus();
+};
+
+$('refresh').onclick = load;
+
+$('closeReader').onclick = () => {
+  $('reader').close();
+};
+
+$('saveInReader').onclick = () => {
+  if (selected) {
+    toggleFavorite(selected.id);
+  }
+};
+
+$('reader').addEventListener('close', () => {
+  if (
+    readerOpener?.isConnected &&
+    readerOpener.getClientRects().length
+  ) {
+    readerOpener.focus();
+  } else {
+    $('search').focus();
+  }
+});
+
+$('reader').addEventListener('click', event => {
+  if (event.target !== $('reader')) return;
+
+  const rect = $('reader').getBoundingClientRect();
+
+  if (
+    event.clientX < rect.left ||
+    event.clientX > rect.right ||
+    event.clientY < rect.top ||
+    event.clientY > rect.bottom
+  ) {
+    $('reader').close();
+  }
+});
+
+window.addEventListener('storage', event => {
+  if (event.key !== storageKey) return;
+
+  try {
+    const saved = JSON.parse(event.newValue || '[]');
+
+    if (Array.isArray(saved)) {
+      favorites = new Set(
+        saved.filter(id => typeof id === 'string')
+      );
+
+      render();
+      updateReaderFavorite();
+    }
+  } catch {
+    // Preserva os favoritos atuais se o armazenamento estiver inválido.
+  }
+});
+
+load();
