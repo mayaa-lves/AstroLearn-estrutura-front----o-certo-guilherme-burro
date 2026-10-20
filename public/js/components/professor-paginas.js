@@ -238,7 +238,7 @@ function B() {
     t.replaceChildren();
     for (const a of n.missoes.filter(a => !e.value || (a.status_publicacao || "publicado") === e.value)) {
       const e = "rascunho" === a.status_publicacao, o = c("article", "", "list-card"), r = c("div");
-      r.append(c("span", e ? "Nova atividade" : "Publicada", e ? "badge" : "badge green"), c("h2", a.titulo), c("p", `${n.periodos.find(e => e.id === a.periodo_id)?.nome || "Sem período"} · ${"equipe" === a.tipo_atividade ? "Em equipe" : "Individual"} · Atividade ${a.ordem}${a.data_limite ? " · Prazo " + new Date(a.data_limite.slice(0, 10) + "T12:00:00").toLocaleDateString("pt-BR") : ""}`));
+      r.append(c("span", e ? "Rascunho" : "Publicada", e ? "badge" : "badge green"), c("h2", a.titulo), c("p", `${n.periodos.find(e => e.id === a.periodo_id)?.nome || "Sem período"} · ${"equipe" === a.tipo_atividade ? "Em equipe" : "Individual"} · Atividade ${a.ordem}${a.data_limite ? " · Prazo " + new Date(a.data_limite.slice(0, 10) + "T12:00:00").toLocaleDateString("pt-BR") : ""}`));
       o.append(r, v(e ? "Continuar rascunho →" : "Abrir atividade →", e ? "atividade/editar/" : "atividade/", { sala: i, atividade: a.id })), t.append(o)
     }
     t.children.length || t.append(c("p", "Nenhuma atividade corresponde a este filtro.", "empty"))
@@ -251,26 +251,13 @@ function k(e) {
   else try { const t = new URL(e.url); if ("https:" !== t.protocol) return null; a.href = t.href, a.target = "_blank", a.rel = "noopener noreferrer" } catch { return null }
   return a
 }
-function U(e) {
-  const a = Array.from(e || []), t = 1048576;
-  if (a.length > 10) throw new Error("Anexe até 10 arquivos.");
-  if (new Set(a.map(e => e.name + "-" + e.size)).size !== a.length) throw new Error("Um dos arquivos foi selecionado mais de uma vez.");
-  let o = 0;
-  for (const e of a) {
-    if (!/\.(pdf|jpe?g|png|webp)$/i.test(e.name)) throw new Error(`${e.name}: escolha PDF, JPG, PNG ou WebP.`);
-    if (!e.size || e.size > 20 * t) throw new Error(`${e.name}: o arquivo deve ter até 20 MB e não pode estar vazio.`);
-    o += e.size
-  }
-  if (o > 50 * t) throw new Error("Os anexos ultrapassam 50 MB.");
-  return a
-}
 a("menuToggle").onclick = () => {
   const e = document.body.classList.toggle("collapsed");
   a("menuToggle").setAttribute("aria-expanded", String(!e)), a("menuToggle").setAttribute("aria-label", e ? "Expandir menu" : "Recolher menu")
 };
 a("help").onclick = () => {
   const e = c("div");
-  e.append(c("p", "Comece em Turmas. Ao abrir uma sala, consulte os alunos e gráficos. Use Atividades para criar uma proposta com PDF ou imagem, Equipes para organizar os grupos e Correções para revisar as entregas."), c("p", "Os gráficos mostram apenas dados registrados. Sem nota significa que a atividade ainda não recebeu uma avaliação."), c("p", "Esta é uma prévia local. Nenhuma turma ou correção é enviada à escola."));
+  e.append(c("p", "Comece em Turmas. Ao abrir uma sala, consulte os alunos e gráficos. Use Atividades para criar uma proposta com PDF ou imagem, Equipes para organizar os grupos e Correções para revisar as entregas."), c("p", "Os gráficos mostram apenas dados registrados. Sem nota significa que a atividade ainda não recebeu uma avaliação."), c("p", "Turmas, atividades e correções são salvas na sua conta pelo servidor."));
   C("Sua estação de aprendizagem", e)
 };
 a("exit").onclick = async e => { e.preventDefault(), location.assign("../auth/login.html") };
@@ -280,109 +267,129 @@ const I = e => "../aluno/atividade.html?" + new URLSearchParams({ preview: "1", 
 
 async function V() {
   await e.editorReady();
-  const o = t.get("atividade") || t.get("criada"), r = t.get("preparar") || e.uid();
-  let s = o ? n.missoes.find(e => e.id === o) : n.missoes.find(e => e.chave_criacao === r);
-  if (o && !s) throw new Error("Atividade não encontrada nesta turma.");
-  w(s ? "Preparar a próxima descoberta." : "Uma nova descoberta.", "publicado" === s?.status_publicacao ? "As alterações salvas ficam visíveis para os alunos." : "Ao salvar, a atividade será disponibilizada aos alunos. O backend atual não possui rascunhos.");
-  a("pageActions").append(v("← Atividades da turma", "atividades/", { sala: i }));
-  const d = c("div", "", "editor-grid"), l = y("Proposta da atividade"), p = c("form");
-  p.id = "missionForm", l.append(p), l.classList.add("form-panel");
-  const h = _(p, "Título da atividade", "text", "mission-title", s?.titulo || "");
-  h.required = !0, h.maxLength = 120, h.placeholder = "Ex.: Como a luz influencia uma planta?";
-  const f = _(p, "Orientação para os alunos", "textarea", "mission-description", s?.descricao || "");
-  f.maxLength = 1e4, f.rows = 9, f.placeholder = "Explique o objetivo, os passos e o que deve aparecer na entrega.";
-  const b = c("div", "", "form-row"), x = _(b, "Período", "select", "mission-period"), A = _(b, "Prazo de entrega (opcional)", "date", "mission-date", s?.data_limite?.slice(0, 10) || "");
-  n.periodos.forEach(e => q(x, e.nome, e.id)), x.value = s?.periodo_id || t.get("periodo") || n.periodos[0]?.id || "", x.required = !0, p.append(b);
-  const S = _(p, "Formato da proposta", "select", "mission-mode");
-  q(S, "Individual", "individual"), q(S, "Em equipe", "equipe"), S.value = s?.tipo_atividade || "individual", S.disabled = !0;
-  const N = c("p", "", "hint"); p.append(N);
-  const M = v("Organizar equipes deste período →", "equipes/", { sala: i }, "text-button"); p.append(M);
-  const R = c("details", "", "orientation"); R.append(c("summary", "Nota e recompensas"));
-  const P = c("div", "", "form-row"), $ = _(P, "Peso da nota", "number", "mission-weight", s?.peso_nota ?? 1), L = _(P, "XP da atividade", "number", "mission-xp", s?.xp_reward ?? 30);
-  $.min = ".1", $.max = "10", $.step = ".1", L.min = "0", L.max = "1000", L.step = "1";
-  R.append(P, c("p", "O período permite até 5 atividades, por período. A ordem é definida automaticamente.", "hint")), p.append(R);
-  const z = c("div", "", "editor-materials");
-  z.append(c("h2", "Materiais de apoio"), c("p", "Upload ainda indisponível no backend. Adicione links pela biblioteca da turma.", "hint"));
-  const D = c("ul", "", "files-list"), T = _(z, "Escolher PDFs ou imagens", "file", "mission-files");
-  T.multiple = !0, T.disabled = !0, T.accept = ".pdf,.jpg,.jpeg,.png,.webp";
-  const O = c("ul", "", "files-list");
-  z.append(D, O, c("p", "Até 10 arquivos · 20 MB por arquivo · 50 MB no total.", "hint")), p.append(z);
-  let B = s ? await e.files(i, s.id) : [], V = [], F = new Set, H = !1;
-  const Z = c("p", "", "file-note"); Z.setAttribute("role", "status"), Z.setAttribute("aria-live", "polite");
-  const J = c("p", "", "error-panel"); J.setAttribute("role", "alert"), p.append(Z, J);
-  const X = c("div", "", "editor-actions"), G = c("button", "Salvar e disponibilizar", "secondary"), K = g("Ver como aluno", () => ne("preview"), "secondary"), Q = g("Revisar e publicar", () => ne("publish"), "primary");
-  G.type = "submit", G.id = "saveDraft", K.id = "previewMission", Q.id = "publishMission", X.append(G, K, Q), p.append(X);
-  const W = y("Antes de compartilhar.", "Uma proposta clara ajuda o aluno a começar."); W.classList.add("editor-summary");
-  const Y = c("span", "", "badge"), ee = c("h3"), ae = c("div", "", "editor-summary-lines");
-  function te() {
-    const e = "publicado" === s?.status_publicacao, a = "equipe" === S.value;
-    G.textContent = e ? "Salvar alterações" : "Salvar e disponibilizar", Q.hidden = !0, Y.textContent = e ? "Publicada" : "Nova atividade", Y.className = e ? "badge green" : "badge", ee.textContent = h.value.trim() || "Sua próxima atividade";
-    ae.replaceChildren(c("p", a ? "Em equipe · entrega individual" : "Individual"), c("p", n.periodos.find(e => e.id === x.value)?.nome || "Escolha um período"), c("p", A.value ? "Prazo: " + new Date(A.value + "T12:00:00").toLocaleDateString("pt-BR") : "Sem prazo de entrega"), c("p", `${B.filter(e => !F.has(e.path)).length + V.length} materiais de apoio`));
-    N.textContent = a ? "Pesquisa em grupo. Cada aluno entrega seu registro e recebe nota e devolutiva individuais. Quem estiver sem equipe precisará ser incluído pelo professor antes de entregar." : "Cada aluno desenvolve e entrega sua própria investigação.";
-    M.hidden = !a, M.href = m("equipes/", { sala: i }) + (m("equipes/", { sala: i }).includes("?") ? "&" : "?") + "periodo=" + encodeURIComponent(x.value), x.disabled = e, S.disabled = !0;
-    const t = n.entregas.some(e => e.missao_id === s?.id); $.disabled = L.disabled = t, D.replaceChildren();
-    for (const e of B) {
-      const a = c("li", "", "editor-file" + (F.has(e.path) ? " staged-removal" : "")), t = k(e);
-      a.append(t || c("span", e.name), g(F.has(e.path) ? "Desfazer" : "Remover", () => { F.has(e.path) ? F.delete(e.path) : F.add(e.path), j = !0, te() }, "text-button")), D.append(a)
+  const activityId = t.get('atividade') || t.get('criada');
+  let mission = activityId ? n.missoes.find(item => item.id === activityId) : null;
+  if (activityId && !mission) throw new Error('Atividade não encontrada nesta turma.');
+  const rules = await e.uploadRules();
+  let selected = null, saving = false;
+  w(mission ? 'Preparar a próxima descoberta.' : 'Uma nova descoberta.',
+    mission?.status_publicacao === 'publicado' ? 'As alterações salvas ficam visíveis para os alunos.' : 'Salve a proposta como rascunho e publique quando estiver pronta.');
+  a('pageActions').append(v('← Atividades da turma', 'atividades/', { sala: i }));
+  const grid = c('div', '', 'editor-grid'), panel = y('Proposta da atividade'), form = c('form');
+  form.id = 'missionForm'; panel.classList.add('form-panel'); panel.append(form);
+  const title = _(form, 'Título da atividade', 'text', 'mission-title', mission?.titulo || '');
+  title.required = true; title.maxLength = 120;
+  const description = _(form, 'Orientação para os alunos', 'textarea', 'mission-description', mission?.descricao || '');
+  description.maxLength = 10000; description.rows = 7;
+  const deliverable = _(form, 'O que entregar?', 'textarea', 'mission-deliverable', mission?.o_que_entregar || '');
+  deliverable.maxLength = 10000; deliverable.rows = 4;
+  deliverable.placeholder = 'Ex.: um relatório com a hipótese, fotos do experimento e a conclusão.';
+  const row = c('div', '', 'form-row');
+  const period = _(row, 'Período', 'select', 'mission-period');
+  n.periodos.forEach(item => q(period, item.nome, item.id));
+  period.value = mission?.periodo_id || t.get('periodo') || n.periodos[0]?.id || ''; period.required = true;
+  const date = _(row, 'Prazo de entrega (opcional)', 'date', 'mission-date', mission?.data_limite?.slice(0, 10) || '');
+  form.append(row);
+  const mode = _(form, 'Formato da proposta', 'select', 'mission-mode');
+  q(mode, 'Individual', 'individual'); q(mode, 'Em equipe', 'equipe'); mode.value = mission?.tipo_atividade || 'individual';
+  const modeHint = c('p', '', 'hint');
+  const teamLink = v('Organizar equipes deste período →', 'equipes/', { sala: i }, 'text-button');
+  form.append(modeHint, teamLink);
+  const rewards = c('details', '', 'orientation'); rewards.append(c('summary', 'Nota e recompensas'));
+  const scores = c('div', '', 'form-row');
+  const weight = _(scores, 'Peso da nota', 'number', 'mission-weight', mission?.peso_nota ?? 1);
+  const xp = _(scores, 'XP da atividade', 'number', 'mission-xp', mission?.xp_reward ?? 30);
+  weight.min = '.1'; weight.max = '10'; weight.step = '.1'; xp.min = '0'; xp.max = '1000'; xp.step = '1';
+  rewards.append(scores, c('p', 'Até 5 atividades por período. A ordem é definida automaticamente.', 'hint')); form.append(rewards);
+  const materials = c('div', '', 'editor-materials');
+  materials.append(c('h2', 'Material de apoio'), c('p', 'Um anexo por atividade. Para compartilhar outros materiais, use a biblioteca da turma.', 'hint'));
+  const fileList = c('ul', '', 'files-list'), fileInput = _(materials, 'Escolher ou substituir o anexo', 'file', 'mission-files');
+  fileInput.accept = rules.accept; fileInput.multiple = false;
+  materials.append(fileList, c('p', rules.aviso + ' PDF, imagens JPG/PNG, DOCX, PPTX, XLSX, ZIP, TXT, PY ou IPYNB.', 'hint'));
+  form.append(materials);
+  const status = c('p', '', 'file-note'), error = c('p', '', 'error-panel');
+  status.setAttribute('role', 'status'); error.setAttribute('role', 'alert'); form.append(status, error);
+  const actions = c('div', '', 'editor-actions');
+  const save = c('button', 'Salvar rascunho', 'secondary'), preview = c('button', 'Ver como aluno', 'secondary'), publish = c('button', 'Revisar e publicar', 'primary');
+  save.type = 'submit'; preview.type = publish.type = 'button';
+  save.id = 'saveDraft'; preview.id = 'previewMission'; publish.id = 'publishMission'; actions.append(save, preview, publish); form.append(actions);
+  const summary = y('Antes de compartilhar.', 'Uma proposta clara ajuda o aluno a começar.'); summary.classList.add('editor-summary');
+  const badge = c('span', '', 'badge'), summaryTitle = c('h3'), summaryLines = c('div', '', 'editor-summary-lines');
+  summary.append(badge, summaryTitle, summaryLines, c('p', 'Rascunhos ficam bloqueados na trilha, sem mostrar o conteúdo. A entrega e a nota em equipe valem para os integrantes do período.', 'hint'));
+  grid.append(panel, summary); a('content').append(grid);
+  function update() {
+    const published = mission?.status_publicacao === 'publicado', team = mode.value === 'equipe';
+    badge.textContent = published ? 'Publicada' : 'Rascunho'; badge.className = published ? 'badge green' : 'badge';
+    save.textContent = published ? 'Salvar alterações' : 'Salvar rascunho'; publish.hidden = published;
+    summaryTitle.textContent = title.value.trim() || 'Sua próxima atividade';
+    summaryLines.replaceChildren(c('p', team ? 'Em equipe · uma entrega compartilhada' : 'Entrega individual'), c('p', n.periodos.find(item => item.id === period.value)?.nome || 'Escolha um período'), c('p', date.value ? 'Prazo: ' + new Date(date.value + 'T12:00:00').toLocaleDateString('pt-BR') : 'Sem prazo definido'));
+    modeHint.textContent = team ? 'Um integrante envia para a equipe. A correção lança a mesma nota e devolutiva para todos os integrantes; não é necessário cada aluno enviar.' : 'Cada aluno envia seu próprio trabalho e recebe sua avaliação.';
+    teamLink.hidden = !team; teamLink.href = m('equipes/', { sala: i, periodo: period.value });
+    // Trocar a modalidade depois de uma entrega deixaria os registros incompatíveis.
+    const hasDeliveries = n.entregas.some(item => item.missao_id === mission?.id);
+    period.disabled = published || hasDeliveries; mode.disabled = hasDeliveries; weight.disabled = xp.disabled = hasDeliveries;
+    fileList.replaceChildren();
+    if (mission?.anexo_url) {
+      const link = k({ url: mission.anexo_url, name: 'Abrir anexo atual' });
+      if (link) fileList.append(u(c('li'), link));
     }
-    O.replaceChildren(...V.map((e, a) => u(c("li"), c("span", e.name + " · novo"), g("Retirar", () => { V.splice(a, 1), j = !0, te() }, "text-button"))))
+    if (selected) fileList.append(u(c('li'), c('span', selected.name + (mission?.anexo_url ? ' · substituirá o anexo atual' : ' · novo')), g('Retirar seleção', () => { selected = null; fileInput.value = ''; j = true; update(); }, 'text-button')));
+    if (!selected && !mission?.anexo_url) fileList.append(c('li', 'Nenhum arquivo anexado.'));
+    [save, preview, publish].forEach(button => button.disabled = saving || !n.periodos.length);
   }
-  W.append(Y, ee, ae, c("p", "Ao salvar, os alunos da turma poderão ver esta atividade. Texto e anexos de entrega ainda dependem do backend.", "hint")), d.append(l, W), a("content").append(d);
-  const oe = () => { j = !0, te() };
-  async function ie() {
-    const a = function () {
-      const e = { titulo: h.value.trim(), descricao: f.value.trim(), periodo_id: x.value, data_limite: A.value || null, tipo_atividade: S.value, peso_nota: Number($.value), xp_reward: Number(L.value) };
-      if (!e.titulo || !e.periodo_id) throw new Error("Preencha o título e escolha um período.");
-      if (!Number.isFinite(e.peso_nota) || e.peso_nota < .1 || e.peso_nota > 10 || !Number.isInteger(e.xp_reward) || e.xp_reward < 0 || e.xp_reward > 1e3) throw new Error("Confira o peso da nota e o XP.");
-      return e
-    }();
-    if (V.length) throw new Error("O backend ainda não recebe arquivos. Remova os anexos antes de salvar.");
-    const o = [...B.filter(e => !F.has(e.path)), ...V];
-    if (o.length > 10 || o.reduce((e, a) => e + a.size, 0) > 52428800) throw new Error("Os materiais atuais e novos ultrapassam o limite da atividade.");
-    if (new Set(o.map(e => e.name + "-" + e.size)).size !== o.length) throw new Error("Um desses materiais já está anexado.");
-    if (s ? s = await e.updateMission(i, s.id, { ...a, revisao: s.revisao }) : (history.replaceState(null, "", m("atividade/nova/", { sala: i, preparar: r })), t.set("preparar", r), s = await e.createMission(i, { ...a, chave_criacao: r })), !s?.id) throw new Error("Não foi possível confirmar o salvamento local.");
-    t.set("atividade", s.id), history.replaceState(null, "", m("atividade/editar/", { sala: i, atividade: s.id }));
-    for (const a of [...F]) await e.removeFile(i, s.id, a), F.delete(a);
-    if (V.length) {
-      const a = await e.files(i, s.id), t = V.filter(e => !a.some(a => a.name === e.name && a.size === e.size));
-      t.length && await e.attach(i, s.id, t), V = [], T.value = ""
-    }
-    const n = await e.room(i);
-    if (s = n.missoes.find(e => e.id === s.id), !s) throw new Error("A atividade não foi encontrada após salvar.");
-    B = await e.files(i, s.id), h.value = s.titulo, f.value = s.descricao || "", x.value = s.periodo_id, S.value = s.tipo_atividade || "individual", A.value = s.data_limite?.slice(0, 10) || "", $.value = s.peso_nota, L.value = s.xp_reward, j = !1, te();
-    Z.textContent = "publicado" === s.status_publicacao ? "Alterações salvas na atividade publicada." : "Rascunho salvo. Ainda não aparece para os alunos."
+  function payload() {
+    if (!title.value.trim() || !period.value) throw new Error('Preencha o título e escolha um período.');
+    const peso = Number(weight.value), pontos = Number(xp.value);
+    if (!Number.isFinite(peso) || peso < .1 || peso > 10 || !Number.isInteger(pontos) || pontos < 0 || pontos > 1000) throw new Error('Confira o peso da nota e o XP.');
+    return { titulo: title.value.trim(), descricao: description.value.trim(), o_que_entregar: deliverable.value.trim(), periodo_id: period.value, data_limite: date.value || null, tipo_atividade: mode.value, peso_nota: peso, xp_reward: pontos, status_publicacao: mission?.status_publicacao || 'rascunho', anexo: selected };
   }
-  async function ne(t) {
-    if (!H) {
-      H = !0, [G, K, Q].forEach(e => e.disabled = !0), a("refresh").disabled = !0, J.textContent = "";
-      try {
-        if ("publish" === t && !f.value.trim()) throw new Error("Escreva a orientação para os alunos antes de publicar.");
-        if (Z.textContent = "Salvando proposta e materiais…", await ie(), "preview" === t) return void location.assign(I(s));
-        if ("publish" === t) {
-          const t = c("div");
-          t.append(c("p", "Confira a proposta antes de liberar para os alunos."), c("h3", s.titulo), c("p", s.descricao, "document-copy"), c("p", `${"equipe" === S.value ? "Em equipe, com entrega individual" : "Individual"} · ${n.periodos.find(e => e.id === s.periodo_id)?.nome} · ${B.length} materiais.`, "hint"));
-          const o = c("a", "Ver a tela do aluno", "secondary"); o.href = I(s);
-          t.append(o, g("Publicar na prévia", () => E(async () => {
-            const t = await e.publishMission(i, s.id, s.revisao);
-            if ("publicado" !== t.status_publicacao) throw new Error("Publicação não confirmada.");
-            s = t, a("actionDialog").close(), Z.textContent = "Atividade publicada na prévia local.", te()
-          }), "primary")), C("Tudo pronto para compartilhar?", t)
-        }
-      } catch (a) {
-        if (J.textContent = (s ? "A atividade já existe; confira as alterações pendentes. " : "") + a.message, Z.textContent = "", s) try {
-          const a = (await e.room(i)).missoes.find(e => e.id === s.id);
-          a && ["titulo", "descricao", "periodo_id", "tipo_atividade", "peso_nota", "xp_reward"].every(e => a[e] === s[e]) && (a.data_limite || "").slice(0, 10) === (s.data_limite || "").slice(0, 10) && (s = a, B = await e.files(i, s.id), V = V.filter(e => !B.some(a => a.name === e.name && a.size === e.size)), F = new Set([...F].filter(e => B.some(a => a.path === e))), te())
-        } catch { }
-      } finally {
-        H = !1, [G, K, Q].forEach(e => e.disabled = !n.periodos.length), a("refresh").disabled = !1
+  async function persist() {
+    const body = payload();
+    mission = mission ? await e.updateMission(i, mission.id, body) : await e.createMission(i, body);
+    if (!mission?.id) throw new Error('O servidor não confirmou o salvamento. Confira a lista antes de tentar criar novamente.');
+    // Guarda imediatamente o ID para que prévia/publicação nunca criem uma segunda atividade.
+    t.set('atividade', mission.id); history.replaceState(null, '', m('atividade/editar/', { sala: i, atividade: mission.id }));
+    selected = null; fileInput.value = ''; j = false;
+    n.missoes = [...n.missoes.filter(item => item.id !== mission.id), mission]; update();
+    status.textContent = mission.status_publicacao === 'publicado' ? 'Alterações salvas na atividade publicada.' : 'Rascunho salvo. O conteúdo ainda não está disponível aos alunos.';
+  }
+  async function perform(action) {
+    if (saving) return;
+    saving = true; error.textContent = ''; a('refresh').disabled = true; update();
+    try {
+      if (action === 'publish' && (!description.value.trim() || !deliverable.value.trim())) throw new Error('Preencha a orientação e “O que entregar?” antes de publicar.');
+      status.textContent = 'Salvando no servidor…';
+      await persist();
+      if (action === 'preview') { j = false; location.assign(I(mission)); return; }
+      if (action === 'publish') {
+        const content = c('div');
+        content.append(c('p', 'Ao publicar, os alunos poderão acessar conforme a ordem de desbloqueio.'), c('h3', mission.titulo), c('p', mission.descricao, 'document-copy'), c('h3', 'O que entregar?'), c('p', mission.o_que_entregar, 'document-copy'));
+        const confirm = g('Publicar atividade', () => E(async () => {
+          confirm.disabled = true;
+          try {
+            const result = await e.publishMission(i, mission.id);
+            if (result.status_publicacao !== 'publicado') throw new Error('O servidor não confirmou a publicação.');
+            mission = result; n.missoes = [...n.missoes.filter(item => item.id !== mission.id), mission]; j = false;
+            a('actionDialog').close(); status.textContent = 'Atividade publicada para a turma.'; update();
+          } catch (err) { confirm.disabled = false; throw err; }
+        }), 'primary');
+        content.append(confirm); C('Tudo pronto para compartilhar?', content);
       }
-    }
+    } catch (err) {
+      status.textContent = ''; error.textContent = err.message;
+      if (!mission && !err.status && err.name === 'ErroAPI') error.textContent += ' O resultado pode não ter chegado: confira a lista de atividades antes de repetir a criação.';
+    } finally { saving = false; a('refresh').disabled = false; update(); }
   }
-  [h, f, x, A, S, $, L].forEach(e => e.oninput = oe), x.onchange = S.onchange = oe;
-  T.onchange = () => { try { V = U(T.files), J.textContent = "", j = !0, te() } catch (e) { J.textContent = e.message, V = [], T.value = "", te() } };
-  p.onsubmit = e => (e.preventDefault(), ne("save"));
-  n.periodos.length || ([G, K, Q].forEach(e => e.disabled = !0), J.textContent = "Crie um período na sala antes de preparar a atividade.");
-  te()
+  form.onsubmit = event => { event.preventDefault(); perform('save'); };
+  preview.onclick = () => perform('preview'); publish.onclick = () => perform('publish');
+  [title, description, deliverable, period, date, mode, weight, xp].forEach(input => input.oninput = () => { j = true; update(); });
+  fileInput.onchange = async () => {
+    try { selected = (await e.validateFiles(fileInput.files, 1))[0] || null; error.textContent = ''; j = true; }
+    catch (err) { selected = null; fileInput.value = ''; error.textContent = err.message; }
+    update();
+  };
+  if (!n.periodos.length) error.textContent = 'Crie um período na sala antes de preparar a atividade.';
+  update();
 }
 
 function F() {
@@ -544,20 +551,21 @@ async function G() {
           a("pageActions").append(v("Editar proposta", "atividade/editar/", { sala: i, atividade: r.id }, "primary"));
           const s = c("a", "Ver como aluno", "secondary"); s.href = I(r), a("pageActions").append(s);
           a("pageActions").append(v("Ver entregas", "correcoes/", { sala: i, atividade: r.id }, "primary"), v("Voltar às atividades", "atividades/", { sala: i }));
-          const d = y("Orientação da atividade"); d.append(c("p", r.descricao || "Sem orientação cadastrada.", "document-copy"));
+          const d = y("Orientação da atividade"); d.append(c("p", r.descricao || "Sem orientação cadastrada.", "document-copy"), c("h3", "O que entregar?"), c("p", r.o_que_entregar || "Não especificado pelo professor.", "document-copy"), c("p", r.tipo_atividade === "equipe" ? "Entrega compartilhada da equipe." : "Entrega individual.", "hint"));
           const p = y("PDFs e imagens da atividade", "Arquivos do professor para apoiar a investigação."), m = c("ul", "", "files-list");
           p.append(m), a("content").append(u(c("div", "", "two-columns"), d, p));
           try {
             const a = await e.files(i, r.id); if (o !== l) return;
-            a.forEach(e => { const a = k(e); a && m.append(u(c("li"), a, c("span", `${Math.ceil((e.size || 0) / 1024)} KB`, "small-label"))) }), a.length || m.append(c("li", "Nenhum arquivo anexado."))
+            a.forEach(e => { const a = k(e); a && m.append(u(c("li"), a, c("span", e.size ? `${Math.ceil(e.size / 1024)} KB` : "Arquivo salvo", "small-label"))) }), a.length || m.append(c("li", "Nenhum arquivo anexado."))
           } catch (e) { p.append(c("p", e.message, "hint")) }
-          const g = c("form"), f = _(g, "Adicionar PDF ou imagem", "file", "extra-files");
-          f.multiple = !0, f.disabled = !0, f.accept = ".pdf,.jpg,.jpeg,.png,.webp";
-          const b = c("button", "Adicionar materiais", "secondary"); b.type = "submit";
-          g.append(c("p", "Até 10 arquivos, 20 MB por arquivo e 50 MB no total.", "hint"), b);
+          const g = c("form"), f = _(g, r.anexo_url ? "Substituir anexo" : "Adicionar anexo", "file", "extra-files");
+          const uploadRules = await e.uploadRules();
+          f.multiple = false; f.accept = uploadRules.accept;
+          const b = c("button", r.anexo_url ? "Substituir anexo" : "Salvar anexo", "secondary"); b.type = "submit";
+          g.append(c("p", "Um anexo por atividade. " + uploadRules.aviso + " Um novo arquivo substitui o atual.", "hint"), b);
           g.onsubmit = async t => {
             t.preventDefault(), b.disabled = !0;
-            try { const t = U(f.files); if (!t.length) throw new Error("Escolha pelo menos um arquivo."); await e.attach(i, r.id, t), a("status").textContent = "Materiais salvos na prévia local.", await G() } catch (t) { h(t) } finally { b.disabled = !1 }
+            try { const t = await e.validateFiles(f.files, 1); if (!t.length) throw new Error("Escolha pelo menos um arquivo."); await e.attach(i, r.id, t), a("status").textContent = "Anexo salvo no servidor.", await G() } catch (t) { h(t) } finally { b.disabled = !1 }
           };
           p.append(g)
         }(s),
@@ -573,7 +581,7 @@ async function G() {
           a("pageActions").append(v("← Todas as entregas", "correcoes/", { sala: i }, "secondary"), v("Histórico do aluno", "aluno/", { sala: i, aluno: r.aluno_id || u?.id }, "text-button"));
           const m = c("div", "", "review-grid"), h = c("div", "", "stack"), b = y("Trabalho do aluno"), x = c("div", "", "review-meta");
           x.append(c("span", "corrigido" === s.status ? "Correção registrada" : "Aguardando correção", "corrigido" === s.status ? "badge green" : "badge gold"), c("span", "Entregue em " + X(s.entregue_em), "small-label"));
-          b.append(x, c("p", s.resposta_entrega || "O backend registra apenas a realização. Solicite o trabalho pelo meio combinado; texto e arquivos ainda não são recebidos pela API.", "document-copy"));
+          b.append(x, c("p", s.resposta_entrega || "Nenhum texto foi enviado. Consulte os anexos abaixo.", "document-copy"));
           const A = c("details", "", "orientation");
           A.append(c("summary", "Relembrar a orientação da atividade"), c("p", d?.descricao || "Sem orientação cadastrada.", "document-copy")), b.append(A), h.append(b);
           const C = y("Anexos da entrega", "PDFs e imagens podem ser visualizados aqui. Outros documentos ficam disponíveis para baixar."), E = c("div", "", "review-file-list"), q = c("div", "", "file-preview");
@@ -584,14 +592,14 @@ async function G() {
             const a = k(e); if (!a) continue;
             a.className = "text-button", a.textContent = "Baixar";
             const t = c("div", "", "review-file"), o = c("div");
-            if (o.append(c("strong", e.name), c("small", Math.ceil((e.size || 0) / 1024) + " KB")), t.append(o, a), ["application/pdf", "image/jpeg", "image/png", "image/webp"].includes(e.type)) {
+            if (o.append(c("strong", e.name), c("small", e.size ? Math.ceil(e.size / 1024) + " KB" : "Arquivo enviado")), t.append(o, a), ["application/pdf", "image/jpeg", "image/png", "image/webp"].includes(e.type)) {
               let a = null;
               if (e.blob instanceof Blob) a = URL.createObjectURL(e.blob), p.push(a);
               else try { const t = new URL(e.preview_url || e.url); "https:" === t.protocol && (a = t.href) } catch { }
               if (a) {
                 const o = () => {
                   if (q.replaceChildren(), E.querySelectorAll("button").forEach(e => e.setAttribute("aria-pressed", "false")), i.setAttribute("aria-pressed", "true"), q.append(c("p", e.name, "small-label")), "application/pdf" === e.type) {
-                    const t = c("iframe"); t.title = "Visualização de " + e.name, t.src = a, q.append(t, c("p", "Se o PDF não abrir, use Baixar. Para renovar o acesso aos anexos, atualize a página.", "hint"))
+                    const t = c("iframe"); t.title = "Visualização de " + e.name, t.src = a, t.setAttribute("sandbox", ""), q.append(t, c("p", "Se o PDF não abrir, use Baixar. Para renovar o acesso aos anexos, atualize a página.", "hint"))
                   } else {
                     const t = c("img"); t.alt = "Anexo do aluno: " + e.name, t.src = a, q.append(t)
                   }
@@ -612,9 +620,9 @@ async function G() {
             const e = JSON.parse(sessionStorage.getItem(D));
             e && (P.value = e.nota ?? "", $.value = e.feedback || "", L.textContent = $.value.length + " / 3.000 caracteres", z.textContent = "Rascunho recuperado nesta aba.", J = !0)
           } catch { }
-          const T = c("button", "Salvar correção da prévia", "primary"), O = c("p", "", "error-panel");
+          const T = c("button", "Salvar correção", "primary"), O = c("p", "", "error-panel");
           T.type = "submit", O.setAttribute("role", "alert");
-          R.append(c("p", "Somente demonstração. Nenhum aluno real receberá esta correção.", "hint"), T, O);
+          R.append(c("p", s.equipe_id ? "A mesma nota e devolutiva serão lançadas para os integrantes desta entrega em equipe." : "A nota e a devolutiva serão enviadas ao aluno.", "hint"), T, O);
           P.oninput = $.oninput = () => {
             J = !0, L.textContent = $.value.length + " / 3.000 caracteres";
             try { sessionStorage.setItem(D, JSON.stringify({ nota: P.value, feedback: $.value })), z.textContent = "Rascunho salvo nesta aba." } catch { z.textContent = "Alterações mantidas somente nesta visita." }
@@ -635,7 +643,7 @@ async function G() {
             if (null === o || o < 0 || o > 10) return O.textContent = "Informe uma nota entre 0 e 10.", void P.focus();
             T.disabled = !0, a("refresh").disabled = !0, O.textContent = "";
             try {
-              await e.correct(r.id, o, $.value.trim()), U(), a("status").textContent = "Correção salva na prévia local.", window.dispatchEvent(new window.Event("astro-notifications-refresh"))
+              await e.correct(r.id, o, $.value.trim()), U(), a("status").textContent = "Correção salva no servidor.", window.dispatchEvent(new window.Event("astro-notifications-refresh"))
             } catch (t) {
               let i = !1;
               try { const a = await e.delivery(r.id); i = "corrigido" === a.status && f(a.nota) === o && (a.comentario_professor || "") === $.value.trim() } catch { }

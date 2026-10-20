@@ -6,19 +6,20 @@
     c.sessaoObrigatoria("professor");
     return c.api(path, method, data);
   };
+  const atividades = import("../services/atividades.js");
   const part = (x) => encodeURIComponent(String(x));
   const base = (s) => "/api/professor/salas/" + part(s);
   const blocked = async (feature) => (await ready).indisponivel(feature);
   const normalize = (m) => ({
     ...m,
-    status_publicacao: "publicado",
-    tipo_atividade: "individual",
-    revisao: 1,
+    status_publicacao: (m.status || m.status_publicacao) === "publicada" || m.status_publicacao === "publicado" ? "publicado" : "rascunho",
+    tipo_atividade: m.modalidade || m.tipo_atividade || "individual",
   });
   const enriched = (e) => ({
     ...e,
     missoes: e.missoes || { id: e.missao_id, titulo: e.titulo_missao },
-    anexos: [],
+    resposta_entrega: e.texto_entrega || "",
+    anexos: e.anexos || [],
   });
   async function room(s) {
     const [d, p, e] = await Promise.all([
@@ -34,26 +35,37 @@
     };
   }
   async function payload(s, b, existing) {
-    if (b.tipo_atividade === "equipe")
-      return blocked("O formato de atividade em equipe");
     const d = await call(base(s));
-    const same = (d.missoes || []).filter(
-      (m) => m.periodo_id === b.periodo_id && m.id !== existing?.id,
-    );
-    let ordem =
-      existing?.periodo_id === b.periodo_id
-        ? existing.ordem
-        : Math.max(0, ...same.map((m) => Number(m.ordem) || 0)) + 1;
-    return {
+    const periodo = b.periodo_id || null;
+    const same = (d.missoes || []).filter(m => (m.periodo_id || null) === periodo && m.id !== existing?.id);
+    const ordem = (existing?.periodo_id || null) === periodo && existing?.ordem
+      ? existing.ordem : Math.max(0, ...same.map(m => Number(m.ordem) || 0)) + 1;
+    const body = {
       titulo: b.titulo,
-      descricao: b.descricao,
-      periodo_id: b.periodo_id,
+      descricao: b.descricao || "",
+      o_que_entregar: b.o_que_entregar || "",
+      periodo_id: periodo,
+      modalidade: b.tipo_atividade || b.modalidade || existing?.modalidade || "individual",
+      status: b.status || (b.status_publicacao === "publicado" ? "publicada" : b.status_publicacao === "rascunho" ? "rascunho" : existing?.status || "rascunho"),
       ordem,
-      data_limite: b.data_limite,
+      data_limite: b.data_limite || null,
       peso_nota: b.peso_nota,
       xp_reward: b.xp_reward,
       sticker_recompensa_id: existing?.sticker_recompensa_id || null,
     };
+    if (!b.anexo) return body;
+    const rules = await atividades;
+    rules.validarArquivos([b.anexo], 1);
+    const form = new FormData();
+    Object.entries(body).forEach(([key, value]) => form.append(key, value == null ? "" : String(value)));
+    form.append("anexo", b.anexo, b.anexo.name);
+    return form;
+  }
+  async function mission(s, m) {
+    const d = await call(base(s));
+    const old = d.missoes.find(a => a.id === m);
+    if (!old) throw Error("Atividade não encontrada nesta turma.");
+    return old;
   }
   window.TeacherData = {
     live: true,
@@ -81,9 +93,27 @@
         ),
       );
     },
-    publishMission: () => blocked("A publicação separada de rascunhos"),
-    files: async () => [],
-    attach: () => blocked("O upload de materiais"),
+    async publishMission(s, m) {
+      const old = await mission(s, m);
+      return this.updateMission(s, m, { ...old, status: "publicada" });
+    },
+    async uploadRules() {
+      const r = await atividades;
+      return { accept: r.ACCEPT_ARQUIVOS, aviso: r.AVISO_UPLOAD };
+    },
+    async validateFiles(files, max = 1) { return (await atividades).validarArquivos(files, max); },
+    async files(s, m) {
+      const old = await mission(s, m);
+      if (!old.anexo_url) return [];
+      const r = await atividades;
+      return [r.normalizarAnexo({ url: old.anexo_url, nome_arquivo: "Material da atividade." + old.anexo_url.split('?')[0].split('.').pop(), path: old.anexo_url })];
+    },
+    async attach(s, m, files) {
+      const lista = await this.validateFiles(files, 1);
+      if (!lista.length) throw Error("Escolha um arquivo.");
+      const old = await mission(s, m);
+      return this.updateMission(s, m, { ...old, anexo: lista[0] });
+    },
     removeFile: () => blocked("A exclusão de anexos"),
     team: (s, t) => call(base(s) + "/equipes/" + part(t)),
     createTeam: (s, b) =>
@@ -101,6 +131,7 @@
       const d = await call("/api/professor/entregas/" + part(e));
       return {
         ...enriched(d.progresso),
+        anexos: (d.anexos || []).map((await atividades).normalizarAnexo),
         sala_id: d.sala_id,
         equipe: d.equipe,
         membros: d.membros,

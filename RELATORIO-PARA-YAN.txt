@@ -1,0 +1,88 @@
+ASTROLEARN — RETORNO AO BACKEND APÓS CONEXÃO DE ATIVIDADES
+Consulta do app.py em Yan-Proenca/steam-project-backend, branch main, 19/10/2026.
+Blob SHA do arquivo consultado: 026077694a3b3a1ff92e2c39b0928c6972baf95d.
+Nenhum arquivo do backend ou registro de banco foi alterado nesta entrega.
+
+CONTRATOS UTILIZADOS
+POST /api/professor/salas/:sala/missoes
+PUT  /api/professor/salas/:sala/missoes/:missao
+Campos: titulo, descricao, o_que_entregar, periodo_id, ordem, data_limite,
+peso_nota, xp_reward, sticker_recompensa_id, status e modalidade.
+status = rascunho/publicada; modalidade = individual/equipe.
+Com arquivo: multipart/form-data, campo anexo (singular).
+Publicação utiliza o mesmo PUT, preservando os demais campos.
+
+GET /api/aluno/dashboard
+GET /api/aluno/missoes/:missao
+Lê missao, bloqueada, progresso, anexos_entrega, equipe e materiais.
+O front utiliza as decisões da API e não calcula desbloqueio a partir de XP.
+
+POST /api/aluno/missoes/enviar
+Sem arquivo: JSON {missao_id, texto}.
+Com arquivo: multipart com missao_id, texto e anexos (campo repetido, até 3).
+O front NÃO envia IDs de alunos/equipe para escolher destinatários.
+
+GET  /api/professor/salas/:sala/entregas
+GET  /api/professor/entregas/:entrega
+POST /api/professor/entregas/:entrega/corrigir
+A consulta lê progresso.texto_entrega e a lista anexos separada.
+Correção envia JSON {nota, feedback_professor}.
+
+PENDÊNCIAS CONCRETAS
+1. CREDENCIAIS EXPOSTAS
+Rotacionar a service_role do Supabase, a chave Gemini e a chave mestra de
+professor compartilhadas na conversa. Atualizar o backend/Vercel e redeployar.
+Os valores não foram utilizados nem copiados para esta entrega.
+
+2. LIMITE DE UPLOAD DA HOSPEDAGEM
+O app.py valida 20 MB por arquivo, mas os envios passam por uma Vercel Function,
+cujo corpo de requisição tem limite de 4,5 MB. O front limita o total a 4 MB.
+Para aceitar arquivos maiores, implementar upload direto ao Storage com
+assinatura/autorização curta emitida pelo backend, e depois vincular os objetos
+à entrega autorizada; ou escolher infraestrutura compatível. A service_role
+continua exclusivamente no servidor.
+Fontes oficiais:
+https://vercel.com/docs/functions/limitations#request-body-size
+https://vercel.com/kb/guide/how-to-bypass-vercel-body-size-limit-serverless-functions
+
+3. PRIVACIDADE DOS ANEXOS E RASCUNHOS
+_upload_anexo_geral usa get_public_url. Uma URL pública não exige login de
+quem a possui: confirmar a política desejada para trabalhos escolares e
+adotar bucket privado/URLs assinadas, se o acesso deve ser restrito à turma.
+O próprio comentário de _serializar_missao_para_aluno informa que o RLS
+permite ler a linha completa em rascunho. Revisar RLS/view/RPC para que o
+conteúdo privado não seja obtido diretamente pela API do Supabase; ocultar
+campos só no Flask não limita consultas diretas com JWT do aluno.
+
+4. ANEXOS E REENVIO
+A missão aceita somente um anexo. Substituição funciona; não existe contrato
+para remover o anexo sem substituí-lo.
+No envio do aluno, anexos novos substituem a lista inteira; sem arquivos, a
+lista antiga permanece. Falta contrato para excluir anexos individuais ou
+limpar toda a lista. A interface explica e respeita a regra atual.
+O backend valida extensão e tamanho; reforçar detecção de conteúdo/MIME se
+for exigido validar efetivamente o formato, não apenas o sufixo do nome.
+
+5. CONFIRMAR EM DUAS CONTAS DE ALUNO
+Validar as permissões RLS do envio/correção em equipe: o código grava em várias
+linhas, uma por integrante, com JWT do usuário que envia. Conferir que todos
+recebem texto, anexos, nota e feedback e que quem está fora da equipe não acessa.
+Como as gravações/uploads são sequenciais, avaliar transação/compensação e
+idempotência para não deixar parte da equipe atualizada ou duplicar trabalho
+quando a conexão falhar no meio da operação.
+
+PRÓXIMAS ETAPAS, NÃO BLOQUEIAM A CONEXÃO FEITA
+- Biblioteca: conectar os contratos de upload/consulta já presentes no app.py.
+- Equipes: conectar tarefas e mural já presentes no app.py.
+- Comunicação: não foram encontradas rotas de perguntas/respostas/notificações
+  no app.py consultado; manter como pendência explícita.
+- Loja/avatar: não foram implementados nesta entrega. Antes de descartar por
+  quantidade de storages, definir catálogo/inventário e quais arquivos de fato
+  precisam ser enviados; o front já utiliza imagens locais para vários itens.
+
+VALIDAÇÃO
+27 cenários de front com respostas simuladas compatíveis com o código público.
+API hospedada: GET / respondeu 200; GET /api/aluno/dashboard sem token respondeu
+401; ambas responderam CORS para http://127.0.0.1:5500.
+Isso NÃO comprova a versão implantada nem valida as políticas/gravações reais.
+Nenhum login, criação de conta ou alteração no banco real foi executado.

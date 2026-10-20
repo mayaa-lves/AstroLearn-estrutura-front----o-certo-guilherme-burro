@@ -75,6 +75,10 @@ export async function solicitar(caminho, {
       }
     }
 
+    if (resposta.status === 413) {
+      throw new ErroAPI('O envio ultrapassou o limite da hospedagem. Reduza os arquivos e tente novamente.', 413);
+    }
+
     let resultado;
 
     try {
