@@ -1,47 +1,31 @@
-ASTROLEARN — ATUALIZAÇÃO DO FRONT — 16/10/2026
+ASTROLEARN — NOVA LOGO, FAVICON PRESERVADO
 
-COMO APLICAR
-1. Guarde uma cópia da pasta atual do projeto.
-2. Extraia este ZIP em uma pasta separada.
-3. Copie aluno, auth, professor, public, scripts, index.html e package.json para a raiz do seu projeto atual. Confirme a substituição dos arquivos quando o Windows perguntar.
-4. Mescle as pastas. NÃO apague a pasta public nem a pasta public/assets: suas imagens e fontes originais continuam sendo usadas. O pacote contém código completo, sem reenviar os 141 MB de imagens que você já tem.
-5. No VS Code, abra index.html com Go Live. Na aba já aberta, pressione Ctrl+Shift+R para recarregar CSS e JavaScript.
-6. Entre com sua conta normalmente. As páginas internas continuam exigindo autenticação.
+Faça backup e copie o conteúdo deste ZIP para a raiz do FRONT.
+Aceite substituir os arquivos, faça commit + push e aguarde o deploy da Vercel.
+Atualize com Ctrl+F5.
 
-Não é necessário npm install para usar Go Live. Alternativa: npm start na raiz.
-Não coloque chaves do Supabase ou senhas no front.
+A imagem enviada foi copiada sem alterações para:
+public/assets/imagens/marca/astrolearn-logo-nova.png
+Mantém transparência e proporções.
 
-ALTERAÇÕES PRINCIPAIS
-- Identidade visual compartilhada: fundo claro discreto com diferenças de atmosfera por área, cards legíveis e vidro leve no menu.
-- Estrelas atrás do conteúdo, movimento suave e reação ao cursor. Cliques no espaço livre criam estrelas com quantidade limitada. Movimentos reduzidos e preferências de acessibilidade são respeitados.
-- Menus com SVGs, controle de recolher/expandir, navegação inferior no celular e opção Mais.
-- Biblioteca docente com os mesmos itens e ícones das outras telas. Ela só entra no menu dentro de uma turma.
-- Biblioteca em grade com capas de proporção fixa; ações de visualizar, editar, excluir e arquivar com nomes acessíveis. Arquivar permanece desabilitado porque não há rota no backend.
-- Planetas bloqueados ficam misteriosos e escondem a imagem do mundo. Imagens dos mundos disponíveis foram mantidas.
-- Avatar com suas reações e controle de vistas preservados. No celular, Ver meu explorador abre a visualização sem empurrar a trilha para baixo.
-- Assistente em página própria, além da ajuda rápida. Respostas preparadas, claramente identificadas; não é uma IA conectada nem um canal de perguntas ao professor.
-- Login com fundo imóvel, olhos acompanhando o mouse, mascote cobrindo o olho e espiando ao revelar a senha. Foguete e interações existentes preservados.
-- Nova tela auth/cadastro.html para escolher aluno ou professor antes do formulário.
-- Checklist de senha forte nos dois cadastros. Contas existentes continuam usando o login normal.
-- Cadastros ajustados para caber em notebook de 1366x768, sem esconder o botão. No celular, o formulário pode rolar para manter os campos legíveis.
-- Perfil reúne preferências, segurança, saída e uma apresentação melhor para escolher foto. Sincronizar foto/nome depende das rotas da conta.
-- Equipe prepara exibição de avatar_url quando a API fornecer; sem foto, usa iniciais, sem atribuir um mascote aleatório a outra pessoa.
-- Editor do professor com Área STEAM e O que deve ser entregue. Essas informações são salvas como texto estruturado na descrição, aceito pela API existente. O aluno vê o que entregar em uma seção própria. Ainda não são colunas independentes para relatórios.
-- Upload conectado nas atividades: um anexo no campo anexo, tanto no professor quanto no aluno, de acordo com o app.py atual. O professor pode abrir o arquivo enviado na correção. Texto livre da entrega ainda não é enviado, pois não existe esse contrato no backend.
+Nova marca aplicada ao menu compartilhado de aluno/professor, landing,
+login, três entradas de cadastro e recuperação/redefinição de senha.
+Menu aberto mostra a imagem e o nome AstroLearn; fechado mostra o símbolo.
+Não substitui marcas próprias dos jogos externos incorporados.
 
-ESCOPO E LIMITES
-As imagens e fontes originais foram preservadas integralmente. Não foi criado um modelo 3D articulado novo: o controle usa as oito vistas renderizadas que já existem. Trocar o personagem por outro modelo ou criar animações corporais completas depende dos arquivos correspondentes.
+O favicon NÃO foi alterado: continua usando astrolearn-simbolo.png.
+O arquivo antigo também não foi substituído.
+Não muda o controlador do cadastro ou as funções da plataforma.
 
-Os uploads foram verificados com respostas simuladas que seguem o código atual do backend. Não foi feito envio na conta real da escola. O app.py do GitHub já aceita multipart; a hospedagem precisa estar atualizada e o bucket configurado pelo responsável pelo backend.
+GRÁFICO DA TURMA
+Este ZIP atualiza APENAS a logo. A correção anterior da leitura das notas
+foi confirmada no arquivo publicado e funciona nos testes com API simulada.
+Para descobrir por que sua turma continua sem gráfico, ainda é necessário
+conferir a resposta real da rota /api/professor/salas/ID/pauta.
+Abra a turma > F12 > Network/Rede > procure pauta > Response/Resposta.
+Envie essa resposta para verificar os IDs das atividades e notas recebidas.
+Não precisa cadastrar notas novas ou limpar dados para fazer esse diagnóstico.
 
-Conquistas, moedas, compras, mural, tarefas e pontuação de jogos continuam com os limites indicados na interface. Este pacote não transforma exemplos locais em dados escolares reais.
-
-TESTE RÁPIDO APÓS COPIAR
-- Login: teste senha escondida/revelada e os olhos do mascote.
-- Entre como aluno: abra uma missão disponível e envie um PDF pequeno de teste.
-- Entre como professor: abra a entrega e confira o arquivo. Registre uma correção e confira o retorno no aluno.
-- Crie uma atividade com área, itens de entrega e um anexo. Abra a prévia como aluno.
-- Biblioteca: visualize, edite e exclua somente um material de teste.
-- No celular: use Mais para acessar todas as páginas e Ver meu explorador para abrir o avatar.
-
-As pendências para o Yan estão em PENDENCIAS-PARA-O-BACKEND.txt.
+Verificações: carregamento da nova imagem no navegador, texto do menu expandido,
+favicon preservado e regressão dos gráficos com API simulada.
+Nenhuma conta real acessada e nenhuma alteração no banco/backend.
