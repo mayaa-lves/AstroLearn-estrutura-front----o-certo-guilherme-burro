@@ -100,3 +100,35 @@ body.astro-nav-ready.collapsed .sidebar .astro-nav-brand .astro-brand-symbol { d
 /* Marca livro e planeta: versão completa no menu aberto. */
 body.astro-nav-ready .sidebar .astro-nav-brand .astro-brand-full { width:180px !important; height:40px !important; object-fit:contain !important; flex:0 1 180px !important; }
 body.astro-nav-ready:not(.collapsed) .sidebar .astro-nav-brand .astro-brand-symbol { display:none !important; }
+
+/* Neutraliza offsets antigos de .brand nas páginas internas. */
+@media (min-width: 801px) {
+  body.astro-nav-ready .sidebar[data-astro-unified] > .astro-nav-brand {
+    position: relative !important;
+    inset: auto !important;
+    width: calc(100% - 24px) !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    box-sizing: border-box !important;
+    flex: 0 0 43px !important;
+    align-self: center !important;
+    flex-direction: row !important;
+    margin: 0 12px 22px !important;
+    padding: 0 !important;
+    transform: none !important;
+    rotate: none !important;
+    translate: none !important;
+    text-indent: 0 !important;
+    line-height: 1 !important;
+  }
+  body.astro-nav-ready .sidebar[data-astro-unified] .astro-nav-brand img {
+    position: static !important;
+    inset: auto !important;
+    transform: none !important;
+    rotate: none !important;
+    translate: none !important;
+    padding: 0 !important;
+    border: 0 !important;
+    object-position: center !important;
+  }
+}
