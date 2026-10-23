@@ -96,3 +96,7 @@ body.astro-nav-ready .sidebar .astro-nav-brand .astro-brand-symbol { display:blo
 body.astro-nav-ready .sidebar .astro-nav-brand .astro-brand-full { display:block !important; width:auto !important; height:auto !important; max-width:none !important; flex:0 1 auto !important; margin:0 !important; font-size:18px !important; font-weight:700 !important; letter-spacing:-.4px !important; }
 body.astro-nav-ready.collapsed .sidebar .astro-nav-brand .astro-brand-full { display:none !important; }
 body.astro-nav-ready.collapsed .sidebar .astro-nav-brand .astro-brand-symbol { display:block !important; }
+
+/* Marca livro e planeta: versão completa no menu aberto. */
+body.astro-nav-ready .sidebar .astro-nav-brand .astro-brand-full { width:180px !important; height:40px !important; object-fit:contain !important; flex:0 1 180px !important; }
+body.astro-nav-ready:not(.collapsed) .sidebar .astro-nav-brand .astro-brand-symbol { display:none !important; }

@@ -53,10 +53,10 @@
     brand.classList.add('astro-nav-brand');
     const assets=new URL('../../assets/imagens/marca/',document.currentScript.src);
     const symbol=document.createElement('img');symbol.className='astro-brand-symbol';
-    symbol.src=new URL('astrolearn-logo-nova.png',assets).href;
+    symbol.src=new URL('astrolearn-livro-simbolo.svg',assets).href;
     symbol.alt='';symbol.width=40;symbol.height=40;symbol.draggable=false;
-    const full=document.createElement('span');full.className='astro-brand-full';
-    full.textContent='AstroLearn';
+    const full=document.createElement('img');full.className='astro-brand-full';
+    full.src=new URL('astrolearn-livro-completa.svg',assets).href;full.alt='';full.width=180;full.height=40;full.draggable=false;
     brand.replaceChildren(symbol,full);brand.setAttribute('aria-label','AstroLearn — início');
   }
   const footer=document.createElement('div');footer.className='astro-nav-footer';sidebar.append(footer);
