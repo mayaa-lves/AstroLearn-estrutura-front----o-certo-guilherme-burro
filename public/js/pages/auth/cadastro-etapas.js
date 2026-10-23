@@ -278,12 +278,12 @@ form.addEventListener("submit", async (event) => {
   $("criarConta").textContent = "Criando sua conta…";
   mensagem("Aguarde a confirmação do servidor.");
   try {
-    await cadastrar(dados, { sinal: controle.signal });
+    const resultado = await cadastrar(dados, { sinal: controle.signal });
     if (!ativo) return;
     criado = true;
     protegerCampos();
     mensagem(
-      "Cadastro confirmado! Confira seu e-mail para confirmar a conta e depois entre na plataforma.",
+      resultado?.message || "Solicitação de cadastro recebida. Confira seu e-mail antes de entrar.",
     );
     const link = document.createElement("a");
     link.href = "login.html";
@@ -327,10 +327,10 @@ document.addEventListener(
       y = event.clientY;
     quadro = requestAnimationFrame(() => {
       const rect = canvas.getBoundingClientRect();
-      const dx = x - (rect.left + rect.width * 0.279),
-        dy = y - (rect.top + rect.height * 0.51);
+      const dx = x - (rect.left + rect.width * 0.278),
+        dy = y - (rect.top + rect.height * 0.499);
       const distancia = Math.max(Math.hypot(dx, dy), 1),
-        limite = rect.width * 0.0018,
+        limite = rect.width * 0.0055,
         intensidade = Math.min(distancia / 180, 1);
       olhos.forEach(
         (olho) =>

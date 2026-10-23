@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="../public/css/preferencias.css">
   <link rel="stylesheet" href="../public/css/menu-unificado.css">
   <script defer src="../public/js/components/menu-unificado.js"></script>
+<link rel="icon" type="image/png" href="../public/assets/imagens/marca/astrolearn-simbolo.png">
 </head>
 
 <body class="team-page">
@@ -124,13 +125,13 @@
 
     <p id="memberHint" class="small-note" hidden>
       Retratos ilustrativos · clique em um integrante para ver
-      suas tarefas neste rascunho.
+      as tarefas compartilhadas da equipe.
     </p>
 
     <div id="workspace" hidden>
       <p class="draft-notice">
-        Rascunho pessoal: tarefas e anotações ficam neste navegador,
-        na sua conta. Seus colegas ainda não recebem essas alterações.
+        Planejamento compartilhado: tarefas e avisos são salvos no servidor e compartilhados com a equipe,
+        com atualização automática a cada 30 segundos.
       </p>
 
       <p id="storageNotice" class="notice" role="status"></p>
@@ -186,7 +187,7 @@
           <ul id="taskList" class="task-list"></ul>
 
           <p id="tasksEmpty" class="empty">
-            Ainda não há tarefas no seu rascunho.
+            Sua equipe ainda não tem tarefas.
             Adicione a primeira responsabilidade.
           </p>
         </section>
@@ -195,14 +196,14 @@
       <section class="wall-card" aria-labelledby="wallTitle">
         <div class="card-heading">
           <h2 id="wallTitle">Mural da equipe</h2>
-          <span class="local-chip">Rascunho pessoal</span>
+          <span class="local-chip">Planejamento compartilhado</span>
         </div>
 
         <form id="ideaForm" novalidate>
           <div class="note-type">
-            <label for="noteType">Tipo</label>
+            <label hidden for="noteType">Tipo</label>
 
-            <select id="noteType">
+            <select hidden id="noteType">
               <option value="idea">Ideia</option>
               <option value="notice">Aviso</option>
               <option value="agreement">Combinado</option>
@@ -216,7 +217,8 @@
               placeholder="Registre uma ideia ou um aviso para combinar com a equipe…" disabled></textarea>
           </div>
 
-          <button id="saveNote" class="primary" type="submit" disabled>Salvar anotação</button>
+          <button id="saveNote" class="primary" type="submit" disabled>Publicar aviso</button>
+<button type="button" id="cancelNote" hidden>Cancelar edição</button>
         </form>
 
         <div class="wall-meta">
@@ -229,8 +231,7 @@
         <ul id="wall" class="wall-list"></ul>
 
         <p id="wallEmpty" class="empty">
-          Suas ideias começam aqui. Essas anotações ainda
-          não são compartilhadas com os colegas.
+          Publique o primeiro aviso. Todos os integrantes poderão ler.
         </p>
       </section>
     </div>
@@ -247,7 +248,7 @@
     <h2 id="taskDialogTitle">Adicionar tarefa</h2>
 
     <p class="muted">
-      Registre uma responsabilidade no seu rascunho.
+      Distribua uma responsabilidade entre os integrantes.
       Isso não altera notas nem envia uma atribuição aos colegas.
     </p>
 
@@ -259,7 +260,8 @@
       <label for="taskOwner">Responsável combinado</label>
       <select id="taskOwner" required></select>
 
-      <label for="taskStatus">Situação no seu rascunho</label>
+      <label for="taskPrazo">Prazo (opcional)</label><input id="taskPrazo" type="date">
+      <label for="taskStatus">Situação da tarefa</label>
 
       <select id="taskStatus">
         <option value="todo">A fazer</option>
@@ -270,7 +272,7 @@
       <p id="taskError" class="error-text" role="alert"></p>
 
       <button class="primary" type="submit">
-        Salvar no rascunho
+        Salvar tarefa
       </button>
     </form>
   </dialog>
@@ -292,8 +294,8 @@
   <dialog id="removeDialog" aria-labelledby="removeTitle">
     <button class="close" type="button" data-close aria-label="Cancelar exclusão">×</button>
 
-    <h2 id="removeTitle">Remover do seu rascunho?</h2>
-    <p>A remoção vale apenas para este planejamento pessoal.</p>
+    <h2 id="removeTitle">Remover da equipe?</h2>
+    <p>A remoção será aplicada para todos os integrantes.</p>
 
     <div class="dialog-actions">
       <button class="secondary" type="button" data-close>

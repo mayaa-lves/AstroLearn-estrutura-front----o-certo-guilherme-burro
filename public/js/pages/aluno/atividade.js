@@ -18,11 +18,6 @@ function link(raw, title) {
   return el;
 }
 
-// Perguntas aguardam contrato de API; não simulamos envio.
-$('pergunta').disabled = true;
-$('pergunta-form').querySelector('button').disabled = true;
-$('pergunta-form').onsubmit = event => event.preventDefault();
-text('pergunta-status', 'Perguntas pela plataforma ainda estão indisponíveis. Fale diretamente com seu professor.');
 $('criteriaList').replaceChildren();
 $('atividade-passos').replaceChildren(); $('atividade-passos').hidden = true;
 $('example').closest('.learning-tip').hidden = true;

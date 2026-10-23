@@ -2,6 +2,8 @@
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
+    <meta name="referrer" content="no-referrer">
+    <script src="../public/js/components/recuperacao-link.js"></script>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Recuperar senha · AstroLearn</title>
     <link rel="stylesheet" href="../public/css/fonts.css" />
@@ -9,7 +11,8 @@
       rel="stylesheet"
       href="../public/css/pages/auth/recuperar-senha.css"
     />
-  </head>
+  <link rel="icon" type="image/png" href="../public/assets/imagens/marca/astrolearn-simbolo.png">
+</head>
   <body>
     <a class="skip" href="#main">Pular para o formulário</a>
     <div class="recovery-scene" aria-hidden="true"></div>
@@ -48,23 +51,19 @@
           <p class="field-error" id="emailError" role="alert"></p>
           <button class="primary" type="submit">Solicitar recuperação →</button>
         </form>
+        <p id="recoveryStatus" class="field-error" role="status" aria-live="polite"></p>
         <div id="recoveryResult" class="feedback" hidden>
-          <h2>E-mail validado nesta prévia</h2>
-          <p>
-            Nenhuma mensagem foi enviada. Quando o backend estiver conectado, o
-            servidor enviará as instruções de recuperação para o e-mail da
-            conta.
-          </p>
-          <a class="secondary" href="redefinir-senha.html?demo=1"
-            >Testar a tela de nova senha</a
+          <h2>Confira sua caixa de entrada</h2>
+          <p>Se este e-mail estiver cadastrado, você receberá as instruções para criar uma nova senha. Confira também o spam. Caso não chegue, aguarde alguns minutos antes de solicitar novamente.</p>
+          <a class="secondary" href="login.html">Voltar ao login</a
           ><button id="tryAgain" class="text-button">Usar outro e-mail</button>
         </div>
         <p class="stage-note">
-          Demonstração do frontend · use dados fictícios.
+          O link de recuperação é pessoal. Não compartilhe com outras pessoas.
         </p>
         <a class="text-link" href="login.html">← Já lembrei minha senha</a>
       </section>
     </main>
-    <script src="../public/js/pages/auth/recuperar-senha.js"></script>
+    <script type="module" src="../public/js/pages/auth/recuperar-senha.js"></script>
   </body>
 </html>

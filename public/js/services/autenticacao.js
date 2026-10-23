@@ -149,9 +149,9 @@ export async function cadastrar(
     nome = String(nome ?? '').trim();
     email = String(email ?? '').trim();
 
-    if (!nome || !email || typeof senha !== 'string' || senha.length < 8) {
+    if (!nome || !email || typeof senha !== 'string' || senha.length < 8 || !/[A-Z]/.test(senha) || !/[a-z]/.test(senha) || !/[0-9]/.test(senha) || !/[^A-Za-z0-9]/.test(senha)) {
         throw new ErroAPI(
-            'Confira o nome, o e-mail e a senha de pelo menos 8 caracteres.'
+            'Confira o nome e o e-mail. Use uma senha com pelo menos 8 caracteres, maiúscula, minúscula, número e símbolo.'
         );
     }
 

@@ -115,7 +115,11 @@
       return this.updateMission(s, m, { ...old, anexo: lista[0] });
     },
     removeFile: () => blocked("A exclusão de anexos"),
-    team: (s, t) => call(base(s) + "/equipes/" + part(t)),
+    team: async (s, t) => {
+      const route=base(s)+"/equipes/"+part(t);
+      const [detail,tasks,notes]=await Promise.all([call(route),call(route+"/tarefas"),call(route+"/avisos")]);
+      return {...detail,tarefas:tasks.tarefas || [],avisos:notes.avisos || []};
+    },
     createTeam: (s, b) =>
       call(base(s) + "/equipes", "POST", {
         nome: b.nome,
@@ -142,13 +146,13 @@
         nota,
         feedback_professor: feedback,
       }),
-    notifications: () => blocked("As notificações"),
-    readNotifications: () => blocked("A leitura de notificações"),
+    notifications: async () => {const d=await call("/api/notificacoes"); return {...d,notificacoes:(d.notificacoes || []).map(n=>({...n,tipo:n.tipo==="duvida"?"pergunta":n.tipo,entrega_id:n.progresso_id}))};},
+    readNotifications: ids => call("/api/notificacoes/lidas","PUT",{ids}),
     simulateDelivery: () => blocked("A simulação de entrega"),
-    questions: () => blocked("As perguntas ao professor"),
+    questions: async s => (await call(base(s)+"/perguntas")).perguntas || [],
     studentQuestions: () => blocked("As perguntas ao professor"),
     ask: () => blocked("As perguntas ao professor"),
-    answer: () => blocked("As respostas às perguntas"),
+    answer: (id,resposta) => call("/api/professor/perguntas/"+part(id)+"/responder","POST",{resposta}),
     demoSubmission: () => blocked("A entrega de texto e arquivos"),
     demoStudentWork: () => blocked("O modo de demonstração"),
     library: (s) => call(base(s) + "/biblioteca"),

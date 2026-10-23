@@ -273,3 +273,9 @@ input {
     font-size: 39px;
   }
 }
+
+.password-requirements {list-style:none;padding:0;margin:0 0 4px;display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;font-size:12px;line-height:1.45;color:#624b70;}
+.password-requirements [data-met="true"] {color:#22603f;font-weight:600;}
+button:disabled {opacity:.65;cursor:wait;}
+.feedback:focus {outline:3px solid #70469c;outline-offset:4px;}
+@media(max-width:400px){.password-requirements{grid-template-columns:1fr;}}

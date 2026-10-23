@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="../../public/css/pages/aluno/jogos/universo.css">
   <link rel="stylesheet" href="../../public/css/menu-unificado.css">
   <script defer src="../../public/js/components/menu-unificado.js"></script>
+<link rel="icon" type="image/png" href="../../public/assets/imagens/marca/astrolearn-simbolo.png">
 </head>
 
 <body class="games-portal collapsed galaxia universe-mode" data-view="galaxia">
@@ -77,18 +78,19 @@
       <canvas id="universeStars" aria-hidden="true"></canvas>
       <canvas id="universePlanets" aria-hidden="true"></canvas>
       <div id="universeObjects" aria-label="Destinos dos jogos">
-        <button id="planet-robo" class="planet-target planet-robo" data-game="robo" type="button"
-          aria-label="Selecionar Rota do robô" aria-pressed="false"><span class="fallback-sphere"
-            aria-hidden="true"></span><span class="planet-label"><strong>Rota do
-              robô</strong><small>ROBÓTICA</small></span></button>
-        <button id="planet-crew" class="planet-target planet-crew" data-game="crew" type="button"
-          aria-label="Selecionar Cosmo Crew" aria-pressed="false"><span class="fallback-sphere"
-            aria-hidden="true"></span><span class="planet-label"><strong>Cosmo
-              Crew</strong><small>COOPERAÇÃO</small></span></button>
-        <button id="planet-quiz" class="planet-target planet-quiz" data-game="quiz" type="button"
-          aria-label="Selecionar Quiz orbital" aria-pressed="false"><span class="fallback-sphere"
-            aria-hidden="true"></span><span class="planet-label"><strong>Quiz
-              orbital</strong><small>UNIVERSO</small></span></button>
+        <button id="planet-pegadas" class="planet-target planet-pegadas" data-game="pegadas" type="button"
+          aria-label="Selecionar Sem Deixar Pegadas" aria-pressed="false"><span class="fallback-sphere"
+            aria-hidden="true"></span><span class="planet-label"><strong>Sem Deixar
+              Pegadas</strong><small>6º ANO</small></span></button>
+        <button id="planet-cidades" class="planet-target planet-cidades" data-game="cidades" type="button"
+          aria-label="Selecionar Cidades Inteligentes" aria-pressed="false"><span class="fallback-sphere"
+            aria-hidden="true"></span><span class="planet-label"><strong>Cidades
+              Inteligentes</strong><small>8º ANO</small></span></button>
+        <button id="planet-eco" class="planet-target planet-eco" data-game="eco" type="button"
+          aria-label="Selecionar Verdadeiro ou Falso" aria-pressed="false"><span class="fallback-sphere"
+            aria-hidden="true"></span><span class="planet-label"><strong>Verdadeiro
+              ou Falso</strong><small>9º ANO</small></span></button>
+        <button id="planet-biolab" class="planet-target planet-biolab" data-game="biolab" type="button" aria-label="Selecionar BioLab, jogo do 7º ano" aria-pressed="false"><span class="fallback-sphere" aria-hidden="true"></span><span class="planet-label"><strong>BioLab</strong><small>7º ANO · LABORATÓRIO</small></span></button>
         <span id="universeShip" class="universe-ship sprite shuttle" aria-hidden="true"></span>
         <span id="universeStation" class="universe-station sprite station" aria-hidden="true"></span>
         <span id="universeRover" class="universe-rover sprite rover" aria-hidden="true"></span>
@@ -97,8 +99,7 @@
         <h1>Universo de desafios</h1>
         <p>Escolha um destino. Comece uma descoberta.</p>
       </header>
-      <nav class="universe-top-actions" aria-label="Navegação do universo"><button type="button" data-preview>Prévia
-          local</button><a href="index.html">← Voltar</a><a href="../home.html#journey"
+      <nav class="universe-top-actions" aria-label="Navegação do universo"><a href="index.html">← Voltar</a><a href="../home.html#journey"
           aria-label="Voltar para a trilha"><svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="m3 10 9-7 9 7v11h-6v-7H9v7H3Z" />
           </svg></a></nav>
@@ -121,18 +122,16 @@
         <p id="universeHint">Arraste para explorar · Use + e − para aproximar</p>
       </div>
       <p id="universeStatus" class="universe-status" role="status" aria-live="polite"></p>
-      <section id="blockedState" class="blocked-state universe-blocked" aria-labelledby="blockedTitle" hidden><svg
+      <section id="blockedState" class="blocked-state universe-blocked" aria-labelledby="blockedTitle"><svg
           class="lock-icon" viewBox="0 0 32 32" aria-hidden="true">
           <rect x="6" y="14" width="20" height="15" rx="3" />
           <path d="M10 14V9a6 6 0 0 1 12 0v5m-6 7v3" />
         </svg>
-        <p class="preview-badge">SIMULAÇÃO LOCAL · SEM CONTROLE REAL</p>
-        <h2 id="blockedTitle">Hora de focar nas atividades</h2>
-        <p>Este é o visual previsto para quando o professor pausar os jogos. A integração ainda não está disponível.</p>
-        <a class="primary" href="../home.html#journey">Voltar para a trilha</a><button class="text-button" type="button"
-          data-preview>Encerrar simulação</button>
+        
+        <h2 id="blockedTitle">Consultando acesso aos jogos…</h2><p id="blockedDescription">Aguarde a consulta ao servidor.</p><button type="button" id="retryAccess" class="secondary">Consultar novamente</button>
+        <a class="primary" href="../home.html#journey">Voltar para a trilha</a>
       </section>
-      <span id="accessState" class="sr-only" role="status">Prévia: acesso liberado</span>
+      <span id="accessState" class="sr-only" role="status">Consultando acesso aos jogos…</span>
     </section>
   </main>
   <dialog id="destinationsDialog" aria-labelledby="destinationsTitle"><button type="button" class="dialog-close"
@@ -140,10 +139,7 @@
     <p class="eyebrow">EXPLORAÇÃO ACESSÍVEL</p>
     <h2 id="destinationsTitle">Escolha um destino</h2>
     <p>Os mesmos jogos, sem precisar arrastar o cenário.</p>
-    <div class="destination-list"><button type="button" data-game="robo">Rota do robô <span>Robótica · 3
-          desafios</span></button><button type="button" data-game="quiz">Quiz orbital <span>Universo · 6
-          perguntas</span></button><button type="button" data-game="crew">Cosmo Crew <span>Cooperação · turnos
-          locais</span></button></div>
+    <div class="destination-list"><button type="button" data-game="pegadas">Sem Deixar Pegadas <span>6º ano · meio ambiente</span></button><button type="button" data-game="biolab">BioLab <span>7º ano · laboratório de ciências</span></button><button type="button" data-game="cidades">Cidades Inteligentes <span>8º ano · tabuleiro</span></button><button type="button" data-game="eco">Verdadeiro ou Falso <span>9º ano · sustentabilidade</span></button></div>
     <p class="hint">Resultados e progresso ficam apenas neste navegador.</p>
   </dialog>
   <dialog id="gameDialog" aria-labelledby="gameTitle" aria-describedby="gameDescription">
@@ -158,16 +154,7 @@
     <p class="hint">Progresso salvo apenas neste navegador. Nenhuma moeda ou conquista da plataforma é concedida.</p>
     <a id="launchGame" class="primary">Começar missão →</a>
   </dialog>
-  <dialog id="previewDialog" aria-labelledby="previewTitle">
-    <button class="dialog-close" type="button" data-close aria-label="Fechar prévia">×</button>
-    <p class="eyebrow">PRÉVIA PARA APRESENTAÇÃO</p>
-    <h2 id="previewTitle">Controle de acesso</h2>
-    <p>Simulação local. Este controle não altera permissões reais nem comunica mudanças ao professor.</p>
-    <label class="preview-control" for="previewBlocked"><span>Simular acesso bloqueado nesta aba</span><input
-        id="previewBlocked" type="checkbox" role="switch"></label>
-    <p id="previewStatus" role="status" class="hint"></p>
-    <button type="button" class="primary" data-close>Concluir prévia</button>
-  </dialog>
+  
   <script src="../../public/js/components/preferencias.js"></script>
   
   <script type="module" src="../../public/js/components/sessao.js"></script>

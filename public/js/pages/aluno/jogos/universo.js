@@ -13,9 +13,10 @@ export function initUniverse() {
   const cursor = { x: -1000, y: -1000 };
   const flight = { x: 0, y: 0, angle: 0 };
   const planets = {
-    robo: { x: 345, y: 650, r: 340, kind: 1, speed: .0055, phase: .06 },
-    crew: { x: 865, y: 235, r: 137, kind: 2, speed: .004, phase: .1 },
-    quiz: { x: 1250, y: 495, r: 190, kind: 0, speed: .008, phase: 0 }
+    biolab: { x: 870, y: 715, r: 135, kind: 0, speed: .006, phase: .4 },
+    pegadas: { x: 345, y: 650, r: 340, kind: 1, speed: .0055, phase: .06 },
+    cidades: { x: 865, y: 235, r: 137, kind: 2, speed: .004, phase: .1 },
+    eco: { x: 1250, y: 495, r: 190, kind: 0, speed: .008, phase: 0 }
   };
   let w = 1, h = 1, ratio = 1, scale = 1, left = 120, selected = null;
   let frame = 0, previous = 0, time = 0, movingCamera = false, disposed = false;
@@ -73,7 +74,7 @@ export function initUniverse() {
   document.addEventListener('astrolearn:universe-focus',event=>{
     const p=planets[event.detail?.id]; if (!p || blocked()) return;
     selected=event.detail.id;
-    camera.tz=selected==='robo'?1:1.45;
+    camera.tz=selected==='pegadas'?1:1.45;
     const desiredX=w<801?w*.55:w*.68, desiredY=w<801?h*.38:h*.43;
     camera.tx=p.x-(desiredX-(left+(w-left)/2))/(scale*camera.tz);
     camera.ty=p.y-(desiredY-h/2)/(scale*camera.tz);
@@ -132,19 +133,19 @@ export function initUniverse() {
     paintSky(moving?dt:0);
     const list=[];
     for(const [id,p] of Object.entries(planets)) {
-      const q=projection(p,id==='robo'?1.4:1);
+      const q=projection(p,id==='pegadas'?1.4:1);
       list.push({...q,kind:p.kind,phase:p.phase+time*p.speed,selected:id===selected});
       const target=$('planet-'+id);
       target.style.width=q.r*2+'px';target.style.height=q.r*2+'px';target.style.transform=`translate(${q.x-q.r}px,${q.y-q.r}px)`;
       // As indicações mantêm tamanho legível; os planetas não são imagens achatadas.
     }
-    const earth=planets.quiz, moonAngle=time*.11;
+    const earth=planets.eco, moonAngle=time*.11;
     const moon=projection({x:earth.x+Math.cos(moonAngle)*290,y:earth.y+Math.sin(moonAngle)*100,r:34});
     list.splice(2,0,{...moon,kind:3,phase:time*.002,selected:false});
-    const rover=projection({x:planets.robo.x+75,y:planets.robo.y-85,r:1});
+    const rover=projection({x:planets.pegadas.x+75,y:planets.pegadas.y-85,r:1});
     setObject('universeRover',rover.x,rover.y,Math.max(60,Math.min(150,100*scale*camera.z)));
     const stationAngle=time*.045;
-    const station=projection({x:planets.crew.x+140+Math.sin(stationAngle)*45,y:planets.crew.y+80+Math.cos(stationAngle)*30,r:1});
+    const station=projection({x:planets.cidades.x+140+Math.sin(stationAngle)*45,y:planets.cidades.y+80+Math.cos(stationAngle)*30,r:1});
     setObject('universeStation',station.x,station.y,Math.max(80,Math.min(190,145*scale*camera.z)),-7+Math.sin(time*.13)*3);
     const foreground={x:w*1.1,y:h*1.42,r:h*.58,kind:3,phase:.14+time*.0008,selected:false};
     list.push(foreground);

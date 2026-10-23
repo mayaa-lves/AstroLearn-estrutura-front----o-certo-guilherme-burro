@@ -32,6 +32,7 @@
     'Perguntas':'M3 4h18v13H8l-5 4Zm4 4h10M7 12h6',
     'Notificações':'M18 8a6 6 0 0 0-12 0c0 8-3 7-3 10h18c0-3-3-2-3-10M10 21h4',
     'Sair':'M9 4H4v16h5m5-12 4 4-4 4M9 12h12',
+    'Assistente':'M4 3h16v14h-6l-4 4v-4H4Zm4 5h8m-8 4h5',
     'Ajuda':'M9 8a3 3 0 1 1 5 3c-2 1-2 2-2 4m0 3h.01M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20',
     'Mais':'M4 12h.01M12 12h.01M20 12h.01'
   };
@@ -68,7 +69,7 @@
   const list=document.createElement('nav');list.setAttribute('aria-label','Todas as páginas');dialog.append(close,title,list);document.body.append(dialog);
   const tooltip=document.createElement('div');tooltip.className='astro-nav-tooltip';tooltip.setAttribute('role','tooltip');tooltip.hidden=true;document.body.append(tooltip);
   let updateFrame=0,active=null,first=true;
-  const entries=[['home.html','Início'],['home.html#journey','Minha trilha'],['biblioteca.html','Biblioteca'],['conquistas.html','Conquistas'],['loja.html','Loja'],['equipe.html','Minha equipe'],['perfil.html','Perfil'],['jogos/index.html','Jogos']];
+  const entries=[['home.html','Início'],['home.html#journey','Minha trilha'],['biblioteca.html','Biblioteca'],['conquistas.html','Conquistas'],['loja.html','Loja'],['equipe.html','Minha equipe'],['perfil.html','Perfil'],['jogos/index.html','Jogos'],['assistente.html','Assistente']];
   function buildStudent(){
     for(const [file,label]of entries){let a=[...nav.querySelectorAll('a')].find(a=>labelOf(a)===label);if(!a){a=document.createElement('a');a.href=new URL(file,studentBase).href;nav.append(a);}polish(a,label);}
     // Preferências continuam no perfil; os arquivos dessas telas não são removidos.
@@ -77,9 +78,9 @@
   function buildTeacher(){
     const params=new URLSearchParams(location.search),room=params.get('sala');
     const items=[['home.html','Turmas']];
-    if(room)items.push(['turma.html','Sala'],['atividades.html','Atividades'],['biblioteca.html','Biblioteca'],['equipes.html','Equipes'],['correcoes.html','Correções'],['perguntas.html','Perguntas']);
-    items.push(['notificacoes.html','Notificações']);
-    const chosen=({'home.html':'Turmas','turma.html':'Sala','aluno.html':'Sala','atividade.html':'Atividades','atividades.html':'Atividades','editor-atividade.html':'Atividades','biblioteca.html':'Biblioteca','novo-material.html':'Biblioteca','equipes.html':'Equipes','correcao.html':'Correções','correcoes.html':'Correções','perguntas.html':'Perguntas','notificacoes.html':'Notificações'})[location.pathname.split('/').pop()];
+    if(room)items.push(['turma.html','Sala'],['atividades.html','Atividades'],['biblioteca.html','Biblioteca'],['equipes.html','Equipes'],['correcoes.html','Correções'],['perguntas.html','Perguntas'],['jogos.html','Jogos']);
+    items.push(['notificacoes.html','Notificações'],['assistente.html','Assistente']);
+    const chosen=({'home.html':'Turmas','assistente.html':'Assistente','jogos.html':'Jogos','turma.html':'Sala','aluno.html':'Sala','atividade.html':'Atividades','atividades.html':'Atividades','editor-atividade.html':'Atividades','biblioteca.html':'Biblioteca','novo-material.html':'Biblioteca','equipes.html':'Equipes','correcao.html':'Correções','correcoes.html':'Correções','perguntas.html':'Perguntas','notificacoes.html':'Notificações'})[location.pathname.split('/').pop()];
     const keep=[];
     for(const [file,label]of items){
       let a=[...nav.querySelectorAll('a')].find(a=>labelOf(a)===label);
@@ -106,7 +107,7 @@
     let name='';const file=location.pathname.split('/').pop();
     if(location.pathname.includes('/aluno/jogos/'))name='Jogos';
     else if(file==='home.html')name=location.hash==='#journey'?'Minha trilha':'Início';
-    else name=({'biblioteca.html':'Biblioteca','conquistas.html':'Conquistas','loja.html':'Loja','equipe.html':'Minha equipe','perfil.html':'Perfil','configuracoes.html':'Perfil','atividade.html':'Minha trilha'})[file]||'';
+    else name=({'assistente.html':'Assistente','biblioteca.html':'Biblioteca','conquistas.html':'Conquistas','loja.html':'Loja','equipe.html':'Minha equipe','perfil.html':'Perfil','configuracoes.html':'Perfil','atividade.html':'Minha trilha'})[file]||'';
     all.forEach(a=>{const yes=labelOf(a)===name;a.classList.toggle('active',yes);if(yes)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
     return all.find(a=>labelOf(a)===name)||null;
   }

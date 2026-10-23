@@ -122,17 +122,17 @@ body.universe-mode {
     margin-top: 6px;
 }
 
-.planet-robo .planet-label {
+.planet-pegadas .planet-label {
     left: 46%;
     top: 48%;
 }
 
-.planet-crew .planet-label {
+.planet-cidades .planet-label {
     left: 76%;
     top: 12%;
 }
 
-.planet-quiz .planet-label {
+.planet-eco .planet-label {
     left: 68%;
     top: 17%;
 }
@@ -150,15 +150,15 @@ body.universe-mode {
     display: block;
 }
 
-.universe-fallback .planet-quiz .fallback-sphere {
+.universe-fallback .planet-eco .fallback-sphere {
     background: radial-gradient(circle at 70% 30%, #77bfc7, #285d95 45%, #071322 80%);
 }
 
-.universe-fallback .planet-crew .fallback-sphere {
+.universe-fallback .planet-cidades .fallback-sphere {
     background: repeating-linear-gradient(8deg, #b8a582 0 7%, #8f7a61 9% 15%, #d6c49b 18% 20%);
 }
 
-.universe-fallback .planet-crew .fallback-sphere::before {
+.universe-fallback .planet-cidades .fallback-sphere::before {
     content: '';
     position: absolute;
     width: 210%;
@@ -597,19 +597,19 @@ body:has(#astroAccountTools) .universe-top-actions a[aria-label] {
         height: 5px;
     }
 
-    .planet-robo .planet-label {
+    .planet-pegadas .planet-label {
         left: 50%;
         top: 38%;
         transform: translateX(-50%);
     }
 
-    .planet-crew .planet-label {
+    .planet-cidades .planet-label {
         left: 50%;
         top: 38%;
         transform: translateX(-50%);
     }
 
-    .planet-quiz .planet-label {
+    .planet-eco .planet-label {
         left: 50%;
         top: 38%;
         transform: translateX(-50%);
@@ -696,3 +696,4 @@ body:has(#astroAccountTools) .universe-top-actions a[aria-label] {
 body.universe-mode {
     overflow: hidden;
 }
+.planet-biolab .planet-label{left:50%;top:80%}.universe-fallback .planet-biolab .fallback-sphere{background:radial-gradient(circle at 35% 30%,#a1e2c2,#2b7893 48%,#071322 83%)}

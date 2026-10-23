@@ -112,16 +112,7 @@ function seguirPonteiro() {
     `${dy / distancia * deslocamento}px`
   );
 
-  // Movimento discreto do cenário.
-  document.body.style.setProperty(
-    '--scene-x',
-    `${(ponteiro.x / innerWidth - .5) * 4}px`
-  );
 
-  document.body.style.setProperty(
-    '--scene-y',
-    `${(ponteiro.y / innerHeight - .5) * 3}px`
-  );
 }
 
 function centralizarOlhar() {
@@ -131,8 +122,6 @@ function centralizarOlhar() {
   mascote.style.setProperty('--eye-x', '0px');
   mascote.style.setProperty('--eye-y', '0px');
 
-  document.body.style.setProperty('--scene-x', '0px');
-  document.body.style.setProperty('--scene-y', '0px');
 }
 
 document.addEventListener('pointermove', (event) => {

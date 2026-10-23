@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="../public/css/menu-unificado.css">
 <script defer src="../public/js/components/menu-unificado.js"></script>
 <link rel="stylesheet" href="../public/css/atividade-conexao.css">
+<link rel="icon" type="image/png" href="../public/assets/imagens/marca/astrolearn-simbolo.png">
 </head>
   <body class="activity-page" data-page="activity" data-activity-world="loading">
     <canvas id="activityStars" class="activity-stars" aria-hidden="true"></canvas>
@@ -180,7 +181,7 @@
                 <h2 id="notesTitle">Pergunte ao professor</h2>
               </div>
               <p class="section-subtitle">
-                Perguntas e respostas desta demonstração ficam neste navegador.
+                Converse com seu professor em particular sobre esta atividade.
               </p>
               <form id="pergunta-form">
                 <label class="sr-only" for="pergunta"
@@ -188,12 +189,12 @@
                 >
                 <textarea
                   id="pergunta"
-                  maxlength="1500"
+                  maxlength="2000"
                   placeholder="O que você quer lembrar ou perguntar?"
                   rows="2"
                 ></textarea>
                 <button class="secondary" type="submit">
-                  Enviar pergunta na prévia
+                  Enviar pergunta
                 </button>
                 <p id="pergunta-status" role="status"></p>
               </form>
@@ -379,5 +380,6 @@
     <script type="module" src="../public/js/pages/aluno/atividade-interface.js"></script>
     <script type="module" src="../public/js/pages/aluno/atividade-planeta.js"></script>
     <script type="module" src="../public/js/pages/aluno/atividade-estrelas.js"></script>
+<script type="module" src="../public/js/pages/aluno/atividade-perguntas.js"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-import { sessaoObrigatoria } from '../../services/conexao.js';
+import { api, sessaoObrigatoria } from '../../services/conexao.js';
 import { dashboard } from '../../services/aluno.js';
 
 const session = sessaoObrigatoria('aluno');
@@ -25,7 +25,8 @@ const emptyDraft = () => ({
 let team = null;
 let members = [];
 let draft = emptyDraft();
-let draftKey = '';
+let editingNote = null;
+let mutating = false;
 let busy = false;
 let ready = false;
 let editingTask = null;
@@ -101,105 +102,34 @@ function controls(enabled) {
   });
 }
 
-/* Valida dados recuperados do navegador. */
-function validate(raw) {
-  if (
-    !raw ||
-    raw.version !== 1 ||
-    !Array.isArray(raw.tasks) ||
-    !Array.isArray(raw.notes)
-  ) {
-    throw Error('Formato inválido.');
-  }
-
-  const tasks = raw.tasks
-    .filter(task =>
-      task &&
-      typeof task.id === 'string' &&
-      typeof task.title === 'string' &&
-      task.title.trim() &&
-      typeof task.owner === 'string' &&
-      Object.hasOwn(statusNames, task.status)
-    )
-    .slice(0, 60)
-    .map(task => ({
-      id: task.id.slice(0, 140),
-      title: task.title.trim().slice(0, 100),
-      owner: task.owner.slice(0, 200),
-      status: task.status
-    }));
-
-  const notes = raw.notes
-    .filter(note =>
-      note &&
-      typeof note.id === 'string' &&
-      typeof note.text === 'string' &&
-      note.text.trim() &&
-      Object.hasOwn(kindNames, note.kind) &&
-      typeof note.createdAt === 'string' &&
-      Number.isFinite(Date.parse(note.createdAt))
-    )
-    .slice(0, 80)
-    .map(note => ({
-      id: note.id.slice(0, 140),
-      text: note.text.trim().slice(0, 1000),
-      kind: note.kind,
-      pinned: note.pinned === true,
-      createdAt: note.createdAt
-    }));
-
-  return {
-    version: 1,
-    tasks: [...new Map(tasks.map(task => [task.id, task])).values()],
-    notes: [...new Map(notes.map(note => [note.id, note])).values()]
-  };
+const serverStatus = {todo:'pendente', doing:'em_andamento', done:'concluida'};
+const localStatus = {pendente:'todo', em_andamento:'doing', concluida:'done'};
+const teamRoute = suffix => '/api/aluno/equipes/' + encodeURIComponent(team.id) + '/' + suffix;
+function taskFromServer(t) {
+  return {id:t.id,title:t.titulo,owner:t.responsavel_id,status:localStatus[t.status] || 'todo',prazo:t.prazo};
 }
-
-function readDraft() {
-  draft = emptyDraft();
-  $('storageNotice').textContent = '';
-
-  try {
-    const saved = localStorage.getItem(draftKey);
-
-    if (saved) {
-      draft = validate(JSON.parse(saved));
-    }
-  } catch {
-    $('storageNotice').textContent =
-      'Não foi possível recuperar seu rascunho neste navegador. Novas alterações ficam nesta página até que seja possível salvá-las.';
-  }
+function noteFromServer(n) {
+  return {id:n.id,text:n.texto,kind:'notice',createdAt:n.criado_em,author:n.autor_id,authorName:n.autor?.nome || 'Integrante'};
 }
-
-function saveDraft() {
-  if (!ready || !draftKey) return false;
-
+async function refreshShared() {
+  const [tasks,notes] = await Promise.all([api(teamRoute('tarefas')),api(teamRoute('avisos'))]);
+  draft.tasks = (tasks.tarefas || []).map(taskFromServer);
+  draft.notes = (notes.avisos || []).map(noteFromServer);
+}
+async function mutate(action, onSuccess) {
+  if (mutating || !ready) return false;
+  mutating = true; controls(false);
   try {
-    localStorage.setItem(
-      draftKey,
-      JSON.stringify(draft)
-    );
-
+    const data = await action();
+    onSuccess(data);
+    renderWorkspace();
     $('storageNotice').textContent = '';
     return true;
-  } catch {
-    $('storageNotice').textContent =
-      'O navegador não permitiu salvar. As alterações atuais ficam somente nesta página e podem se perder ao sair.';
-
+  } catch (error) {
+    $('storageNotice').textContent = error.message;
+    tell('Não foi possível confirmar a alteração. Atualize antes de tentar novamente.');
     return false;
-  }
-}
-
-function saveAndRender(message) {
-  const saved = saveDraft();
-
-  renderWorkspace();
-
-  tell(
-    saved
-      ? message
-      : 'Alteração mantida somente nesta página.'
-  );
+  } finally {mutating=false; controls(ready);}
 }
 
 function ownerName(owner) {
@@ -240,7 +170,7 @@ function showMember(member, index, trigger) {
     $('memberTasks').append(
       element(
         'li',
-        'Sem responsabilidades no seu rascunho.'
+        'Sem responsabilidades da equipe.'
       )
     );
   }
@@ -258,7 +188,7 @@ function renderMembers() {
 
     button.setAttribute(
       'aria-label',
-      `Ver planejamento pessoal de ${member.nome}`
+      `Ver tarefas de ${member.nome}`
     );
 
     const copy = element('span', '', 'member-copy');
@@ -277,7 +207,7 @@ function renderMembers() {
       element(
         'span',
         count
-          ? `${count} ${count === 1 ? 'tarefa' : 'tarefas'} no rascunho`
+          ? `${count} ${count === 1 ? 'tarefa' : 'tarefas'} na equipe`
           : 'Integrante da equipe'
       )
     );
@@ -298,7 +228,7 @@ function openTask(task, trigger) {
 
   if (!task && draft.tasks.length >= 60) {
     tell(
-      'Seu rascunho já tem 60 tarefas. Remova uma antes de adicionar outra.'
+      'Sua equipe já tem 60 tarefas. Remova uma antes de adicionar outra.'
     );
     return;
   }
@@ -329,6 +259,7 @@ function openTask(task, trigger) {
   $('taskOwner').value =
     task?.owner || session.usuario.id;
 
+  $('taskPrazo').value = task?.prazo?.slice(0,10) || '';
   $('taskStatus').value =
     task?.status || 'todo';
 
@@ -347,7 +278,7 @@ function askRemove(type, targetId, trigger) {
 
   $('removeTitle').textContent =
     type === 'task'
-      ? 'Remover tarefa do seu rascunho?'
+      ? 'Remover tarefa da equipe?'
       : 'Remover sua anotação?';
 
   show($('removeDialog'), trigger);
@@ -381,19 +312,17 @@ function renderTasks() {
     check.setAttribute(
       'aria-label',
       `Marcar ${task.title} como ${check.checked ? 'não concluída' : 'concluída'
-      } no seu rascunho`
+      } da equipe`
     );
 
-    check.addEventListener('change', () => {
-      task.status = check.checked ? 'done' : 'todo';
-
-      saveAndRender(
-        'Situação atualizada no seu rascunho.'
+    check.addEventListener('change', async () => {
+      check.disabled = true;
+      const saved = await mutate(
+        () => api('/api/aluno/tarefas/' + encodeURIComponent(task.id),'PUT',{status:check.checked?'concluida':'pendente'}),
+        data => Object.assign(task,taskFromServer(data))
       );
-
-      [...$('taskList').querySelectorAll('input')]
-        .find(node => node.dataset.taskId === task.id)
-        ?.focus();
+      if (!saved) { check.checked = task.status === 'done'; check.disabled = false; }
+      else tell('Situação atualizada para a equipe.');
     });
 
     checkLabel.append(check);
@@ -402,7 +331,7 @@ function renderTasks() {
 
     copy.append(
       element('strong', task.title),
-      element('span', ownerName(task.owner))
+      element('span', ownerName(task.owner) + (task.prazo ? ' · Prazo: ' + new Date(task.prazo.slice(0,10)+'T12:00:00').toLocaleDateString('pt-BR') : ''))
     );
 
     const edit = iconButton(
@@ -442,93 +371,26 @@ function renderTasks() {
 /* Anotações do rascunho pessoal. */
 function renderNotes() {
   $('wall').replaceChildren();
-
-  $('wallEmpty').hidden =
-    draft.notes.length > 0;
-
-  const notes = [...draft.notes].sort(
-    (a, b) =>
-      Number(b.pinned) - Number(a.pinned) ||
-      Date.parse(b.createdAt) - Date.parse(a.createdAt)
-  );
-
-  notes.forEach(note => {
-    const row = element(
-      'li',
-      '',
-      'idea-note' + (note.pinned ? ' pinned' : '')
-    );
-
-    const copy = element(
-      'div',
-      '',
-      'idea-content'
-    );
-
-    const time = element(
-      'time',
-      new Date(note.createdAt).toLocaleString('pt-BR', {
-        day: '2-digit',
-        month: 'short',
-        hour: '2-digit',
-        minute: '2-digit'
-      })
-    );
-
+  $('wallEmpty').hidden = draft.notes.length > 0;
+  [...draft.notes].sort((a,b)=>Date.parse(b.createdAt)-Date.parse(a.createdAt)).forEach(note => {
+    const row = element('li','','idea-note');
+    const copy = element('div','','idea-content');
+    const time = element('time',new Date(note.createdAt).toLocaleString('pt-BR'));
     time.dateTime = note.createdAt;
-
-    copy.append(
-      element('strong', 'Você'),
-      time,
-      element(
-        'span',
-        kindNames[note.kind] +
-        (note.pinned ? ' · Fixada' : ''),
-        'note-kind'
-      ),
-      element('p', note.text)
-    );
-
-    const pin = iconButton(
-      note.pinned
-        ? 'Desafixar anotação'
-        : 'Fixar anotação',
-      'm8 3 8 0-1 6 4 4H5l4-4ZM12 13v8'
-    );
-
-    pin.setAttribute(
-      'aria-pressed',
-      String(note.pinned)
-    );
-
-    pin.addEventListener('click', () => {
-      note.pinned = !note.pinned;
-
-      saveAndRender(
-        note.pinned
-          ? 'Anotação fixada no seu rascunho.'
-          : 'Anotação desafixada.'
-      );
-
-      $('idea').focus();
-    });
-
-    const remove = iconButton(
-      'Remover anotação',
-      'M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 10v7m4-7v7'
-    );
-
-    remove.addEventListener('click', () => {
-      askRemove('note', note.id, remove);
-    });
-
-    row.append(
-      portrait(0),
-      copy,
-      pin,
-      remove
-    );
-
+    copy.append(element('strong',note.author === session.usuario.id ? 'Você' : note.authorName),time,element('p',note.text));
+    row.append(portrait(0),copy);
+    if (note.author === session.usuario.id) {
+      const edit = iconButton('Editar aviso','m15 4 5 5M4 20l4-1L20 7a2 2 0 0 0-4-4L4 15Z');
+      edit.onclick = () => {
+        editingNote = note.id; $('idea').value = note.text;
+        $('ideaCount').textContent = note.text.length + ' / 1000';
+        $('saveNote').textContent = 'Salvar edição';
+        $('cancelNote').hidden = false; $('idea').focus();
+      };
+      const remove = iconButton('Remover aviso','M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 10v7m4-7v7');
+      remove.onclick = () => askRemove('note',note.id,remove);
+      row.append(edit,remove);
+    }
     $('wall').append(row);
   });
 }
@@ -586,7 +448,7 @@ async function load() {
   team = null;
   members = [];
   draft = emptyDraft();
-  draftKey = '';
+  editingNote = null;
 
   controls(false);
 
@@ -608,24 +470,17 @@ async function load() {
   });
 
   try {
-    const data = await dashboard();
+    const [data, teamData] = await Promise.all([dashboard(),api('/api/aluno/equipe')]);
 
-    if (!data?.equipe) {
+    if (!teamData?.equipe) {
       $('teamLabel').textContent = 'Sem equipe';
       $('noTeam').hidden = false;
       return;
     }
 
-    team = data.equipe;
+    team = teamData.equipe;
 
-    const roster = [
-      session.usuario,
-      ...(
-        Array.isArray(data.colegas)
-          ? data.colegas
-          : []
-      )
-    ];
+    const roster = team.membros || [];
 
     const unique = new Map();
 
@@ -668,13 +523,7 @@ async function load() {
       );
     }
 
-    draftKey =
-      'astrolearn-equipe-rascunho-v1:' +
-      encodeURIComponent(session.usuario.id) +
-      ':' +
-      encodeURIComponent(team.id);
-
-    readDraft();
+    await refreshShared();
     renderMission(data);
 
     ready = true;
@@ -707,67 +556,25 @@ $('organize').addEventListener('click', () => {
   openTask(null, $('organize'));
 });
 
-$('taskForm').addEventListener('submit', event => {
+$('taskForm').addEventListener('submit', async event => {
   event.preventDefault();
-
-  if (!ready) return;
-
-  const title = $('taskTitle').value.trim();
-  const owner = $('taskOwner').value;
-  const status = $('taskStatus').value;
-
-  $('taskError').textContent = '';
-
-  if (!title) {
-    $('taskError').textContent = 'Descreva a tarefa.';
-    $('taskTitle').focus();
-    return;
+  if (!ready || mutating) return;
+  const titulo = $('taskTitle').value.trim();
+  const responsavel_id = $('taskOwner').value;
+  const status = serverStatus[$('taskStatus').value];
+  if (!titulo || !members.some(m=>m.id===responsavel_id) || !status) {
+    $('taskError').textContent = 'Informe o título e um responsável da equipe.'; return;
   }
-
-  if (!members.some(member => member.id === owner)) {
-    $('taskError').textContent =
-      'Selecione um integrante da equipe atual.';
-
-    $('taskOwner').focus();
-    return;
-  }
-
-  if (!Object.hasOwn(statusNames, status)) return;
-
-  if (editingTask) {
-    const task = draft.tasks.find(
-      item => item.id === editingTask
-    );
-
-    if (!task) {
-      $('taskError').textContent =
-        'A tarefa já foi removida. Feche e crie uma nova.';
-      return;
-    }
-
-    Object.assign(task, {
-      title: title.slice(0, 100),
-      owner,
-      status
-    });
-  } else {
-    if (draft.tasks.length >= 60) {
-      $('taskError').textContent =
-        'Limite de 60 tarefas neste rascunho.';
-      return;
-    }
-
-    draft.tasks.push({
-      id: id(),
-      title: title.slice(0, 100),
-      owner,
-      status
-    });
-  }
-
-  saveAndRender('Tarefa salva no seu rascunho.');
-
-  $('taskDialog').close();
+  const payload={titulo,responsavel_id,status,prazo:$('taskPrazo').value || null};
+  const submit = $('taskForm').querySelector('[type="submit"]'); submit.disabled = true;
+  const currentId = editingTask;
+  const saved = await mutate(
+    () => api(currentId?'/api/aluno/tarefas/'+encodeURIComponent(currentId):teamRoute('tarefas'),currentId?'PUT':'POST',payload),
+    data => { const task=taskFromServer(data); if(currentId) draft.tasks=draft.tasks.map(t=>t.id===currentId?task:t); else draft.tasks.push(task); }
+  );
+  submit.disabled=false;
+  if(saved) {tell('Tarefa salva para a equipe.'); $('taskDialog').close();}
+  else $('taskError').textContent=$('storageNotice').textContent;
 });
 
 $('idea').addEventListener('input', () => {
@@ -777,69 +584,40 @@ $('idea').addEventListener('input', () => {
   $('formError').textContent = '';
 });
 
-$('ideaForm').addEventListener('submit', event => {
+function resetNote() {
+  editingNote = null; $('idea').value=''; $('ideaCount').textContent='0 / 1000';
+  $('saveNote').textContent='Publicar aviso'; $('cancelNote').hidden=true;
+}
+$('cancelNote').onclick = resetNote;
+$('ideaForm').addEventListener('submit', async event => {
   event.preventDefault();
-
-  if (!ready) return;
-
-  const text = $('idea').value.trim();
-  const kind = $('noteType').value;
-
-  if (!text) {
-    $('formError').textContent =
-      'Escreva sua anotação antes de salvar.';
-
-    $('idea').focus();
-    return;
-  }
-
-  if (!Object.hasOwn(kindNames, kind)) return;
-
-  if (draft.notes.length >= 80) {
-    $('formError').textContent =
-      'Limite de 80 anotações neste rascunho. Remova uma para continuar.';
-    return;
-  }
-
-  draft.notes.push({
-    id: id(),
-    text: text.slice(0, 1000),
-    kind,
-    pinned: false,
-    createdAt: new Date().toISOString()
-  });
-
-  saveAndRender(
-    'Anotação salva no seu rascunho pessoal.'
+  const texto=$('idea').value.trim();
+  if(!texto || !ready || mutating) return;
+  const currentId=editingNote;
+  const saved=await mutate(
+    () => api(currentId?'/api/aluno/avisos/'+encodeURIComponent(currentId):teamRoute('avisos'),currentId?'PUT':'POST',{texto}),
+    data => {const note=noteFromServer({...data,autor:{nome:session.usuario.nome}}); if(currentId) draft.notes=draft.notes.map(n=>n.id===currentId?note:n); else draft.notes.push(note);}
   );
-
-  $('idea').value = '';
-  $('ideaCount').textContent = '0 / 1000';
-  $('formError').textContent = '';
-
-  $('wallStatus').textContent =
-    'Anotação adicionada ao rascunho pessoal.';
-
-  $('idea').focus();
+  if(saved) {resetNote(); tell('Aviso publicado para a equipe.'); $('wallStatus').textContent='Aviso salvo no servidor.';}
+  else $('formError').textContent=$('storageNotice').textContent;
 });
-
-$('confirmRemove').addEventListener('click', () => {
-  if (!ready || !removal) return;
-
-  if (removal.type === 'task') {
-    draft.tasks = draft.tasks.filter(
-      task => task.id !== removal.id
-    );
-  } else {
-    draft.notes = draft.notes.filter(
-      note => note.id !== removal.id
-    );
-  }
-
-  saveAndRender('Item removido do seu rascunho.');
-
-  $('removeDialog').close();
+$('confirmRemove').addEventListener('click', async () => {
+  if(!ready || !removal || mutating) return;
+  const item={...removal}; const button=$('confirmRemove'); button.disabled=true;
+  const saved=await mutate(
+    () => api('/api/aluno/'+(item.type==='task'?'tarefas':'avisos')+'/'+encodeURIComponent(item.id),'DELETE'),
+    () => {if(item.type==='task') draft.tasks=draft.tasks.filter(t=>t.id!==item.id); else draft.notes=draft.notes.filter(n=>n.id!==item.id);}
+  );
+  button.disabled=false;
+  if(saved) {tell('Item removido da equipe.'); $('removeDialog').close();}
 });
+setInterval(async () => {
+  if(document.hidden || !ready || busy || mutating || document.querySelector('dialog[open]') || editingNote) return;
+  busy=true;
+  try {await refreshShared(); renderWorkspace(); $('storageNotice').textContent='';}
+  catch(error) {$('storageNotice').textContent='Atualização automática: '+error.message;}
+  finally {busy=false;}
+},30000);
 
 document.querySelectorAll('[data-close]').forEach(button => {
   button.addEventListener('click', () => {
@@ -868,19 +646,6 @@ document.querySelectorAll('dialog').forEach(dialog => {
       removal = null;
     }
   });
-});
-
-addEventListener('storage', event => {
-  if (
-    ready &&
-    (
-      event.key === draftKey ||
-      event.key === null
-    )
-  ) {
-    readDraft();
-    renderWorkspace();
-  }
 });
 
 /* Estrelas: fluxo, resposta ao mouse e criação no clique. */

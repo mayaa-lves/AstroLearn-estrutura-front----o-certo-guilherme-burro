@@ -39,9 +39,7 @@
   top: 50%;
   width: var(--canvas-w);
   height: var(--canvas-h);
-  transform:
-    translate(-50%, -50%)
-    translate(var(--scene-x, 0px), var(--scene-y, 0px));
+  transform: translate(-50%, -50%);
 }
 
 .scene-image {

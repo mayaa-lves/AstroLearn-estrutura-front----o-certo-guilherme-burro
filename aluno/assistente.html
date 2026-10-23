@@ -9,122 +9,11 @@
     <link rel="stylesheet" href="../public/css/preferencias.css" />
     <link rel="stylesheet" href="../public/css/experiencia.css" />
     <style>
-      .help-layout {
-        display: grid;
-        grid-template-columns: 250px 1fr;
-        gap: 28px;
-        max-width: 1000px;
-        margin-top: 24px;
-      }
-      .help-aside {
-        padding: 24px;
-        text-align: center;
-        background: linear-gradient(145deg, #efedf6, #f9f8fc);
-        border-radius: 22px;
-        border: 1px solid #e5dfed;
-      }
-      .help-mascot {
-        display: block;
-        width: 150px;
-        height: 180px;
-        margin: auto;
-        background: url("../public/assets/imagens/aluno/loja/tres-olhos.png") 0 50%/200%
-          300% no-repeat;
-        filter: drop-shadow(0 8px 4px #65507a15);
-      }
-      .help-aside p {
-        font-size: 13px;
-        line-height: 1.65;
-        color: #6f657c;
-      }
-      .help-conversation {
-        min-width: 0;
-        display: flex;
-        flex-direction: column;
-      }
-      .help-messages {
-        min-height: 240px;
-        max-height: 50vh;
-        overflow: auto;
-        padding: 4px 8px;
-        display: flex;
-        flex-direction: column;
-        gap: 14px;
-      }
-      .help-message {
-        padding: 15px 18px;
-        border-radius: 16px;
-        background: white;
-        border: 1px solid #e5dfed;
-        font-size: 14px;
-        line-height: 1.7;
-        max-width: 90%;
-        margin: 0;
-        white-space: pre-wrap;
-      }
-      .help-message.user {
-        align-self: flex-end;
-        background: #eee7f8;
-        border-color: #e0d2f0;
-      }
-      .help-topics {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-        margin: 18px 0;
-      }
-      .help-topics button {
-        border: 1px solid #ddd4e8;
-        border-radius: 20px;
-        background: #fff9;
-        padding: 9px 14px;
-        color: #674b82;
-        font-size: 12px;
-        min-height: 40px;
-      }
-      #helpForm {
-        display: flex;
-        gap: 10px;
-      }
-      #helpInput {
-        flex: 1;
-        min-width: 0;
-        background: #fff;
-        border: 1px solid #dcd3e8;
-        border-radius: 13px;
-        padding: 14px;
-        font: inherit;
-        font-size: 14px;
-      }
-      #helpForm button {
-        border-radius: 13px;
-        padding: 12px 20px;
-      }
-      .help-notice {
-        color: #73657f;
-        font-size: 12px;
-      }
-      @media (max-width: 800px) {
-        .help-layout {
-          grid-template-columns: 1fr;
-        }
-        .help-aside {
-          display: none;
-        }
-        .help-messages {
-          min-height: 240px;
-          max-height: 45vh;
-        }
-        .help-message {
-          max-width: 95%;
-        }
-        #helpForm button {
-          padding: 10px 15px;
-        }
-      }
-    </style>
+.sparky-header{display:block!important;max-width:1000px;padding:16px 0 0;margin-bottom:22px}.sparky-header .eyebrow{font-size:11px;letter-spacing:.12em;margin:0 0 8px}.sparky-header h1{font-size:clamp(27px,3vw,38px);line-height:1.2;margin:0 0 10px}.sparky-header p:last-child{font-size:14px;line-height:1.6;color:#665478;margin:0;max-width:650px}[data-sparky-page]{width:100%;max-width:1000px;margin-top:0!important}@media(max-width:800px){.sparky-header{padding-top:50px}}
+</style>
     <link rel="stylesheet" href="../public/css/menu-unificado.css">
   <script defer src="../public/js/components/menu-unificado.js"></script>
+<link rel="icon" type="image/png" href="../public/assets/imagens/marca/astrolearn-simbolo.png">
 </head>
   <body>
     <aside class="sidebar">
@@ -207,58 +96,17 @@
       <small>Uma descoberta de cada vez.</small>
     </aside>
     <main id="main" tabindex="-1">
-      <header>
-        <p class="eyebrow">CENTRAL DE AJUDA</p>
-        <h1>Uma mãozinha na sua expedição.</h1>
-        <p>Orientações rápidas para navegar e continuar aprendendo.</p>
+      <header class="sparky-header">
+        <p class="eyebrow">ASSISTENTE DE APRENDIZAGEM</p>
+        <h1>Sua central do Sparky.</h1>
+        <p>Seu copiloto para investigar, perguntar e continuar aprendendo.</p>
       </header>
-      <div class="help-layout">
-        <aside class="help-aside">
-          <span class="help-mascot" aria-hidden="true"></span>
-          <h2>Vamos descobrir?</h2>
-          <p>Estou aqui para ajudar você a encontrar seu caminho pela plataforma.</p>
-        </aside>
-        <section class="help-conversation" aria-label="Conversa com o assistente">
-          <p class="help-notice">
-            Guia com respostas preparadas. Não é uma IA e não envia mensagens ao
-            professor.
-          </p>
-          <div
-            class="help-messages"
-            id="helpMessages"
-            role="log"
-            aria-live="polite"
-            aria-label="Mensagens"
-          >
-            <p class="help-message">
-              Oi! Como posso ajudar? Escolha um assunto ou escreva sua dúvida sobre a
-              plataforma.
-            </p>
-          </div>
-          <div class="help-topics">
-            <button type="button" data-topic="missão">Como começo uma missão?</button
-            ><button type="button" data-topic="arquivo">Como envio um arquivo?</button
-            ><button type="button" data-topic="biblioteca">
-              Onde estão os materiais?</button
-            ><button type="button" data-topic="equipe">Minha equipe</button>
-          </div>
-          <form id="helpForm">
-            <label class="sr-only" for="helpInput">Sua pergunta</label
-            ><input
-              id="helpInput"
-              maxlength="500"
-              placeholder="Escreva sua dúvida sobre a plataforma…"
-              autocomplete="off"
-              required
-            /><button class="primary" type="submit">Enviar</button>
-          </form>
-        </section>
-      </div>
+      <section data-sparky-page aria-label="Conversa com Sparky" style="max-width:1000px;margin-top:24px"></section>
     </main>
     <script src="../public/js/components/preferencias.js"></script>
     
     <script type="module" src="../public/js/components/sessao.js"></script>
     <script type="module" src="../public/js/components/experiencia.js"></script>
-    <script type="module" src="../public/js/pages/aluno/assistente.js"></script>
+
   </body>
 </html>

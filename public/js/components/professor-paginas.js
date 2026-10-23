@@ -176,7 +176,7 @@ async function L(t) {
 function z(e, a, t) {
   const o = c("form"), i = _(o, a); i.required = !0, i.maxLength = 80;
   const n = c("button", "Confirmar", "primary"); n.type = "submit";
-  o.append(c("p", "A criação fica apenas na prévia deste navegador.", "hint"), n);
+  o.append(c("p", "Os dados serão salvos no servidor para esta turma.", "hint"), n);
   o.onsubmit = e => { e.preventDefault(), i.value.trim() && E(async () => { n.disabled = !0; try { await t(i.value.trim()) } finally { n.disabled = !1 } }) };
   C(e, o)
 }
@@ -432,6 +432,14 @@ async function H(a) {
     const s = c("button", "Adicionar integrante", "primary");
     s.type = "submit", s.disabled = !t.alunos_disponiveis.length || t.membros.length >= 4, n.append(s);
     n.onsubmit = t => { t.preventDefault(), E(async () => { if (!r.value) throw new Error("Selecione um aluno disponível."); await e.addMember(i, a, r.value), await H(a) }) };
+    const shared=y("Planejamento da equipe", "Tarefas e avisos publicados pelos integrantes.");
+    shared.append(c("h3","Tarefas"));
+    for(const task of t.tarefas || []) shared.append(c("p",task.titulo+" · "+(task.responsavel?.nome || "Sem responsável")+" · "+({pendente:"A fazer",em_andamento:"Em andamento",concluida:"Concluída"}[task.status] || task.status)));
+    if(!t.tarefas?.length) shared.append(c("p","Nenhuma tarefa cadastrada.","hint"));
+    shared.append(c("h3","Mural"));
+    for(const note of t.avisos || []) shared.append(c("p",(note.autor?.nome || "Integrante")+": "+note.texto,"document-copy"));
+    if(!t.avisos?.length) shared.append(c("p","Nenhum aviso publicado.","hint"));
+    o.append(shared);
     o.append(n), t.alunos_disponiveis.length || o.append(c("p", "Todos os alunos já estão em equipes deste período.", "hint")), C(t.equipe.nome, o)
   } catch (e) { h(e) }
 }
@@ -488,12 +496,12 @@ async function G() {
       const s = g("Marcar exibidas como lidas", async () => {
         s.disabled = !0;
         try {
-          const t = o.notificacoes.filter(p).map(e => e.id);
-          await e.readNotifications(t), window.dispatchEvent(new Event("astro-notifications-refresh")), await G(), a("status").textContent = "Avisos marcados como lidos nesta prévia."
+          const t = o.notificacoes.filter(e => p(e) && !e.lida_em).map(e => e.id);
+          if (!t.length) return;
+          await e.readNotifications(t), window.dispatchEvent(new Event("astro-notifications-refresh")), await G(), a("status").textContent = "Avisos marcados como lidos no servidor."
         } catch (e) { h(e), s.disabled = !1 }
       }, "secondary");
       i.append(s);
-      a("pageActions").append(g("Simular nova entrega", async () => { try { await e.simulateDelivery(), await G(), window.dispatchEvent(new Event("astro-notifications-refresh")) } catch (e) { h(e) } }, "secondary"));
       a("content").append(i);
       const d = c("div", "", "notification-page");
       function p(e) { return !("all" !== n.value && e.lida_em || r.value && e.tipo !== r.value) }
@@ -658,7 +666,6 @@ async function G() {
           const s = r.filter(e => !e.resposta).length;
           a("content").append(u(c("section", "", "stats"), x("Aguardando resposta", s), x("Respondidas", r.length - s), x("Perguntas nesta turma", r.length)));
           a("pageActions").append(v("← Voltar à sala", "sala/", { sala: i }));
-          const d = c("a", "Testar pergunta como aluno ↗", "secondary"); d.href = "../aluno/atividade.html?missao=1", a("pageActions").append(d);
           const p = c("div", "", "filters"), m = c("input"), g = c("select");
           m.type = "search", m.placeholder = "Buscar aluno, atividade ou pergunta…", m.setAttribute("aria-label", "Buscar pergunta"), g.setAttribute("aria-label", "Situação da pergunta"), q(g, "Sem resposta", "pending"), q(g, "Todas", "all"), q(g, "Respondidas", "answered"), t.get("pergunta") && (g.value = "all"), p.append(m, g), a("content").append(p);
           const h = c("div", "", "question-list"), f = c("p", "Nenhuma pergunta corresponde aos filtros.", "empty"); a("content").append(h, f);
@@ -673,7 +680,7 @@ async function G() {
               s.hidden = !0;
               const t = c("form"), n = _(t, "Responder ao aluno", "textarea", "reply-" + o.id);
               n.required = !0, n.maxLength = 3e3, n.rows = 3;
-              const l = c("button", "Responder na prévia", "primary"), p = c("p", "", "error-panel");
+              const l = c("button", "Enviar resposta", "primary"), p = c("p", "", "error-panel");
               l.type = "submit", p.setAttribute("role", "alert"), t.append(c("p", "A resposta fica visível somente para este aluno e o professor.", "hint"), l, p), i.append(t);
               t.onsubmit = async i => {
                 if (i.preventDefault(), !l.disabled)
@@ -682,7 +689,7 @@ async function G() {
                     try {
                       const i = await e.answer(o.id, n.value.trim());
                       if (!i.pergunta?.id) throw new Error("A resposta não foi confirmada.");
-                      Object.assign(o, i.pergunta), t.hidden = !0, s.hidden = !1, d(), a("status").textContent = "Resposta salva na prévia.", A();
+                      Object.assign(o, i.pergunta), t.hidden = !0, s.hidden = !1, d(), a("status").textContent = "Resposta salva no servidor.", A();
                       const l = a("content").querySelectorAll(".stats strong");
                       l[0].textContent = r.filter(e => !e.resposta).length, l[1].textContent = r.filter(e => e.resposta).length
                     } catch (i) { p.textContent = i.message, l.disabled = !1 }
