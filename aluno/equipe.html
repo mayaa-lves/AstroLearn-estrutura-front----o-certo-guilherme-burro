@@ -1,297 +1,320 @@
 <!doctype html>
-
 <html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width,initial-scale=1" name="viewport" />
-    <title>Minha equipe · AstroLearn</title>
-    <meta
-      content="Organize as responsabilidades e registre as ideias da sua equipe."
-      name="description"
-    />
-    <link href="../public/css/aluno-pdf.css" rel="stylesheet" />
-    <link href="../public/css/pages/aluno/equipe.css" rel="stylesheet" />
-    <link href="../public/css/menu-pdf.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../public/css/preferencias.css" />
-  </head>
-  <body class="collapsed">
-    <a class="skip" href="#main">Pular para minha equipe</a>
-    <aside class="sidebar">
-      <a class="brand" href="home.html"
-        ><svg aria-hidden="true" viewBox="0 0 40 40">
-          <circle cx="20" cy="20" r="9"></circle>
-          <ellipse
-            cx="20"
-            cy="20"
-            rx="18"
-            ry="6"
-            transform="rotate(-28 20 20)"
-          ></ellipse></svg
-        >Astro<span>Learn</span></a
-      >
-      <button
-        aria-controls="mainNav"
-        aria-expanded="true"
-        aria-label="Recolher menu"
-        id="menuToggle"
-        type="button"
-      >
-        ‹‹
-      </button>
-      <nav aria-label="Navegação principal" id="mainNav">
-        <a aria-label="Início" href="home.html">
-          <svg aria-hidden="true" viewBox="0 0 24 24">
-            <path d="M3 10 12 3l9 7v10H3Zm6 10v-7h6v7"></path>
-          </svg>
-          <span class="label">Início</span>
-        </a>
-        <a aria-label="Minha trilha" href="home.html#journey">
-          <svg aria-hidden="true" viewBox="0 0 24 24">
-            <path
-              d="M6 3a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm12 12a3 3 0 1 0 0 6 3 3 0 0 0 0-6ZM6 9v3h12v3"
-            ></path>
-          </svg>
-          <span class="label">Minha trilha</span>
-        </a>
-        <a aria-label="Biblioteca" href="biblioteca.html">
-          <svg aria-hidden="true" viewBox="0 0 24 24">
-            <path
-              d="M12 5C9 3 5 3 2 4v16c4-1 7-1 10 1 3-2 6-2 10-1V4c-3-1-7-1-10 1Zm0 0v16"
-            ></path>
-          </svg>
-          <span class="label">Biblioteca</span>
-        </a>
-        <a aria-label="Conquistas" href="conquistas.html">
-          <svg aria-hidden="true" viewBox="0 0 24 24">
-            <path d="m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1Z"></path>
-          </svg>
-          <span class="label">Conquistas</span>
-        </a>
-        <a aria-label="Loja" href="loja.html">
-          <svg aria-hidden="true" viewBox="0 0 24 24">
-            <path d="M3 9h18v12H3ZM2 9l3-6h14l3 6M9 21v-7h6v7"></path>
-          </svg>
-          <span class="label">Loja</span>
-        </a>
-        <a
-          aria-current="page"
-          aria-label="Minha equipe"
-          class="active"
-          href="equipe.html"
-        >
-          <svg aria-hidden="true" viewBox="0 0 24 24">
-            <path
-              d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM2 21v-3a7 7 0 0 1 14 0v3m1-17a4 4 0 0 1 0 8m2 2a6 6 0 0 1 3 5v2"
-            ></path>
-          </svg>
-          <span class="label">Minha equipe</span>
-        </a>
-        <a aria-label="Perfil" href="perfil.html">
-          <svg aria-hidden="true" viewBox="0 0 24 24">
-            <path
-              d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10ZM3 22a9 9 0 0 1 18 0"
-            ></path>
-          </svg>
-          <span class="label">Perfil</span>
-        </a>
-      </nav>
-      <small>Uma descoberta de cada vez.</small>
-    </aside>
-    <main id="main" tabindex="-1">
-      <header>
-        <div>
-          <h1>Minha equipe</h1>
-          <p>Ideias diferentes. Uma descoberta em conjunto.</p>
-        </div>
-        <button aria-pressed="false" class="quiet" id="motion" type="button">
-          Pausar animações
-        </button>
-      </header>
-      <p class="team-label">Carregando equipe…</p>
-      <button class="preview-note" id="previewInfo" type="button">
-        Prévia local · equipe de exemplo ⓘ
-      </button>
-      <p class="storage-notice" id="storageNotice" role="status"></p>
-      <section
-        aria-label="Integrantes da equipe"
-        class="members"
-        id="members"
-      ></section>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Minha equipe · AstroLearn</title>
+
+  <link rel="stylesheet" href="../public/css/menu-pdf.css">
+  <link rel="stylesheet" href="../public/css/pages/aluno/equipe.css">
+  <link rel="stylesheet" href="../public/css/preferencias.css">
+  <link rel="stylesheet" href="../public/css/menu-unificado.css">
+  <script defer src="../public/js/components/menu-unificado.js"></script>
+<link rel="icon" type="image/png" href="../public/assets/imagens/marca/astrolearn-simbolo.png">
+</head>
+
+<body class="team-page">
+  <div class="team-scene" aria-hidden="true"></div>
+  <canvas id="teamStars" aria-hidden="true"></canvas>
+
+  <a class="skip" href="#main">Pular para minha equipe</a>
+
+  <aside class="sidebar">
+    <a class="brand" href="home.html">
+      <svg aria-hidden="true" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="9"></circle>
+        <ellipse cx="20" cy="20" rx="18" ry="6" transform="rotate(-28 20 20)"></ellipse>
+      </svg>
+      Astro<span>Learn</span>
+    </a>
+
+    <button id="menuToggle" type="button" aria-controls="mainNav" aria-expanded="true"
+      aria-label="Recolher menu">‹‹</button>
+
+    <nav id="mainNav" aria-label="Navegação principal">
+      <a href="home.html" aria-label="Início">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="M3 10 12 3l9 7v10H3Zm6 10v-7h6v7"></path>
+        </svg>
+        <span class="label">Início</span>
+      </a>
+
+      <a href="home.html#journey" aria-label="Minha trilha">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="M6 3a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm12 12a3 3 0 1 0 0 6 3 3 0 0 0 0-6ZM6 9v3h12v3"></path>
+        </svg>
+        <span class="label">Minha trilha</span>
+      </a>
+
+      <a href="biblioteca.html" aria-label="Biblioteca">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="M12 5C9 3 5 3 2 4v16c4-1 7-1 10 1 3-2 6-2 10-1V4c-3-1-7-1-10 1Zm0 0v16"></path>
+        </svg>
+        <span class="label">Biblioteca</span>
+      </a>
+
+      <a href="conquistas.html" aria-label="Conquistas">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1Z"></path>
+        </svg>
+        <span class="label">Conquistas</span>
+      </a>
+
+      <a href="loja.html" aria-label="Loja">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="M3 9h18v12H3ZM2 9l3-6h14l3 6M9 21v-7h6v7"></path>
+        </svg>
+        <span class="label">Loja</span>
+      </a>
+
+      <a href="equipe.html" class="active" aria-label="Minha equipe" aria-current="page">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM2 21v-3a7 7 0 0 1 14 0v3m1-17a4 4 0 0 1 0 8m2 2a6 6 0 0 1 3 5v2">
+          </path>
+        </svg>
+        <span class="label">Minha equipe</span>
+      </a>
+
+      <a href="perfil.html" aria-label="Perfil">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10ZM3 22a9 9 0 0 1 18 0"></path>
+        </svg>
+        <span class="label">Perfil</span>
+      </a>
+    </nav>
+
+    <small>Uma descoberta de cada vez.</small>
+  </aside>
+
+  <main id="main" tabindex="-1">
+    <header class="team-heading">
+      <p class="eyebrow">BASE DE COLABORAÇÃO</p>
+      <h1>Minha equipe</h1>
+      <p>Ideias diferentes. Uma descoberta em conjunto.</p>
+    </header>
+
+    <div class="team-meta">
+      <p id="teamLabel" class="team-label" role="status">
+        Carregando equipe…
+      </p>
+
+      <span id="teamPeriod" class="muted"></span>
+
+      <button id="refresh" class="text-button" type="button">↻ Atualizar</button>
+    </div>
+
+    <p id="loadError" class="notice error" role="alert" hidden></p>
+
+    <div id="noTeam" class="no-team" hidden>
+      <h2>Sua próxima tripulação está a caminho</h2>
+
+      <p>
+        Você ainda não foi incluído em uma equipe.
+        Converse com seu professor; enquanto isso,
+        continue explorando sua trilha.
+      </p>
+
+      <a class="primary" href="home.html#journey">
+        Ir para minha trilha →
+      </a>
+    </div>
+
+    <section id="members" class="members" aria-label="Integrantes da equipe" aria-busy="true"></section>
+
+    <p id="memberHint" class="small-note" hidden>
+      Retratos ilustrativos · clique em um integrante para ver
+      as tarefas compartilhadas da equipe.
+    </p>
+
+    <div id="workspace" hidden>
+      <p class="draft-notice">
+        Planejamento compartilhado: tarefas e avisos são salvos no servidor e compartilhados com a equipe,
+        com atualização automática a cada 30 segundos.
+      </p>
+
+      <p id="storageNotice" class="notice" role="status"></p>
+
       <div class="team-grid">
-        <section aria-labelledby="missionTitle" class="mission-card">
+        <section class="mission-card" aria-labelledby="missionHeading">
           <div class="card-heading">
-            <h2>
-              <svg aria-hidden="true" class="heading-icon" viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="9"></circle>
-                <circle cx="12" cy="12" r="4"></circle>
-                <path d="m12 12 9-9"></path></svg
-              >Missão da equipe
-            </h2>
-            <span class="tag">Atividade em grupo</span>
+            <h2 id="missionHeading">Atividade em destaque</h2>
+            <span class="tag">Na sua trilha</span>
           </div>
+
           <div class="mission-body">
-            <div
-              aria-label="Ilustração de um protótipo de explorador lunar"
-              class="mission-image"
-              role="img"
-            ></div>
+            <img class="mission-image" src="../public/assets/imagens/aluno/equipe/rover-equipe.png"
+              alt="Ilustração de um pequeno explorador lunar">
+
             <div>
-              <h3 id="missionTitle">Construam um explorador lunar</h3>
-              <p>
-                Investiguem o terreno, planejem o robô e compartilhem suas
-                decisões.
+              <h3 id="missionTitle">
+                As atividades continuam na sua trilha
+              </h3>
+
+              <p id="missionDescription">
+                Consulte as orientações do professor para saber
+                quais atividades devem ser feitas em equipe.
               </p>
-              <a class="primary" href="atividade.html?equipe=lunar"
-                >Abrir atividade →</a
-              >
+
+              <a id="missionLink" class="primary" href="home.html#journey">Ir para minha trilha →</a>
             </div>
           </div>
+
           <h3 class="agreement-title">Combinados da missão</h3>
+
           <div class="agreements">
-            <p><span aria-hidden="true">◌</span>Ouvir todas as ideias</p>
-            <p><span aria-hidden="true">▤</span>Registrar as decisões</p>
-            <p>
-              <span aria-hidden="true">♧</span>Revisar juntos antes de entregar
-            </p>
+            <p>Ouvir todas as ideias</p>
+            <p>Registrar as decisões</p>
+            <p>Revisar juntos</p>
           </div>
+
+          <p class="small-note">
+            Confirme com o professor quais atividades serão
+            realizadas em grupo.
+          </p>
         </section>
-        <section aria-labelledby="tasksTitle" class="tasks-card">
-          <h2 id="tasksTitle">
-            <svg aria-hidden="true" class="heading-icon" viewBox="0 0 24 24">
-              <path d="M8 6h13M8 12h13M8 18h13"></path>
-              <circle cx="3" cy="6" r="1"></circle>
-              <circle cx="3" cy="12" r="1"></circle>
-              <circle cx="3" cy="18" r="1"></circle></svg
-            >Divisão de tarefas
-          </h2>
-          <ul id="taskList"></ul>
-          <button class="secondary full" id="organize" type="button">
-            Organizar tarefas
-          </button>
-          <p class="local-hint">
-            Combine a divisão com seu grupo. Esta prévia não envia notificações.
+
+        <section class="tasks-card" aria-labelledby="tasksTitle">
+          <div class="card-heading">
+            <h2 id="tasksTitle">Divisão de tarefas</h2>
+
+            <button id="organize" class="secondary" type="button" disabled>+ Tarefa</button>
+          </div>
+
+          <span class="local-chip">Meu planejamento</span>
+
+          <ul id="taskList" class="task-list"></ul>
+
+          <p id="tasksEmpty" class="empty">
+            Sua equipe ainda não tem tarefas.
+            Adicione a primeira responsabilidade.
           </p>
         </section>
       </div>
-      <section aria-labelledby="wallTitle" class="wall-card">
+
+      <section class="wall-card" aria-labelledby="wallTitle">
         <div class="card-heading">
-          <h2 id="wallTitle">
-            <svg aria-hidden="true" class="heading-icon" viewBox="0 0 24 24">
-              <path d="M3 3h18v14H9l-6 4Z"></path>
-              <path d="M7 8h10M7 12h6"></path></svg
-            >Mural da equipe
-          </h2>
-          <span class="local-chip">Neste navegador</span>
+          <h2 id="wallTitle">Mural da equipe</h2>
+          <span class="local-chip">Planejamento compartilhado</span>
         </div>
-        <form id="ideaForm">
-          <label class="sr-only" for="idea"
-            >Compartilhar uma ideia ou dúvida</label
-          >
-          <textarea
-            id="idea"
-            maxlength="1000"
-            placeholder="Compartilhe uma ideia ou dúvida..."
-            rows="2"
-          ></textarea>
-          <button class="primary" type="submit">Adicionar</button>
+
+        <form id="ideaForm" novalidate>
+          <div class="note-type">
+            <label hidden for="noteType">Tipo</label>
+
+            <select hidden id="noteType">
+              <option value="idea">Ideia</option>
+              <option value="notice">Aviso</option>
+              <option value="agreement">Combinado</option>
+            </select>
+          </div>
+
+          <div class="note-input">
+            <label for="idea" class="sr-only">Sua anotação</label>
+
+            <textarea id="idea" maxlength="1000" rows="2"
+              placeholder="Registre uma ideia ou um aviso para combinar com a equipe…" disabled></textarea>
+          </div>
+
+          <button id="saveNote" class="primary" type="submit" disabled>Publicar aviso</button>
+<button type="button" id="cancelNote" hidden>Cancelar edição</button>
         </form>
+
         <div class="wall-meta">
           <span id="ideaCount">0 / 1000</span>
           <p id="formError" role="alert"></p>
         </div>
-        <p class="sr-only" id="wallStatus" role="status"></p>
-        <ul id="wall"></ul>
-        <div class="example-note">
-          <span>EXEMPLO PARA INSPIRAR</span>
-          <p>Uma ideia: testar rodas de tamanhos diferentes.</p>
-        </div>
+
+        <p id="wallStatus" class="sr-only" role="status"></p>
+
+        <ul id="wall" class="wall-list"></ul>
+
+        <p id="wallEmpty" class="empty">
+          Publique o primeiro aviso. Todos os integrantes poderão ler.
+        </p>
       </section>
-      <footer>AstroLearn · Juntos, a descoberta vai mais longe.</footer>
-    </main>
-    <button
-      aria-label="Ajuda para trabalhar em equipe"
-      class="helper"
-      id="helper"
-      type="button"
-    >
-      <span aria-hidden="true" class="helper-image"> </span>
-      <span class="helper-tip">Uma pista para colaborar?</span>
-    </button>
-    <dialog aria-labelledby="taskDialogTitle" id="taskDialog">
-      <button
-        aria-label="Fechar organização de tarefas"
-        class="close"
-        data-close=""
-        type="button"
-      >
-        ×
+    </div>
+
+    <footer>
+      AstroLearn · Juntos, a descoberta vai mais longe.
+    </footer>
+  </main>
+
+  <dialog id="taskDialog" aria-labelledby="taskDialogTitle">
+    <button class="close" type="button" data-close aria-label="Fechar organização de tarefas">×</button>
+
+    <p class="eyebrow">MEU PLANEJAMENTO</p>
+    <h2 id="taskDialogTitle">Adicionar tarefa</h2>
+
+    <p class="muted">
+      Distribua uma responsabilidade entre os integrantes.
+      Isso não altera notas nem envia uma atribuição aos colegas.
+    </p>
+
+    <form id="taskForm" novalidate>
+      <label for="taskTitle">O que precisa ser feito?</label>
+
+      <input id="taskTitle" maxlength="100" autocomplete="off" required>
+
+      <label for="taskOwner">Responsável combinado</label>
+      <select id="taskOwner" required></select>
+
+      <label for="taskPrazo">Prazo (opcional)</label><input id="taskPrazo" type="date">
+      <label for="taskStatus">Situação da tarefa</label>
+
+      <select id="taskStatus">
+        <option value="todo">A fazer</option>
+        <option value="doing">Em andamento</option>
+        <option value="done">Concluída</option>
+      </select>
+
+      <p id="taskError" class="error-text" role="alert"></p>
+
+      <button class="primary" type="submit">
+        Salvar tarefa
       </button>
-      <h2 id="taskDialogTitle">Organizar responsabilidades</h2>
-      <p>
-        Registre o combinado de cada integrante. Isso não define notas nem
-        impede que vocês ajudem uns aos outros.
-      </p>
-      <form id="taskForm">
-        <div id="taskFields"></div>
-        <p id="taskError" role="alert"></p>
-        <button class="primary" type="submit">Salvar combinado</button>
-      </form>
-    </dialog>
-    <dialog aria-labelledby="memberTitle" id="memberDialog">
-      <button
-        aria-label="Fechar integrante"
-        class="close"
-        data-close=""
-        type="button"
-      >
-        ×
+    </form>
+  </dialog>
+
+  <dialog id="memberDialog" aria-labelledby="memberTitle">
+    <button class="close" type="button" data-close aria-label="Fechar integrante">×</button>
+
+    <div id="memberPortrait" class="portrait" aria-hidden="true"></div>
+
+    <h2 id="memberTitle"></h2>
+
+    <p class="muted">
+      Responsabilidades registradas apenas no seu planejamento.
+    </p>
+
+    <ul id="memberTasks"></ul>
+  </dialog>
+
+  <dialog id="removeDialog" aria-labelledby="removeTitle">
+    <button class="close" type="button" data-close aria-label="Cancelar exclusão">×</button>
+
+    <h2 id="removeTitle">Remover da equipe?</h2>
+    <p>A remoção será aplicada para todos os integrantes.</p>
+
+    <div class="dialog-actions">
+      <button class="secondary" type="button" data-close>
+        Cancelar
       </button>
-      <div aria-hidden="true" class="portrait" id="memberPortrait"></div>
-      <h2 id="memberTitle"></h2>
-      <p id="memberTask"></p>
-      <p>
-        Integrante demonstrativo. As responsabilidades podem ser ajustadas pela
-        equipe.
-      </p>
-      <button class="primary" data-close="" type="button">Entendi</button>
-    </dialog>
-    <dialog aria-labelledby="removeTitle" id="removeDialog">
-      <button
-        aria-label="Cancelar exclusão"
-        class="close"
-        data-close=""
-        type="button"
-      >
-        ×
-      </button>
-      <h2 id="removeTitle">Remover sua ideia?</h2>
-      <p>Esta anotação será removida do mural local.</p>
-      <div class="dialog-actions">
-        <button class="secondary" data-close="" type="button">
-          Manter ideia
-        </button>
-        <button class="primary" id="confirmRemove" type="button">
-          Remover ideia
-        </button>
-      </div>
-    </dialog>
-    <dialog aria-labelledby="infoTitle" id="info">
-      <button
-        aria-label="Fechar aviso"
-        class="close"
-        data-close=""
-        type="button"
-      >
-        ×
-      </button>
-      <h2 id="infoTitle"></h2>
-      <p id="infoText"></p>
-      <button class="primary" data-close="" type="button">Entendi</button>
-    </dialog>
-    <script defer="True" type="module" src="../public/js/pages/aluno/equipe.js"></script>
-    <script defer="True" src="../public/js/components/estrelas-pdf.js"></script>
-    <script defer="True" src="../public/js/components/menu-pdf.js"></script>
-    <script src="../public/js/components/preferencias.js"></script>
+
+      <button id="confirmRemove" class="primary" type="button">Remover</button>
+    </div>
+  </dialog>
+
+  <p id="teamToast" class="team-toast" role="status" aria-live="polite" hidden></p>
+
+  <script src="../public/js/components/preferencias.js"></script>
+
+  
+
   <script type="module" src="../public/js/components/sessao.js"></script>
+
+  <script type="module" src="../public/js/pages/aluno/equipe.js"></script>
 </body>
+
 </html>

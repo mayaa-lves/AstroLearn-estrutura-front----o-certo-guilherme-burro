@@ -327,34 +327,23 @@ $("progress").onclick = () =>
       ? `${dados.concluidas || 0} de ${dados.total || 0} missões concluídas. As informações acompanham o registro e a correção das atividades da sua turma.`
       : "Sua trilha ainda está sendo carregada.",
   );
-// Caixa de avisos: interface pronta, sem inventar notificações do servidor.
-const notificationPanel = $("notificationPanel");
-$("notifications").onclick = () => {
-  closeAccount();
-  if (!$("chatPanel").hidden) chat(false);
-  if (!notificationPanel.open) notificationPanel.showModal();
-  document.body.classList.add("notifications-open");
-  $("notifications").setAttribute("aria-expanded", "true");
-  $("closeNotifications").focus();
+// Avisos reais: o módulo mantém a gaveta e consulta o servidor.
+const notificationPanel = $('notificationPanel');
+$('notifications').onclick = () => {
+ closeAccount(); if (!$('chatPanel').hidden) chat(false);
+ if (!notificationPanel.open) notificationPanel.showModal();
+ document.body.classList.add('notifications-open');
+ $('notifications').setAttribute('aria-expanded','true');
+ window.dispatchEvent(new Event('astro-notifications-open'));
 };
-$("closeNotifications").onclick = () => notificationPanel.close();
-notificationPanel.addEventListener("close", () => {
-  document.body.classList.remove("notifications-open");
-  $("notifications").setAttribute("aria-expanded", "false");
-  $("notifications").focus();
+$('closeNotifications').onclick = () => notificationPanel.close();
+notificationPanel.addEventListener('close',()=>{
+ document.body.classList.remove('notifications-open');$('notifications').setAttribute('aria-expanded','false');$('notifications').focus();
 });
-notificationPanel.addEventListener("click", event => {
-  if (event.target !== notificationPanel) return;
-  const rect = notificationPanel.getBoundingClientRect();
-  if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) notificationPanel.close();
-});
-document.querySelectorAll("[data-notification-filter]").forEach(button => {
-  button.onclick = () => {
-    const unread = button.dataset.notificationFilter === "unread";
-    document.querySelectorAll("[data-notification-filter]").forEach(filter => filter.setAttribute("aria-pressed", String(filter === button)));
-    $("notificationEmptyTitle").textContent = unread ? "Nenhum aviso não lido carregado" : "Nenhum aviso carregado";
-    $("notificationEmptyDescription").textContent = unread ? "Os novos avisos ficarão separados nesta aba quando estiverem disponíveis." : "Correções e novidades da turma aparecerão aqui quando os avisos estiverem disponíveis.";
-  };
+notificationPanel.addEventListener('click',event=>{
+ if(event.target!==notificationPanel) return;
+ const r=notificationPanel.getBoundingClientRect();
+ if(event.clientX<r.left || event.clientX>r.right || event.clientY<r.top || event.clientY>r.bottom) notificationPanel.close();
 });
 
 // O avatar é um conjunto de oito vistas renderizadas, não um modelo geométrico.

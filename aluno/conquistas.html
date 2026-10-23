@@ -1,215 +1,359 @@
 <!doctype html>
-
 <html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width,initial-scale=1" name="viewport" />
-    <title>Minhas conquistas · AstroLearn</title>
-    <meta
-      content="Explore suas conquistas e descubra o próximo passo da sua jornada."
-      name="description"
-    />
-    <link href="../public/css/aluno-pdf.css" rel="stylesheet" />
-    <link href="../public/css/pages/aluno/conquistas.css" rel="stylesheet" />
-    <link href="../public/css/menu-pdf.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../public/css/preferencias.css" />
-  </head>
-  <body>
-    <a class="skip" href="#main">Pular para as conquistas</a>
-    <aside class="sidebar">
-      <a class="brand" href="home.html"
-        ><svg aria-hidden="true" viewBox="0 0 40 40">
-          <circle cx="20" cy="20" r="9"></circle>
-          <ellipse
-            cx="20"
-            cy="20"
-            rx="18"
-            ry="6"
-            transform="rotate(-28 20 20)"
-          ></ellipse></svg
-        >Astro<span>Learn</span></a
-      >
-      <button
-        aria-controls="mainNav"
-        aria-expanded="true"
-        aria-label="Recolher menu"
-        id="menuToggle"
-        type="button"
-      >
-        ‹‹
-      </button>
-      <nav aria-label="Navegação principal" id="mainNav">
-        <a aria-label="Início" href="home.html">
-          <svg aria-hidden="true" viewBox="0 0 24 24">
-            <path d="M3 10 12 3l9 7v10H3Zm6 10v-7h6v7"></path>
-          </svg>
-          <span class="label">Início</span>
-        </a>
-        <a aria-label="Minha trilha" href="home.html#journey">
-          <svg aria-hidden="true" viewBox="0 0 24 24">
-            <path
-              d="M6 3a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm12 12a3 3 0 1 0 0 6 3 3 0 0 0 0-6ZM6 9v3h12v3"
-            ></path>
-          </svg>
-          <span class="label">Minha trilha</span>
-        </a>
-        <a aria-label="Biblioteca" href="biblioteca.html">
-          <svg aria-hidden="true" viewBox="0 0 24 24">
-            <path
-              d="M12 5C9 3 5 3 2 4v16c4-1 7-1 10 1 3-2 6-2 10-1V4c-3-1-7-1-10 1Zm0 0v16"
-            ></path>
-          </svg>
-          <span class="label">Biblioteca</span>
-        </a>
-        <a
-          aria-current="page"
-          aria-label="Conquistas"
-          class="active"
-          href="conquistas.html"
-        >
-          <svg aria-hidden="true" viewBox="0 0 24 24">
-            <path d="m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1Z"></path>
-          </svg>
-          <span class="label">Conquistas</span>
-        </a>
-        <a aria-label="Loja" href="loja.html">
-          <svg aria-hidden="true" viewBox="0 0 24 24">
-            <path d="M3 9h18v12H3ZM2 9l3-6h14l3 6M9 21v-7h6v7"></path>
-          </svg>
-          <span class="label">Loja</span>
-        </a>
-        <a aria-label="Minha equipe" href="equipe.html">
-          <svg aria-hidden="true" viewBox="0 0 24 24">
-            <path
-              d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM2 21v-3a7 7 0 0 1 14 0v3m1-17a4 4 0 0 1 0 8m2 2a6 6 0 0 1 3 5v2"
-            ></path>
-          </svg>
-          <span class="label">Minha equipe</span>
-        </a>
-        <a aria-label="Perfil" href="perfil.html">
-          <svg aria-hidden="true" viewBox="0 0 24 24">
-            <path
-              d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10ZM3 22a9 9 0 0 1 18 0"
-            ></path>
-          </svg>
-          <span class="label">Perfil</span>
-        </a>
-      </nav>
-      <small>Uma descoberta de cada vez.</small>
-    </aside>
-    <main id="main" tabindex="-1">
-      <header>
-        <div>
-          <h1>Minhas conquistas</h1>
-          <p>Cada descoberta conta uma parte da sua jornada.</p>
-        </div>
-        <button aria-pressed="false" class="quiet" id="motion" type="button">
-          Pausar animações
-        </button>
-      </header>
-      <p class="preview-note">
-        Prévia interativa · progresso de exemplo, sem vínculo com notas ou
-        entregas reais.
-      </p>
-      <p class="summary">
-        <strong>3 conquistas desbloqueadas</strong>
-        <span>Investigação, criatividade e novas descobertas.</span>
-      </p>
-      <section aria-labelledby="nextTitle" class="next">
-        <div aria-hidden="true" class="badge badge-3"></div>
-        <div class="next-copy">
-          <span class="eyebrow">PRÓXIMA CONQUISTA</span>
-          <h2 id="nextTitle">Explorador curioso</h2>
-          <p>Conclua 5 missões para desbloquear.</p>
-          <label for="goalProgress">3 de 5 missões</label>
-          <progress id="goalProgress" max="5" value="3">3 de 5</progress>
-        </div>
-        <a class="trail-link" href="home.html#journey"
-          >Continuar minha trilha →</a
-        >
-        <button
-          aria-label="Cumprimentar o mascote Lilás"
-          class="mascot"
-          id="mascot"
-          type="button"
-        >
-          <img
-            alt="Mascote Lilás de um olho, com traje de exploração"
-            src="../public/assets/imagens/aluno/conquistas/lilas.png"
-          />
-          <span class="mascot-tip" role="status"
-            >Você está construindo uma bela jornada!</span
-          >
-        </button>
-      </section>
-      <div aria-label="Filtrar conquistas" class="filters" role="group">
-        <button aria-pressed="true" data-filter="all" type="button">
-          Todas
-        </button>
-        <button aria-pressed="false" data-filter="earned" type="button">
-          Desbloqueadas
-        </button>
-        <button aria-pressed="false" data-filter="progress" type="button">
-          Em progresso
-        </button>
-      </div>
-      <p class="sr-only" id="resultCount" role="status"></p>
-      <section
-        aria-label="Coleção de conquistas"
-        class="collection"
-        id="collection"
-      ></section>
-      <footer>
-        AstroLearn · O importante é o que você aprende pelo caminho.
-      </footer>
-    </main>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Minhas conquistas · AstroLearn</title>
+
+  <link rel="stylesheet" href="../public/css/menu-pdf.css">
+  <link rel="stylesheet" href="../public/css/pages/aluno/conquistas.css">
+  <link rel="stylesheet" href="../public/css/preferencias.css">
+  <link rel="stylesheet" href="../public/css/menu-unificado.css">
+  <script defer src="../public/js/components/menu-unificado.js"></script>
+<link rel="icon" type="image/png" href="../public/assets/imagens/marca/astrolearn-simbolo.png">
+</head>
+
+<body class="achievements-page">
+  <div class="achievement-scene" aria-hidden="true"></div>
+
+  <canvas id="achievementStars" aria-hidden="true"></canvas>
+
+  <a class="skip" href="#main">Pular para as conquistas</a>
+
+  <aside class="sidebar">
+    <a class="brand" href="home.html">
+      <svg aria-hidden="true" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="9"></circle>
+        <ellipse
+          cx="20"
+          cy="20"
+          rx="18"
+          ry="6"
+          transform="rotate(-28 20 20)"
+        ></ellipse>
+      </svg>
+      Astro<span>Learn</span>
+    </a>
+
     <button
-      aria-label="Abrir ajuda sobre conquistas"
-      class="helper"
-      id="helper"
+      id="menuToggle"
       type="button"
-    >
-      <span aria-hidden="true" class="helper-image"> </span>
-      <span class="helper-tip">Precisa de uma pista?</span>
-    </button>
-    <dialog aria-labelledby="detailTitle" id="details">
-      <button
-        aria-label="Fechar detalhes"
-        class="close"
-        data-close=""
-        type="button"
+      aria-controls="mainNav"
+      aria-expanded="true"
+      aria-label="Recolher menu"
+    >‹‹</button>
+
+    <nav id="mainNav" aria-label="Navegação principal">
+      <a href="home.html" aria-label="Início">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="M3 10 12 3l9 7v10H3Zm6 10v-7h6v7"></path>
+        </svg>
+        <span class="label">Início</span>
+      </a>
+
+      <a href="home.html#journey" aria-label="Minha trilha">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="M6 3a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm12 12a3 3 0 1 0 0 6 3 3 0 0 0 0-6ZM6 9v3h12v3"></path>
+        </svg>
+        <span class="label">Minha trilha</span>
+      </a>
+
+      <a href="biblioteca.html" aria-label="Biblioteca">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="M12 5C9 3 5 3 2 4v16c4-1 7-1 10 1 3-2 6-2 10-1V4c-3-1-7-1-10 1Zm0 0v16"></path>
+        </svg>
+        <span class="label">Biblioteca</span>
+      </a>
+
+      <a
+        href="conquistas.html"
+        class="active"
+        aria-label="Conquistas"
+        aria-current="page"
       >
-        ×
-      </button>
-      <div aria-hidden="true" class="badge" id="detailBadge"></div>
-      <span class="eyebrow" id="detailStatus"> </span>
-      <h2 id="detailTitle"></h2>
-      <p id="detailDescription"></p>
-      <div class="criterion">
-        <strong>Como conquistar</strong>
-        <p id="detailCriterion"></p>
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1Z"></path>
+        </svg>
+        <span class="label">Conquistas</span>
+      </a>
+
+      <a href="loja.html" aria-label="Loja">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="M3 9h18v12H3ZM2 9l3-6h14l3 6M9 21v-7h6v7"></path>
+        </svg>
+        <span class="label">Loja</span>
+      </a>
+
+      <a href="equipe.html" aria-label="Minha equipe">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM2 21v-3a7 7 0 0 1 14 0v3m1-17a4 4 0 0 1 0 8m2 2a6 6 0 0 1 3 5v2"></path>
+        </svg>
+        <span class="label">Minha equipe</span>
+      </a>
+
+      <a href="perfil.html" aria-label="Perfil">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10ZM3 22a9 9 0 0 1 18 0"></path>
+        </svg>
+        <span class="label">Perfil</span>
+      </a>
+    </nav>
+
+    <small>Uma descoberta de cada vez.</small>
+  </aside>
+
+  <button
+    id="openTelescope"
+    class="telescope-trigger"
+    type="button"
+    aria-haspopup="dialog"
+    aria-controls="telescope"
+    aria-label="Observar Saturno pelo telescópio"
+  >
+    <span>
+      Observar Saturno <span aria-hidden="true">↗</span>
+    </span>
+  </button>
+
+  <main id="main" tabindex="-1">
+    <header class="achievement-heading">
+      <p class="eyebrow">CADA DESCOBERTA CONTA</p>
+      <h1>Minhas conquistas</h1>
+      <p>Veja o que você já conquistou e o que vem pela frente.</p>
+    </header>
+
+    <p class="summary">
+      <strong id="earnedCount"></strong>
+      <span>Sua jornada está só começando.</span>
+    </p>
+
+    <p class="preview-note">
+      Prévia demonstrativa · as conquistas e o progresso abaixo
+      ainda não representam sua conta.
+    </p>
+
+    <section class="next" aria-labelledby="nextTitle">
+      <div class="badge badge-3" aria-hidden="true"></div>
+
+      <div class="next-copy">
+        <p class="eyebrow">PRÓXIMA CONQUISTA</p>
+        <h2 id="nextTitle">Explorador curioso</h2>
+        <p id="nextCriterion"></p>
+
+        <label id="nextProgressLabel" for="goalProgress"></label>
+
+        <progress
+          id="goalProgress"
+          value="3"
+          max="5"
+          aria-labelledby="nextTitle nextProgressLabel"
+        >3 de 5</progress>
       </div>
-      <p id="detailProgress"></p>
-      <p class="demo-info">Os estados exibidos são exemplos desta prévia.</p>
-      <a class="primary" href="home.html#journey">Voltar à minha trilha →</a>
-    </dialog>
-    <dialog aria-labelledby="infoTitle" id="info">
-      <button
-        aria-label="Fechar aviso"
-        class="close"
-        data-close=""
-        type="button"
+
+      <a class="primary trail-link" href="home.html#journey">
+        Continuar minha trilha →
+      </a>
+    </section>
+
+    <div class="collection-heading">
+      <h2 id="collectionTitle">Sua coleção</h2>
+
+      <div
+        class="filters"
+        role="group"
+        aria-label="Filtrar conquistas"
       >
-        ×
-      </button>
-      <h2 id="infoTitle"></h2>
-      <p id="infoText"></p>
-      <button class="primary" data-close="" type="button">Entendi</button>
-    </dialog>
-    <script defer="True" src="../public/js/pages/aluno/conquistas.js"></script>
-    <script defer="True" src="../public/js/components/menu-pdf.js"></script>
-    <script src="../public/js/components/preferencias.js"></script>
-  <script type="module" src="../public/js/components/sessao.js"></script>
-<script src="../public/js/components/recursos-locais.js"></script>
+        <button
+          type="button"
+          data-filter="all"
+          aria-pressed="true"
+        >Todas</button>
+
+        <button
+          type="button"
+          data-filter="earned"
+          aria-pressed="false"
+        >Desbloqueadas</button>
+
+        <button
+          type="button"
+          data-filter="progress"
+          aria-pressed="false"
+        >Em progresso</button>
+      </div>
+    </div>
+
+    <p id="resultCount" class="sr-only" role="status"></p>
+
+    <section
+      id="collection"
+      class="collection"
+      aria-labelledby="collectionTitle"
+    ></section>
+
+    <footer>
+      AstroLearn · O importante é o que você aprende pelo caminho.
+    </footer>
+  </main>
+
+  <dialog id="details" aria-labelledby="detailTitle">
+    <button
+      class="close"
+      type="button"
+      data-close
+      aria-label="Fechar detalhes"
+    >×</button>
+
+    <div id="detailBadge" class="badge" aria-hidden="true"></div>
+
+    <p id="detailStatus" class="eyebrow"></p>
+    <h2 id="detailTitle"></h2>
+    <p id="detailDescription"></p>
+
+    <div class="criterion">
+      <strong>Como conquistar</strong>
+      <p id="detailCriterion"></p>
+    </div>
+
+    <p id="detailProgress"></p>
+
+    <p class="demo-info">
+      Dados ilustrativos desta prévia, sem alteração das suas notas
+      ou entregas.
+    </p>
+
+    <a class="primary" href="home.html#journey">
+      Voltar à minha trilha →
+    </a>
+  </dialog>
+
+  <dialog
+    id="telescope"
+    class="telescope-dialog"
+    aria-labelledby="scopeTitle"
+    aria-describedby="scopeIntro"
+  >
+    <div class="scope-shell">
+      <canvas id="scopeStars" aria-hidden="true"></canvas>
+
+      <div class="scope-top">
+        <div>
+          <p class="eyebrow">OBSERVATÓRIO ASTROLEARN</p>
+          <h2 id="scopeTitle">Um encontro com Saturno</h2>
+        </div>
+
+        <button
+          id="closeTelescope"
+          class="scope-back"
+          type="button"
+        >← Voltar às conquistas</button>
+      </div>
+
+      <p id="scopeIntro">
+        Explore a ilustração e toque nas estrelas marcadas
+        para descobrir curiosidades.
+      </p>
+
+      <div class="scope-lens">
+        <div class="saturn-position">
+          <img
+            id="saturnImage"
+            class="saturn-image"
+            src="../public/assets/imagens/aluno/conquistas/saturno-observacao.png"
+            alt="Ilustração de Saturno com faixas de nuvens e anéis inclinados"
+            draggable="false"
+          >
+        </div>
+
+        <span class="lens-cross" aria-hidden="true"></span>
+
+        <button
+          class="fact-star star-a"
+          type="button"
+          data-fact="0"
+          aria-label="Curiosidade sobre os anéis"
+          aria-controls="scopeFact"
+          aria-pressed="true"
+        >✦</button>
+
+        <button
+          class="fact-star star-b"
+          type="button"
+          data-fact="1"
+          aria-label="Curiosidade sobre o ano de Saturno"
+          aria-controls="scopeFact"
+          aria-pressed="false"
+        >✦</button>
+
+        <button
+          class="fact-star star-c"
+          type="button"
+          data-fact="2"
+          aria-label="Curiosidade sobre a superfície de Saturno"
+          aria-controls="scopeFact"
+          aria-pressed="false"
+        >✦</button>
+      </div>
+
+      <div class="scope-bottom">
+        <div class="scope-zoom">
+          <label for="scopeZoom">
+            Aproximação
+            <output id="zoomValue" for="scopeZoom">1,0×</output>
+          </label>
+
+          <input
+            id="scopeZoom"
+            type="range"
+            min="80"
+            max="145"
+            value="100"
+            step="1"
+          >
+
+          <button id="resetZoom" type="button">Restaurar</button>
+        </div>
+
+        <div
+          id="scopeFact"
+          class="scope-fact"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          <h3 id="factTitle">Anéis de gelo e rocha</h3>
+
+          <p id="factText">
+            Os anéis de Saturno são formados por incontáveis
+            fragmentos de gelo e rocha.
+          </p>
+        </div>
+      </div>
+
+      <p class="scope-source">
+        Ilustração educativa · zoom de exploração visual.
+        <a
+          href="https://science.nasa.gov/saturn/facts/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Curiosidades: NASA ↗</a>
+      </p>
+    </div>
+  </dialog>
+
+  <script src="../public/js/components/preferencias.js"></script>
+
+  
+
+  <script
+    type="module"
+    src="../public/js/components/sessao.js"
+  ></script>
+
+  <script
+    src="../public/js/pages/aluno/conquistas.js"
+    defer
+  ></script>
 </body>
 </html>

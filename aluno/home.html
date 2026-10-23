@@ -10,7 +10,10 @@
     />
     <link rel="stylesheet" href="../public/css/pages/aluno/home.css" />
     <link rel="stylesheet" href="../public/css/preferencias.css" />
-  </head>
+    <link rel="stylesheet" href="../public/css/menu-unificado.css">
+  <script defer src="../public/js/components/menu-unificado.js"></script>
+<link rel="icon" type="image/png" href="../public/assets/imagens/marca/astrolearn-simbolo.png">
+</head>
   <body class="menu-collapsed">
     <a class="skip" href="#main">Pular para a trilha</a>
     <div class="space-background" aria-hidden="true"></div>
@@ -331,7 +334,7 @@
           <p id="notificationEmptyDescription">Correções e novidades da turma aparecerão aqui quando os avisos estiverem disponíveis.</p>
         </div>
       </div>
-      <footer class="notification-availability"><span class="notification-preview">EM PREPARAÇÃO</span><p>Esta caixa ainda não recebe avisos da turma nesta versão.</p></footer>
+      <footer class="notification-availability"><button id="refreshNotifications" type="button" class="text-button">Atualizar avisos</button><p id="notificationStatus" role="status"></p></footer>
     </dialog>
     <dialog id="dialog" aria-labelledby="dialogTitle">
       <button type="button" class="dialog-close" id="closeDialog" aria-label="Fechar">
@@ -357,9 +360,10 @@
       </button>
     </dialog>
     <script src="../public/js/components/preferencias.js"></script>
-    <script defer src="../public/js/components/menu-pdf.js"></script>
+    
     <script type="module" src="../public/js/pages/aluno/home.js"></script>
     <script type="module" src="../public/js/pages/aluno/home-cenario.js"></script>
     <script type="module" src="../public/js/pages/aluno/home-planetas.js"></script>
-  </body>
+  <script type="module" src="../public/js/pages/aluno/home-notificacoes.js"></script>
+</body>
 </html>

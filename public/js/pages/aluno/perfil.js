@@ -1,136 +1,171 @@
-/* Perfil demonstrativo: dados de vínculo não são editáveis pelo aluno. */
+/* Preferências locais; nenhum nome fictício ou edição de cadastro escolar. */
 (() => {
   "use strict";
-  const $ = (id) => document.getElementById(id),
-    prefs = window.AstroPrefs,
-    NAME_KEY = "astrolearn-display-name-v1";
-  let origin = null,
-    name = "Maya";
-  try {
-    const raw = JSON.parse(localStorage.getItem(NAME_KEY) || "null");
-    if (
-      raw?.version === 1 &&
-      typeof raw.name === "string" &&
-      raw.name.trim().length >= 2 &&
-      raw.name.trim().length <= 40
-    )
-      name = raw.name.trim();
-  } catch {
+
+  const $ = id => document.getElementById(id);
+  const prefs = window.AstroPrefs;
+  const tabs = [
+    $("preferencesTab"),
+    $("securityTab")
+  ];
+
+  function selectTab(tab, focus = true) {
+    tabs.forEach(item => {
+      const active = item === tab;
+
+      item.setAttribute("aria-selected", String(active));
+      item.tabIndex = active ? 0 : -1;
+
+      $(item.getAttribute("aria-controls")).hidden = !active;
+    });
+
+    if (focus) tab.focus();
+  }
+
+  tabs.forEach((tab, index) => {
+    tab.addEventListener("click", () => selectTab(tab));
+
+    tab.addEventListener("keydown", event => {
+      let next;
+
+      if (event.key === "ArrowRight") {
+        next = tabs[(index + 1) % tabs.length];
+      }
+
+      if (event.key === "ArrowLeft") {
+        next = tabs[(index + tabs.length - 1) % tabs.length];
+      }
+
+      if (event.key === "Home") {
+        next = tabs[0];
+      }
+
+      if (event.key === "End") {
+        next = tabs[tabs.length - 1];
+      }
+
+      if (next) {
+        event.preventDefault();
+        selectTab(next);
+      }
+    });
+  });
+
+  $("openSecurity").addEventListener("click", () => {
+    selectTab($("securityTab"));
+  });
+
+  if (!prefs) {
+    $("preferencesForm")
+      .querySelectorAll("input,button")
+      .forEach(el => {
+        el.disabled = true;
+      });
+
     $("pageError").textContent =
-      "Não foi possível ler o nome salvo. Você pode editar o nome e tentar salvar novamente.";
+      "Não foi possível carregar as preferências. " +
+      "Confira o arquivo compartilhado preferencias.js.";
+
+    return;
   }
-  $("studentName").textContent = name;
-  function values() {
-    return {
-      animations: prefs.systemReduced() ? prefs.get().animations : $("animations").checked,
-      textSize: Number($("textSize").value),
-      contrast: $("contrast").checked,
-    };
-  }
-  function controls(v) {
-    $("animations").checked = v.animations && !prefs.systemReduced();
-    $("animations").disabled = prefs.systemReduced();
-    $("animationHint").textContent = prefs.systemReduced()
-      ? "Seu sistema está configurado para reduzir movimentos."
-      : "Movimentos suaves na plataforma.";
-    $("textSize").value = String(v.textSize);
-    $("contrast").checked = v.contrast;
-    range();
-  }
+
   function range() {
     const value = Number($("textSize").value);
+
     $("textSizeValue").textContent = value + "%";
-    $("textSize").setAttribute("aria-valuetext", value + " por cento");
+
+    $("textSize").setAttribute(
+      "aria-valuetext",
+      value + " por cento"
+    );
+
     $("textSize").style.setProperty(
       "--range-fill",
-      ((value - 100) / 50) * 100 + "%",
+      ((value - 100) / 50 * 100) + "%"
     );
   }
+
+  function controls(values) {
+    const reduced = prefs.systemReduced();
+
+    $("animations").checked =
+      values.animations && !reduced;
+
+    $("animations").disabled = reduced;
+
+    $("animationHint").textContent = reduced
+      ? "Seu sistema está configurado para reduzir movimentos."
+      : "Movimentos suaves durante a navegação.";
+
+    $("textSize").value = String(values.textSize);
+    $("contrast").checked = values.contrast;
+
+    range();
+  }
+
+  function values() {
+    return {
+      animations: prefs.systemReduced()
+        ? prefs.get().animations
+        : $("animations").checked,
+
+      textSize: Number($("textSize").value),
+
+      contrast: $("contrast").checked
+    };
+  }
+
   function preview() {
     range();
     prefs.preview(values());
+
     $("preferenceStatus").textContent =
       "Prévia aplicada. Salve para manter as mudanças.";
+
     $("pageError").textContent = "";
   }
+
   $("textSize").addEventListener("input", preview);
   $("animations").addEventListener("change", preview);
   $("contrast").addEventListener("change", preview);
-  $("preferencesForm").addEventListener("submit", (e) => {
-    e.preventDefault();
+
+  $("preferencesForm").addEventListener("submit", event => {
+    event.preventDefault();
+
     if (prefs.save(values())) {
-      $("preferenceStatus").textContent = "Preferências salvas ✓";
+      $("preferenceStatus").textContent =
+        "Preferências salvas neste navegador.";
+
       $("pageError").textContent = "";
     } else {
       $("preferenceStatus").textContent = "";
+
       $("pageError").textContent =
-        "Não foi possível salvar as preferências. Os ajustes estão em prévia, e os valores salvos anteriormente foram mantidos. Permita o armazenamento do site ou libere espaço e tente novamente.";
+        "Não foi possível salvar. A prévia continua ativa, " +
+        "mas os ajustes anteriores foram mantidos. " +
+        "Permita o armazenamento do site e tente novamente.";
     }
   });
+
   $("restore").addEventListener("click", () => {
     controls(prefs.defaults);
     prefs.preview(prefs.defaults);
+
     $("preferenceStatus").textContent =
       "Padrão restaurado em prévia. Salve para confirmar.";
+
     $("pageError").textContent = "";
   });
-  function open(id) {
-    origin = document.activeElement;
-    $(id).showModal();
-  }
-  function close(d) {
-    d.close();
-    if (origin?.isConnected) origin.focus();
-  }
-  $("editName").addEventListener("click", () => {
-    $("displayName").value = name;
-    $("nameError").textContent = "";
-    open("nameDialog");
-    $("displayName").focus();
-  });
-  $("nameForm").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const next = $("displayName").value.trim().replace(/\s+/g, " ");
-    if (next.length < 2 || next.length > 40) {
-      $("nameError").textContent =
-        "Use entre 2 e 40 caracteres para seu nome de exibição.";
-      $("displayName").focus();
-      return;
-    }
-    try {
-      localStorage.setItem(
-        NAME_KEY,
-        JSON.stringify({ version: 1, name: next }),
-      );
-    } catch {
-      $("nameError").textContent =
-        "Não foi possível salvar o nome. Seu nome anterior foi mantido. Tente novamente após permitir o armazenamento.";
-      return;
-    }
-    name = next;
-    $("studentName").textContent = name;
-    close($("nameDialog"));
-    $("preferenceStatus").textContent = "Nome de exibição salvo ✓";
-  });
-  for (const b of document.querySelectorAll("[data-close]"))
-    b.addEventListener("click", () => close(b.closest("dialog")));
-  for (const d of document.querySelectorAll("dialog"))
-    d.addEventListener("cancel", () => origin?.isConnected && origin.focus());
-  $("helper").addEventListener("click", () => open("info"));
+
   controls(prefs.get());
-  if (prefs.readError())
+
+  if (prefs.readError()) {
     $("pageError").textContent =
-      "Não foi possível ler as preferências anteriores. Nenhum ajuste salvo foi substituído.";
+      "Não foi possível ler as preferências anteriores. " +
+      "Nenhum ajuste salvo foi substituído.";
+  }
+
   document.addEventListener("astrolearn:preferences", () => {
-    if (prefs.systemReduced()) {
-      $("animations").disabled = true;
-      $("animations").checked = false;
-      $("animationHint").textContent =
-        "Seu sistema está configurado para reduzir movimentos.";
-    } else {
-      $("animations").disabled = false;
-      $("animations").checked = prefs.get().animations;
-      $("animationHint").textContent = "Movimentos suaves na plataforma.";
-    }
+    controls(prefs.get());
   });
 })();

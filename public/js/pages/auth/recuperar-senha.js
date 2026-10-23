@@ -1,25 +1,27 @@
-// O backend atual ainda não tem recuperação de senha.
-(() => {
-  const $ = id => document.getElementById(id);
-
-  $('recoveryForm').hidden = true;
-  $('recoveryResult').hidden = false;
-
-  $('recoveryResult').querySelector('h2').textContent =
-    'Recuperação ainda indisponível';
-
-  $('recoveryResult').querySelector('p').textContent =
-    'O backend ainda precisa implementar o envio do link de recuperação. Por enquanto, procure o responsável pela plataforma.';
-
-  const link = $('recoveryResult').querySelector('a');
-  link.href = 'login.html';
-  link.textContent = 'Voltar ao login';
-
-  $('tryAgain').hidden = true;
-
-  document.querySelector('.intro').textContent =
-    'Vamos ajudar você a recuperar o acesso.';
-
-  document.querySelector('.stage-note').textContent =
-    'Nenhum e-mail de recuperação é enviado nesta etapa.';
-})();
+import {solicitarRecuperacao} from '../../services/recuperacao.js';
+const $ = id => document.getElementById(id);
+const form=$('recoveryForm'), email=$('email'), submit=form.querySelector('[type="submit"]');
+const result=$('recoveryResult'), status=$('recoveryStatus');
+let busy=false;
+form.onsubmit=async event=>{
+  event.preventDefault(); if(busy) return;
+  email.value=email.value.trim();
+  const valid=email.value && email.validity.valid;
+  $('emailError').textContent=valid?'':'Digite um e-mail válido.';
+  email.setAttribute('aria-invalid',String(!valid));
+  if(!valid){email.focus();return;}
+  busy=true;submit.disabled=true;email.readOnly=true;form.setAttribute('aria-busy','true');
+  status.textContent='Solicitando as instruções…';
+  try {
+    await solicitarRecuperacao(email.value);
+    // O servidor usa resposta genérica; não comprova entrega do e-mail.
+    form.hidden=true;result.hidden=false;status.textContent='';
+    result.tabIndex=-1;result.focus();
+  } catch(error) {
+    status.textContent=error.status===429?'Muitas solicitações em pouco tempo. Aguarde antes de tentar novamente.':error.message;
+  } finally {
+    busy=false;submit.disabled=false;email.readOnly=false;form.setAttribute('aria-busy','false');
+  }
+};
+email.oninput=()=>{$('emailError').textContent='';email.removeAttribute('aria-invalid');};
+$('tryAgain').onclick=()=>{result.hidden=true;form.hidden=false;status.textContent='';email.focus();};

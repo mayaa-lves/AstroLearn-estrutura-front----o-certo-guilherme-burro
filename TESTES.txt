@@ -1,0 +1,39 @@
+VERIFICAÇÃO DO FRONT
+
+API simulada conforme os contratos do app.py consultado.
+Sem uso de credenciais reais nem alterações no banco da turma.
+
+OK 1 missão bloqueada não permite enviar
+OK 2 rascunho sem conteúdo e sem envio
+OK 3 orientação, prazo sem perder um dia, o que entregar e materiais seguros
+OK 4 entrega vazia bloqueada
+OK 5 formato não aceito rejeitado
+OK 6 limite de três arquivos
+OK 7 limite real da hospedagem
+OK 8 multipart com texto e dois anexos, sem interpretar HTML
+OK 9 entrega e anexos persistem após recarregar
+OK 10 reenvio somente texto mantém anexos anteriores
+OK 11 novos anexos substituem lista inteira
+OK 12 erro de permissão não simula sucesso
+OK 13 erro 409 mantém o trabalho e não exibe sucesso
+OK 14 erro 413 mantém o trabalho e não exibe sucesso
+OK 15 professor consulta texto e anexos reais do contrato
+OK 16 correção envia nota e feedback ao endpoint correto
+OK 17 aluno consulta nota e correção impede reenvio
+OK 18 trilha usa desbloqueio retornado após correção
+OK 19 professor cria rascunho multipart com anexo, modalidade e o que entregar
+OK 20 publicar usa PUT, preserva dados e não duplica criação
+OK 21 editor recarrega modalidade e publicação do servidor
+OK 22 professor substitui anexo pelo campo anexo
+OK 23 aluno sem equipe não envia atividade coletiva
+OK 24 entrega em equipe não envia IDs de integrantes pelo front
+OK 25 correção em equipe mostra impacto coletivo
+OK 26 atividade responsiva sem rolagem horizontal
+OK 27 nenhum erro JavaScript ou rota inesperada nos fluxos testados
+TOTAL 27 testes de integração de front aprovados. API simulada, sem gravações reais.
+
+Sintaxe validada nos 84 arquivos JavaScript do projeto.
+Cenários: desktop e atividade móvel de 390 px, fuso America/Sao_Paulo.
+As imagens não vieram no ZIP; os cenários completos não foram reavaliados.
+
+Consulte LEIA-ME.txt para executar a validação com contas reais.

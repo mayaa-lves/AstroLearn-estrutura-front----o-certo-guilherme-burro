@@ -1,158 +1,1061 @@
-/* Laboratório: fundo exclusivo e artes discretas com assets já aprovados. */
-body:before {
-  background:
-    linear-gradient(150deg, #f8f6eef2, #eeedf2d9),
-    url("../../../../assets/imagens/aluno/inicial/nave-cinematic-v3.png")
-      center/cover no-repeat;
+@import url('../../../fonts.css');
+
+* {
+  box-sizing: border-box;
 }
-.game-hero {
-  display: grid;
-  grid-template-columns: 1fr 210px;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 24px;
-  padding: 30px;
+
+[hidden] {
+  display: none !important;
 }
-.game-hero h2 {
-  font-size: 32px;
-  margin: 12px 0;
-}
-.game-hero p {
-  max-width: 650px;
-  margin: 8px 0;
-  font-size: 15px;
-}
-.hero-planet {
-  height: 190px;
-  background: url("../../../../assets/imagens/login/cenarios-e-personagens/planet.png")
-    center/contain no-repeat;
-  filter: drop-shadow(0 12px 18px #725a6f22);
-}
-.game-filters {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-}
-.game-filters [aria-pressed="true"] {
-  background: #7542af;
-  color: white;
-  border-color: #7542af;
-}
-.game-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
-}
-.game-card {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 22px;
-}
-.game-card .chip {
-  align-self: flex-start;
-}
-.game-card h2 {
+
+body.games-portal {
   margin: 0;
+  color: #25163e;
+  background: #fcfaf7;
+  font: 400 16px/1.5 Astro, Arial, sans-serif;
 }
-.game-card p {
+
+.games-portal button,
+.games-portal a,
+.games-portal input {
+  font: inherit;
+}
+
+.games-portal button,
+.games-portal a {
+  touch-action: manipulation;
+}
+
+.games-portal button {
+  cursor: pointer;
+}
+
+.games-portal button:disabled {
+  cursor: not-allowed;
+}
+
+.games-portal svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.games-portal :is(a, button, input, [tabindex]):focus-visible {
+  outline: 3px solid #8950de;
+  outline-offset: 5px;
+}
+
+.skip {
+  position: fixed;
+  top: -100px;
+  left: 20px;
+  padding: 12px;
+  background: #fff;
+  color: #241640;
+  z-index: 100;
+}
+
+.skip:focus {
+  top: 12px;
+}
+
+.games-portal main {
+  position: relative;
+  margin-left: 186px;
+  width: calc(100% - 218px);
+  max-width: 1500px;
+  padding: 30px 0 20px;
+}
+
+.games-portal.collapsed main {
+  margin-left: 136px;
+  width: calc(100% - 168px);
+}
+
+.portal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-right: 100px;
+}
+
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: .18em;
+  font-weight: 700;
+  color: #8050ab;
+  margin: 0 0 8px;
+}
+
+h1 {
+  font-size: clamp(30px, 3vw, 44px);
+  line-height: 1.14;
+  letter-spacing: -.035em;
   margin: 0 0 10px;
-  font-size: 14px;
-  color: #675574;
 }
-.game-card .primary {
-  margin-top: auto;
+
+.portal-header p:last-child {
+  margin: 0;
+  color: #685676;
+  font-size: 16px;
 }
-.game-card small {
-  margin-top: 2px;
-  text-align: center;
-}
-.game-art {
-  height: 160px;
-  border-radius: 15px;
+
+.home-fallback {
+  position: absolute;
+  right: 0;
+  top: 24px;
+  width: 45px;
+  height: 45px;
   display: grid;
   place-items: center;
-  background: #ebe5f0;
+  border-radius: 50%;
+  border: 1px solid #e0d3ec;
+  background: #fffdfa;
+  color: #7138b7;
+  text-decoration: none;
 }
-.art-robo {
-  background: linear-gradient(130deg, #e5efe9, #f5f1e7);
+
+body:has(#astroAccountTools) .home-fallback {
+  display: none;
 }
-.art-robo svg {
-  width: 135px;
-  height: 120px;
-  color: #668874;
-  stroke-width: 3;
+
+.portal-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 18px 0 12px;
 }
-.art-quiz {
-  background:
-    linear-gradient(120deg, #eee8f6aa, #efe7ed66),
-    url("../../../../assets/imagens/aluno/inicial/horizonte-v7.png") center
-      42% / cover;
+
+.access-state {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 20px;
+  padding: 6px 12px;
+  background: #e9f5ed;
+  color: #326246;
+  font-size: 12px;
 }
-.art-crew {
-  background: linear-gradient(120deg, #e7e9f0, #f1e4ef);
+
+.is-blocked .access-state {
+  background: #f4e8d9;
+  color: #805727;
 }
-.crew-icon {
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  min-height: 46px;
+  padding: 11px 24px;
+  border-radius: 12px;
+  text-decoration: none;
+  border: 1px solid #7c3ed6;
+  font-size: 14px;
+}
+
+.primary {
+  color: white;
+  background: #7837d5;
+  box-shadow: 0 5px 14px #6630b817;
+}
+
+.primary:hover {
+  background: #6228b8;
+}
+
+.secondary {
+  color: #7139ad;
+  background: #fff;
+}
+
+.text-button {
+  padding: 10px 0;
+  min-height: 44px;
+  border: 0;
+  background: none;
+  color: #7040a7;
+  font-size: 12px !important;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.text-link,
+.back-link {
+  color: #6d3d9d;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.text-link:hover,
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.entry-content {
+  width: 100%;
+}
+
+.hangar-scene {
+  position: relative;
+  height: clamp(270px, 43vh, 470px);
+  overflow: hidden;
+  border-radius: 24px;
+  background: linear-gradient(115deg, #fff7ea88, transparent 65%), url('../../../../assets/imagens/aluno/jogos/horizonte-hangar.png') center 60%/cover;
+  border: 1px solid #e7dfe9;
+  isolation: isolate;
+}
+
+.hangar-glow {
+  position: absolute;
+  width: 60%;
+  height: 25%;
+  left: 18%;
+  bottom: 13%;
+  background: #b6a2ff26;
+  filter: blur(30px);
+  border-radius: 50%;
+}
+
+.sprite {
   display: block;
-  width: 130px;
-  height: 145px;
-  background: url("../../../../assets/imagens/aluno/inicial/assistente-poses-v4.png")
-    0 100%/300% 200% no-repeat;
+  background-image: url('../../../../assets/imagens/aluno/jogos/destinos-atlas.png');
+  background-repeat: no-repeat;
+  background-size: 200% 200%;
+  aspect-ratio: 1.5;
+  width: 100%;
 }
-@media (max-width: 1150px) {
-  .game-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-  .game-grid > article:last-child {
-    grid-column: 1/-1;
-  }
-  .game-hero {
-    grid-template-columns: 1fr 150px;
-  }
-  .hero-planet {
-    height: 145px;
-  }
+
+.rover {
+  background-position: 0 0;
+  background-size: 200% 188.2353%;
+  aspect-ratio: 768 / 544;
 }
-@media (max-width: 650px) {
-  .game-grid {
-    grid-template-columns: 1fr;
+
+.earth {
+  background-position: 100% 0;
+  background-size: 200% 188.2353%;
+  aspect-ratio: 768 / 544;
+}
+
+.station {
+  background-position: 0 100%;
+  background-size: 192% 213.3333%;
+  aspect-ratio: 800 / 480;
+}
+
+.shuttle {
+  background-position: 100% 100%;
+  background-size: 208.6957% 225.5507%;
+  aspect-ratio: 736 / 454;
+}
+
+.entry-shuttle {
+  position: absolute;
+  width: min(63%, 650px);
+  left: 18%;
+  top: 50%;
+  transform: translate(var(--ship-x, 0px), calc(-50% + var(--ship-y, 0px))) rotate(-4deg);
+  filter: drop-shadow(0 24px 18px #1b183433);
+  transition: transform .35s ease-out;
+}
+
+.scene-caption {
+  position: absolute;
+  bottom: 20px;
+  left: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #37294d;
+  padding: 10px 14px;
+  border: 1px solid #fff7;
+  border-radius: 30px;
+  background: #fffaf0df;
+}
+
+.small-mark {
+  color: #8958c6;
+}
+
+.entry-actions {
+  display: grid;
+  justify-items: center;
+  gap: 13px;
+  margin: 22px 0 16px;
+}
+
+.entry-actions .primary {
+  min-width: min(360px, 100%);
+  min-height: 50px;
+  font-weight: 700;
+}
+
+.entry-features {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 26px;
+  color: #71617f;
+  font-size: 12px;
+}
+
+.entry-features span::before {
+  content: '·';
+  margin-right: 8px;
+  color: #a17fc6;
+}
+
+.local-note {
+  font-size: 12px;
+  color: #756480;
+  max-width: 940px;
+  line-height: 1.6;
+  margin: 22px 0 0;
+}
+
+.games-portal footer {
+  color: #7a6987;
+  font-size: 11px;
+  margin-top: 14px;
+}
+
+.galaxy-toolbar {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-right: 100px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.galaxy-toolbar .text-button {
+  margin-left: auto;
+}
+
+.preview-badge {
+  font-size: 10px;
+  letter-spacing: .06em;
+  color: #8a70a5;
+}
+
+.galaxy-shell {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  height: min(780px, calc(100svh - 110px));
+  min-height: 560px;
+  border: 1px solid #3e4059;
+  border-radius: 26px;
+  background: linear-gradient(180deg, #0914263b, #060d2066), url('../../../../assets/imagens/aluno/jogos/galaxia-fundo.png') center/cover;
+  color: #fff;
+}
+
+#galaxyStars {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.galaxy-heading {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  padding: 28px 20px 0;
+  pointer-events: none;
+}
+
+.galaxy-heading .eyebrow {
+  color: #c8b5f1;
+  font-size: 10px;
+}
+
+.galaxy-heading h1 {
+  font-size: clamp(28px, 2.8vw, 40px);
+  margin-bottom: 6px;
+}
+
+.galaxy-heading p:last-child {
+  color: #d1d9ec;
+  font-size: 15px;
+  margin: 0;
+}
+
+.galaxy-content {
+  position: absolute;
+  inset: 130px 0 0;
+}
+
+.destinations {
+  position: absolute;
+  inset: 0 2% 55px;
+}
+
+.destination {
+  position: absolute;
+  padding: 0;
+  border: 0;
+  color: #fff;
+  background: none;
+  width: 31%;
+  text-align: center;
+}
+
+.destination-robo {
+  left: 1%;
+  top: 0;
+}
+
+.destination-crew {
+  right: 1%;
+  top: 0;
+}
+
+.destination-quiz {
+  left: 34.5%;
+  top: 23%;
+}
+
+.destination-art {
+  display: block;
+  width: 100%;
+  animation: float-destination 7s ease-in-out infinite;
+}
+
+.destination-quiz .destination-art {
+  animation-delay: -2.5s;
+}
+
+.destination-crew .destination-art {
+  animation-delay: -4s;
+}
+
+.destination-art .sprite {
+  filter: drop-shadow(0 12px 20px #0007);
+  transition: filter .25s, scale .3s;
+}
+
+.destination:hover .sprite,
+.destination:focus-visible .sprite {
+  scale: 1.06;
+  filter: drop-shadow(0 0 20px #b998ec77);
+}
+
+.destination-label {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 158px;
+  max-width: 100%;
+  padding: 10px 20px;
+  background: #10152bd9;
+  border: 1px solid #a390cb5c;
+  border-radius: 15px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 24px #0003;
+}
+
+.destination-label small {
+  color: #bfa5e9;
+  font-size: 9px;
+  letter-spacing: .12em;
+}
+
+.destination-label strong {
+  font-size: 17px;
+}
+
+.destination-label>span {
+  color: #eee3ff;
+  font-size: 12px;
+}
+
+.destination:hover .destination-label,
+.destination:focus-visible .destination-label {
+  border-color: #c6a0ff;
+  background: #30224ccc;
+}
+
+.flight-ship {
+  position: absolute;
+  width: 110px;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 4;
+  will-change: transform;
+}
+
+.galaxy-hint {
+  position: absolute;
+  bottom: 10px;
+  left: 20px;
+  right: 20px;
+  margin: 0;
+  color: #d2d8ea;
+  font-size: 11px;
+  pointer-events: none;
+}
+
+.catalogue-head {
+  margin: 24px 0 14px;
+}
+
+.catalogue-head h2 {
+  margin: 0 0 3px;
+  font-size: 20px;
+}
+
+.catalogue-head p {
+  margin: 0;
+  color: #766580;
+  font-size: 13px;
+}
+
+.game-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.game-list button {
+  text-align: left;
+  border: 1px solid #e4d9ed;
+  border-radius: 15px;
+  padding: 18px;
+  background: #fffdfa;
+  color: #39234f;
+}
+
+.game-list button:hover {
+  background: #f4edfb;
+  border-color: #b99ad9;
+}
+
+.game-list strong {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.game-list span {
+  display: block;
+  font-size: 12px;
+  color: #74617f;
+}
+
+.blocked-state {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  gap: 12px;
+  min-height: 400px;
+  padding: 35px;
+  color: #fff;
+  background: linear-gradient(#050b21a6, #050b21cf), url('../../../../assets/imagens/aluno/jogos/galaxia-fundo.png') center/cover;
+  border-radius: 24px;
+}
+
+.galaxy-shell .blocked-state {
+  background: transparent;
+  min-height: 100%;
+}
+
+.blocked-state h2 {
+  margin: 0;
+  font-size: clamp(23px, 3vw, 34px);
+}
+
+.blocked-state>p {
+  max-width: 520px;
+  margin: 0;
+  color: #d4d5e8;
+}
+
+.blocked-state .preview-badge {
+  font-size: 10px;
+  color: #c8b6ef;
+}
+
+.blocked-state .primary {
+  margin-top: 12px;
+}
+
+.blocked-state .text-button {
+  color: #d5c3ef;
+}
+
+.lock-icon {
+  width: 42px !important;
+  height: 42px !important;
+  margin-bottom: 8px;
+}
+
+.is-blocked.galaxia .galaxy-heading,
+.is-blocked .catalogue-head {
+  display: none;
+}
+
+.games-portal dialog {
+  width: min(530px, calc(100% - 32px));
+  max-height: 88svh;
+  overflow: auto;
+  padding: 30px;
+  border: 1px solid #d9c9e7;
+  border-radius: 24px;
+  background: #fffdfa;
+  color: #30203f;
+  box-shadow: 0 25px 80px #08051666;
+}
+
+.games-portal dialog::backdrop {
+  background: #080c26a6;
+  backdrop-filter: blur(7px);
+}
+
+.games-portal dialog h2 {
+  font-size: 26px;
+  line-height: 1.2;
+  margin: 8px 0 12px;
+}
+
+.games-portal dialog h3 {
+  font-size: 16px;
+  margin: 20px 0 8px;
+}
+
+.games-portal dialog p,
+.games-portal dialog li {
+  font-size: 14px;
+  color: #665270;
+}
+
+.games-portal dialog ol {
+  padding-left: 20px;
+}
+
+.games-portal dialog li {
+  padding-left: 4px;
+  margin: 8px 0;
+}
+
+.dialog-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #ddcfe8;
+  border-radius: 50%;
+  color: #7549a5;
+  background: #fffdfa;
+  font-size: 25px !important;
+  z-index: 2;
+}
+
+.dialog-art {
+  background: radial-gradient(ellipse, #c1c8f44d, transparent 70%);
+  width: 180px;
+  margin: -12px auto 0;
+}
+
+.game-detail-meta {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.game-detail-meta span {
+  font-size: 11px;
+  color: #785498;
+  background: #f1eafa;
+  border-radius: 18px;
+  padding: 5px 10px;
+}
+
+#launchGame {
+  width: 100%;
+  margin-top: 14px;
+}
+
+.hint {
+  font-size: 12px !important;
+  color: #7e6d89;
+}
+
+.preview-control {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 15px 0;
+  font-size: 14px;
+}
+
+.preview-control input {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  accent-color: #7b3dc6;
+}
+
+/* Navegação compartilhada, flutuante e retrátil. */
+.games-portal .sidebar {
+  position: fixed;
+  z-index: 15;
+  top: 20px;
+  bottom: 20px;
+  left: 20px;
+  width: 144px;
+  padding: 20px 12px;
+  border: 1px solid #e4d9e9b3;
+  border-radius: 24px;
+  background: #fffdf5e8;
+  backdrop-filter: blur(14px);
+  overflow: auto;
+}
+
+.games-portal .sidebar .brand {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 26px;
+  color: #2b1947;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.games-portal .sidebar .brand svg {
+  width: 35px;
+  height: 35px;
+}
+
+.games-portal .sidebar .brand span {
+  color: #7c41c0;
+}
+
+.games-portal #menuToggle {
+  position: absolute;
+  top: 61px;
+  right: 7px;
+  background: #fffefa;
+  color: #7135aa;
+  border: 1px solid #e4d5ef;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+}
+
+.games-portal .sidebar nav {
+  display: grid;
+  gap: 5px;
+  margin-top: 20px;
+}
+
+.games-portal .sidebar nav a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 54px;
+  padding: 8px 4px;
+  border-radius: 12px;
+  color: #625078;
+  text-decoration: none;
+  font-size: 11px;
+}
+
+.games-portal .sidebar nav a:hover {
+  background: #f5effa;
+}
+
+.games-portal .sidebar nav .active {
+  background: #eee5fc;
+  color: #7437c7;
+}
+
+.games-portal .sidebar small {
+  display: none;
+}
+
+.games-portal.collapsed .sidebar {
+  width: 88px;
+  padding-inline: 12px;
+}
+
+.games-portal.collapsed .sidebar .brand {
+  position: static;
+  font-size: 0;
+  height: 36px;
+  margin-bottom: 25px;
+}
+
+.games-portal.collapsed .sidebar .brand::before {
+  content: none;
+}
+
+.games-portal.collapsed .sidebar .brand svg {
+  display: block;
+}
+
+.games-portal.collapsed .sidebar .brand span,
+.games-portal.collapsed .sidebar nav .label {
+  display: none;
+}
+
+.games-portal.collapsed #menuToggle {
+  top: 57px;
+  right: 7px;
+}
+
+.games-portal.collapsed .sidebar nav a {
+  min-height: 48px;
+}
+
+.games-portal .sidebar nav a[aria-label="Configurações"] {
+  display: none;
+}
+
+.games-portal.astro-high-contrast {
+  background: #fff;
+  color: #170f23;
+}
+
+.astro-high-contrast :is(.destination-label, .galaxy-shell, .blocked-state) {
+  background: #071021;
+  border-color: #fff;
+}
+
+.astro-high-contrast :is(.game-list button, dialog) {
+  border-color: #2b193e;
+  background: #fff;
+}
+
+.astro-high-contrast .galaxy-shell :is(h1, h2, p, small, strong, span) {
+  color: #fff !important;
+}
+
+@keyframes float-destination {
+
+  0%,
+  100% {
+    transform: translateY(0);
   }
-  .game-grid > article:last-child {
-    grid-column: auto;
-  }
-  .game-hero {
-    grid-template-columns: 1fr;
-    padding: 22px;
-  }
-  .hero-planet {
-    display: none;
-  }
-  .game-hero h2 {
-    font-size: 27px;
-  }
-  .game-art {
-    height: 140px;
+
+  50% {
+    transform: translateY(-8px);
   }
 }
 
-.hero-planet {
-  animation: hovering 9s ease-in-out infinite;
-}
-.game-card {
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
-}
-.game-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px #4d335716;
-}
-@media (prefers-reduced-motion: reduce) {
-  .hero-planet {
-    animation: none;
+@media (max-width: 1000px) {
+  .destination {
+    width: 33%;
   }
-  .game-card {
-    transition: none;
+
+  .destination-robo {
+    left: 0;
+  }
+
+  .destination-crew {
+    right: 0;
+  }
+
+  .destination-quiz {
+    left: 33.5%;
+    top: 30%;
+  }
+
+  .destination-label {
+    min-width: 0;
+    padding: 9px 13px;
+  }
+
+  .destination-label strong {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 800px) {
+
+  .games-portal main,
+  .games-portal.collapsed main {
+    margin: 0;
+    width: 100%;
+    padding: 80px 16px 118px;
+  }
+
+  .portal-header {
+    padding-right: 0;
+  }
+
+  .portal-header h1 {
+    font-size: 30px;
+  }
+
+  .portal-header p:last-child {
+    font-size: 14px;
+  }
+
+  .portal-meta {
+    margin-top: 12px;
+  }
+
+  .hangar-scene {
+    height: 290px;
+  }
+
+  .entry-shuttle {
+    width: 100%;
+    left: -4%;
+  }
+
+  .scene-caption {
+    font-size: 11px;
+    left: 12px;
+    right: 12px;
+    bottom: 14px;
+    padding: 10px;
+  }
+
+  .entry-actions .primary {
+    width: 100%;
+  }
+
+  .galaxy-toolbar {
+    padding-right: 0;
+    gap: 8px 12px;
+  }
+
+  .galaxy-toolbar .preview-badge {
+    display: none;
+  }
+
+  .galaxy-shell {
+    min-height: 1030px;
+    height: auto;
+    border-radius: 22px;
+  }
+
+  .galaxy-heading {
+    padding: 30px 10px 0;
+  }
+
+  .galaxy-heading h1 {
+    font-size: 27px;
+  }
+
+  .galaxy-content {
+    position: relative;
+    inset: auto;
+  }
+
+  .destinations {
+    position: relative;
+    inset: auto;
+    display: grid;
+    gap: 20px;
+    padding: 16px 12px 65px;
+  }
+
+  .destination {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .destination-art {
+    max-width: 260px;
+  }
+
+  .destination-label {
+    min-width: 170px;
+  }
+
+  .flight-ship {
+    display: none;
+  }
+
+  .galaxy-hint {
+    bottom: 15px;
+    font-size: 10px;
+  }
+
+  .game-list {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .is-blocked .galaxy-shell {
+    min-height: 550px;
+  }
+
+  .galaxy-shell .blocked-state {
+    min-height: 550px;
+    padding: 26px;
+  }
+
+  .blocked-state {
+    padding: 30px 20px;
+  }
+
+  .games-portal .sidebar,
+  .games-portal.collapsed .sidebar {
+    top: auto;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    left: 12px;
+    right: 12px;
+    width: auto;
+    height: 68px;
+    padding: 6px;
+    border-radius: 19px;
+    overflow: visible;
+  }
+
+  .games-portal .sidebar nav {
+    display: flex;
+    margin: 0;
+    height: 100%;
+  }
+
+  .games-portal .sidebar nav a {
+    min-height: 48px;
+    font-size: 10px;
+    padding: 6px 2px;
+  }
+
+  .games-portal .sidebar nav .label,
+  .games-portal.collapsed .sidebar nav .label {
+    display: block;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .games-portal *,
+  .games-portal *::before {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 }

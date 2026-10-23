@@ -1,6 +1,7 @@
 /* Interface da atividade: não altera os handlers de entrega ou correção. */
 import {sessaoObrigatoria,api,encerrar} from '../../services/conexao.js';
 import {dashboard} from '../../services/aluno.js';
+import {formatarPrazo} from '../../services/atividades.js';
 const params=new URLSearchParams(location.search),preview=params.get('preview')==='1';
 const session=sessaoObrigatoria(preview?'professor':'aluno');
 const $=id=>document.getElementById(id),trigger=$('activityAccountToggle'),panel=$('activityAccountPanel');
@@ -30,7 +31,7 @@ async function identify(){
   else{const data=await dashboard();missions=(data.periodos_trilha||[]).flatMap(period=>period.missoes||[]);teacher=data.sala?.perfis?.nome||data.sala?.professor?.nome||data.sala?.professor_nome;}
   const index=missions.findIndex(m=>String(m.id)===id),mission=missions[index];
   $('activityTeacher').textContent='Professor: '+(teacher||'não informado');
-  const date=mission?.data_limite?new Date(mission.data_limite):null;$('activityTeacherDue').textContent=date&&!Number.isNaN(date.getTime())?'Prazo: '+date.toLocaleDateString('pt-BR'):'Sem prazo definido';
+  $('activityTeacherDue').textContent=mission?.data_limite?'Prazo: '+formatarPrazo(mission.data_limite):'Sem prazo definido';
   if(index<0)return;
   const world=index%5,planet=$('activityPlanet');planet.dataset.world=String(world);planet.style.setProperty('--world-x',world*25+'%');planet.hidden=false;document.body.dataset.activityWorld=String(world);
   document.dispatchEvent(new CustomEvent('astrolearn:planets'));
