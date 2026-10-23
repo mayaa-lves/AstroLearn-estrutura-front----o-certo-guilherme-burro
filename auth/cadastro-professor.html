@@ -9,7 +9,8 @@
     <link href="../public/css/auth.css" rel="stylesheet" />
     <link href="../public/css/pages/auth/cadastro-aluno.css" rel="stylesheet" />
     <link rel="stylesheet" href="../public/css/pages/auth/cadastro-etapas.css" />
-  </head>
+  <link rel="icon" type="image/png" href="../public/assets/imagens/marca/astrolearn-simbolo.png">
+</head>
   <body class="cadastro-page cadastro-aluno" data-step="perfil">
     <a class="skip-link" href="#conteudo">Pular para o cadastro</a>
     <!-- A mascote já faz parte do cenário original. -->
@@ -17,11 +18,10 @@
       <div class="cenario-canvas">
         <div aria-hidden="true" class="cenario-neutro"></div>
         <div aria-hidden="true" class="cenario-timido"></div>
-        <span aria-hidden="true" class="olho olho-esquerdo"> </span>
-        <span aria-hidden="true" class="olho olho-direito"> </span>
+        <span aria-hidden="true" class="olho olho-unico"> </span>
         <button
           aria-describedby="dica-mascote"
-          aria-label="Conversar com a mascote turquesa"
+          aria-label="Conversar com o mascote de um olho"
           class="mascote"
           type="button"
         ></button>
@@ -192,20 +192,22 @@
               <div class="student-room" id="studentRoom">
                 <label for="turma">
                   Código da turma
-                  <span class="opcional">(após o primeiro acesso)</span>
+                  <span class="opcional">(opcional)</span>
                 </label>
                 <input
-                  aria-describedby="turma-ajuda"
+                  aria-describedby="turma-ajuda turma-erro"
                   autocomplete="off"
                   id="turma"
                   maxlength="40"
                   name="turma"
-                  placeholder="Disponível ao entrar na turma"
-                  disabled
+                  placeholder="Ex.: C78AC9"
+                  autocapitalize="characters"
+                  spellcheck="false"
                 />
                 <p class="auth-help" id="turma-ajuda">
-                  Você poderá usar o código da turma depois de entrar na sua conta.
+                  Se tiver um código, entraremos na turma após criar sua conta.
                 </p>
+                <p class="auth-error" hidden id="turma-erro"></p>
               </div>
               <details class="authorization" hidden id="autorizacao">
                 <summary>Autorização da escola</summary>
@@ -252,7 +254,7 @@
             ></p>
           </form>
           <p class="confirmation-note">
-            Confirme seu e-mail, se solicitado, para acessar a plataforma.
+            Após o cadastro, vamos verificar seu acesso para você começar.
           </p>
         </section>
         <noscript
@@ -263,6 +265,6 @@
       </section>
     </main>
     <footer class="cadastro-footer">Aprenda. Explore. Vá além.</footer>
-    <script src="../public/js/pages/auth/cadastro-etapas.js" type="module"></script>
+    <script src="../public/js/pages/auth/cadastro-etapas.js?v=cadastro-turma-1" type="module"></script>
   </body>
 </html>

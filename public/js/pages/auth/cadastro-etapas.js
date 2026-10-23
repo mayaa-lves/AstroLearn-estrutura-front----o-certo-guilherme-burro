@@ -1,5 +1,7 @@
 // Cadastro em duas etapas sobre o cenário aprovado. Usa a autenticação existente.
-import { cadastrar } from "../../services/autenticacao.js";
+import { destinoAposLogin } from "../../services/autenticacao.js";
+import { cadastrarEVerificarAcesso, mensagemDeAcesso } from "../../services/cadastro-acesso.js";
+import { matricularNoCadastro } from "../../services/cadastro-turma.js";
 
 const $ = (id) => document.getElementById(id);
 const body = document.body;
@@ -131,6 +133,7 @@ async function etapa(proxima, escolha = null) {
       $("perfilEscolhido").textContent =
         perfil === "professor" ? "Cadastro de professor" : "Cadastro de aluno";
       $("studentRoom").hidden = perfil !== "aluno";
+      $("turma").disabled = perfil !== "aluno";
       $("autorizacao").hidden = perfil !== "professor";
       chave.disabled = perfil !== "professor";
       chave.required = perfil === "professor";
@@ -227,6 +230,38 @@ form.addEventListener("input", (event) => {
   erro(event.target);
   mensagem("");
 });
+let linkEntrada = null;
+const turmaPanel = document.createElement('form');
+turmaPanel.className = 'cadastro-turma-pendente'; turmaPanel.hidden = true;
+turmaPanel.setAttribute('aria-label','Corrigir código da turma');
+const turmaLabel = document.createElement('label');turmaLabel.htmlFor='turmaRetry';turmaLabel.textContent='Código da turma';
+const turmaRetry = document.createElement('input');turmaRetry.id='turmaRetry';turmaRetry.maxLength=40;turmaRetry.autocomplete='off';turmaRetry.setAttribute('autocapitalize','characters');turmaRetry.spellcheck=false;turmaRetry.setAttribute('aria-describedby','turmaRetryStatus');
+const turmaStatus = document.createElement('p');turmaStatus.id='turmaRetryStatus';turmaStatus.className='auth-error';turmaStatus.setAttribute('role','status');
+const turmaButton = document.createElement('button');turmaButton.type='submit';turmaButton.className='auth-primary';turmaButton.textContent='Entrar na turma';
+turmaPanel.append(turmaLabel,turmaRetry,turmaStatus,turmaButton);form.after(turmaPanel);
+let entrandoTurma=false;
+async function tentarTurma(raw){
+ if(entrandoTurma)return;
+ entrandoTurma=true;turmaPanel.hidden=false;turmaRetry.value=String(raw).trim().toUpperCase();turmaRetry.disabled=true;turmaButton.disabled=true;turmaPanel.setAttribute('aria-busy','true');
+ turmaStatus.textContent='Sua conta está pronta. Entrando na turma…';
+ try {
+  const sala=await matricularNoCadastro(turmaRetry.value);
+  if(!ativo)return;
+  turmaPanel.hidden=true;mensagem('Seu acesso está pronto! Você está na turma '+(sala.nome || 'do seu professor')+'.');
+  if(linkEntrada){linkEntrada.href=destinoAposLogin();linkEntrada.textContent=' Abrir minha trilha →';status.append(linkEntrada);}
+  status.focus();
+ }catch(error){
+  if(!ativo)return;
+  turmaStatus.textContent='Sua conta já foi criada. '+(error.message || 'Não foi possível confirmar a entrada na turma.')+' Corrija o código aqui ou entre na plataforma; não cadastre novamente.';
+  turmaRetry.setAttribute('aria-invalid','true');
+  if(error.status===401 && linkEntrada){linkEntrada.href='login.html';linkEntrada.textContent=' Ir para o login →';}
+ }finally{
+  entrandoTurma=false;turmaRetry.disabled=false;turmaButton.disabled=false;turmaPanel.setAttribute('aria-busy','false');
+ }
+}
+turmaPanel.onsubmit=event=>{event.preventDefault();if(!turmaRetry.value.trim()){turmaStatus.textContent='Informe o código fornecido pelo professor.';turmaRetry.focus();return;}tentarTurma(turmaRetry.value);};
+turmaRetry.oninput=()=>turmaRetry.removeAttribute('aria-invalid');
+
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   if (ocupado || criado || transicao || !perfil || body.dataset.step !== "dados") return;
@@ -263,6 +298,7 @@ form.addEventListener("submit", async (event) => {
     primeiro.focus();
     return;
   }
+  const codigoTurma = perfil === "aluno" ? $("turma").value.trim().toUpperCase() : "";
   const dados = {
     nome: $("nome").value.trim(),
     email: $("email").value.trim(),
@@ -278,24 +314,34 @@ form.addEventListener("submit", async (event) => {
   $("criarConta").textContent = "Criando sua conta…";
   mensagem("Aguarde a confirmação do servidor.");
   try {
-    await cadastrar(dados, { sinal: controle.signal });
+    const resultado = await cadastrarEVerificarAcesso(dados, { sinal: controle.signal });
     if (!ativo) return;
     criado = true;
     protegerCampos();
+    $("dados-cadastro").hidden = true;
     mensagem(
-      "Cadastro confirmado! Confira seu e-mail para confirmar a conta e depois entre na plataforma.",
+      resultado.mensagem,
+      !resultado.acessoConfirmado,
     );
     const link = document.createElement("a");
-    link.href = "login.html";
-    link.textContent = " Ir para o login →";
+    link.href = resultado.acessoConfirmado ? destinoAposLogin() : 'login.html';
+    link.textContent = resultado.acessoConfirmado ? ' Entrar na plataforma →' : ' Ir para o login →';
+    linkEntrada = link;
     status.append(link);
-    $("criarConta").textContent = "Conta criada";
+    $("criarConta").textContent = resultado.acessoConfirmado ? "Acesso confirmado" : "Cadastro recebido";
     status.tabIndex = -1;
     status.focus();
+    if (resultado.acessoConfirmado && resultado.usuario.role === "aluno" && codigoTurma) {
+      await tentarTurma(codigoTurma);
+    }
   } catch (error) {
     if (!ativo) return;
     mensagem(
-      error.message || "Não foi possível confirmar o cadastro. Tente novamente.",
+      error.status === 429
+        ? 'O servidor limitou as tentativas de cadastro. Não tente novamente agora; confira com o responsável pela plataforma.'
+        : error.status === 409
+          ? 'Este e-mail já tem um cadastro. Use a tela de login; não é necessário cadastrar novamente.'
+          : mensagemDeAcesso(error),
       true,
     );
     if (error.status === 403 && perfil === "professor") {
@@ -305,6 +351,8 @@ form.addEventListener("submit", async (event) => {
     status.tabIndex = -1;
     status.focus();
   } finally {
+    dados.senha = '';
+    delete dados.chave_mestra;
     ocupado = false;
     controle = null;
     form.setAttribute("aria-busy", "false");
@@ -327,10 +375,10 @@ document.addEventListener(
       y = event.clientY;
     quadro = requestAnimationFrame(() => {
       const rect = canvas.getBoundingClientRect();
-      const dx = x - (rect.left + rect.width * 0.279),
-        dy = y - (rect.top + rect.height * 0.51);
+      const dx = x - (rect.left + rect.width * 0.278),
+        dy = y - (rect.top + rect.height * 0.499);
       const distancia = Math.max(Math.hypot(dx, dy), 1),
-        limite = rect.width * 0.0018,
+        limite = rect.width * 0.0055,
         intensidade = Math.min(distancia / 180, 1);
       olhos.forEach(
         (olho) =>

@@ -451,3 +451,8 @@
     margin-top: 22px;
   }
 }
+
+.cadastro-turma-pendente {margin-top:12px;padding:12px;border:1px solid #c8b6da;border-radius:12px;background:#fff9;}
+.cadastro-turma-pendente label {display:block;font-size:12px;margin-bottom:6px;}
+.cadastro-turma-pendente input {width:100%;box-sizing:border-box;min-height:40px;padding:8px 10px;border:1px solid #bca4ce;border-radius:9px;background:#fff;color:#302246;font:inherit;}
+.cadastro-turma-pendente .auth-primary {width:100%;margin-top:8px;}

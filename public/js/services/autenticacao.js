@@ -57,7 +57,7 @@ export function obterToken() {
 }
 
 export async function entrar({ email, senha }, { sinal } = {}) {
-    email = String(email ?? '').trim();
+    email = String(email ?? '').trim().toLowerCase();
 
     if (!email || typeof senha !== 'string' || !senha) {
         throw new ErroAPI('Preencha o e-mail e a senha.');
@@ -147,11 +147,11 @@ export async function cadastrar(
     { sinal } = {}
 ) {
     nome = String(nome ?? '').trim();
-    email = String(email ?? '').trim();
+    email = String(email ?? '').trim().toLowerCase();
 
-    if (!nome || !email || typeof senha !== 'string' || senha.length < 8) {
+    if (!nome || !email || typeof senha !== 'string' || senha.length < 8 || !/[A-Z]/.test(senha) || !/[a-z]/.test(senha) || !/[0-9]/.test(senha) || !/[^A-Za-z0-9]/.test(senha)) {
         throw new ErroAPI(
-            'Confira o nome, o e-mail e a senha de pelo menos 8 caracteres.'
+            'Confira o nome e o e-mail. Use uma senha com pelo menos 8 caracteres, maiúscula, minúscula, número e símbolo.'
         );
     }
 
@@ -166,7 +166,7 @@ export async function cadastrar(
             throw new ErroAPI('Informe a chave de autorização do professor.');
         }
 
-        dados.chave_mestra = chave_mestra;
+        dados.chave_mestra = chave_mestra.trim();
     }
 
     return solicitar('/api/auth/cadastro', {
